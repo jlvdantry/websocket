@@ -30,8 +30,10 @@ Para la instalación del cliente, realizar los siguientes pasos:
   - npm install
   - npm run dev
   - Editar el archivo config/session y cambiar lo siguiente:
-    ` 'expire_on_close' => false, // Reemplazar por TRUE `
-    ` 'path' => '/' // reemplazar por env('SESSION_PATH',base_path()), `
+    ```php
+    'expire_on_close' => false, // Reemplazar por TRUE 
+     'path' => '/' // reemplazar por env('SESSION_PATH',base_path()),
+     ```
   - php artisan session:table
   - npm install datatables.net
   - npm install datatables.net-dt
