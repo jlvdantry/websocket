@@ -44,5 +44,6 @@ Soporte para exponer API
 
 ## Changelog
 08/04/2020 - Version inicial.
+
 08/04/2020 - Soporte para exponer servicios API
 
