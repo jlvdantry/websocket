@@ -40,8 +40,9 @@ Para la instalación del cliente, realizar los siguientes pasos:
 Para verificar la instalación, acceder a la URL de la aplicación e intentar iniciar sesion con Llave.
 
 ## Nuevas funciones!
-Esta es la versión inicial, no hay nuevas funciones
+Soporte para exponer API
 
 ## Changelog
-08/07/2020 - Version inicial.
+08/04/2020 - Version inicial.
+08/04/2020 - Soporte para exponer servicios API
 

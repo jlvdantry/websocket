@@ -10,8 +10,9 @@ class ErrorLoggerService
 {
     private function __construct(){}
     //
-    public static function log(string $nivel, string $desc, int $response = 0):String{
+    public static function log(String $nivel, String $desc, int $response = 0):String{
         $idUsuario = Auth::user()!==NULL? Auth::user()->idUsuario:0;
+        
         $uuid = session()->get('requuid');
         ErrorLogger::create(
             [
@@ -21,7 +22,7 @@ class ErrorLoggerService
                 'tx_request_uri' => request()->path(),
                 'tx_session_token' => session()->get('ix_token')??'',
                 'nu_http_response' => $response,
-                'idUsuario' => $idUsuario
+                'idUsuario' => $idUsuario??0
             ]
         );
         return $uuid;
