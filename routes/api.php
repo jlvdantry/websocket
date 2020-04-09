@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+/**
+ * Ejemplo de una llamada a API
+ * GET /public/api/user?api_token=TOKENKEY
+ */
+Route::get('/user', 'Api\ApiController@register')->middleware('auth:api');
+
+

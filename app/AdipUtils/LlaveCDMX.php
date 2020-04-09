@@ -62,7 +62,7 @@ final class LlaveCDMX{
         $resultToken = $my_cURL->execute();
         $oResult = json_decode($resultToken);
         if(NULL===$oResult){
-            Logg::log('authenticate '.pathinfo(__FILE__, PATHINFO_FILENAME),'LlaveCDMX devolvió un objeto vacío a la hora de solicitar el primer token', 0);
+            Logg::log(__METHOD__,'LlaveCDMX devolvió un objeto vacío a la hora de solicitar el primer token', 0);
             die('<h3>Authentication required (LlaveCDMX)</h3>');
         }
 

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Log;
+use App\AdipUtils\ErrorLoggerService as Logg;
 
 
 /**
@@ -132,7 +133,11 @@ class LlaveGuard implements Guard{
         }else{
             // Sí trae. Ver si el code tiene token
             $oSession = LlaveSesion::where('tx_code', $_code)->first();
+            
             if ($oSession instanceof LlaveSesion){
+                if(NULL===session()->get('ix_token')){
+                    abort(500, 'No pudimos completar el inicio de sesión, el identificador de sesión está en blanco');
+                }
                 return $this->validateSession($oSession);
             }else{
                 // Autenticación usando Llave CDMX
@@ -163,7 +168,8 @@ class LlaveGuard implements Guard{
                                 $uBase->permisos()->attach($permisosLlave->getItem($p));
                             }
                             $u->descripcionRol = $permisosLlave->getItem(0)->nb_permiso;
-                            $u->update();
+                            $uBase->descripcionRol = $permisosLlave->getItem(0)->nb_permiso;
+                            $uBase->update();
                         }
                         $ixToken=hash('sha256', microtime(true).'ADIP/CDMX'.Network::getClientIP().Network::getClientUA().Str::random(30));;
                         $tsIni=microtime(true);
@@ -224,6 +230,7 @@ class LlaveGuard implements Guard{
 
     private function validateSession(LlaveSesion $oSession): ?User{
         // Hay sesion con ese código, ver si es válida
+        //dd(session()->get('ix_token'),$oSession->ix_token);
         if(!(session()->get('ix_token')==$oSession->ix_token)){
             LogSesion::create([
                 'ix_token' => session()->get('ix_token')
