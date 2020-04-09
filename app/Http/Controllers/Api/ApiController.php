@@ -13,7 +13,11 @@ class ApiController extends Controller{
     private const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; WOW64) ADIP(CDMX)/Endpoint Client';
     private $requuid;
 
+    /**
+     * Metodo de ejemplo que muestra los datos de la app que consume la API
+     */
     public function register(Request $r){
+        // Estas líneas son obligatorias, no eliminar
         if(!$this->validateRequest($r)){            
             if($r->expectsJson()){
                 return \Response::json([
