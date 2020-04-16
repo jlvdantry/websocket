@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 /**
  * Ejemplo de una llamada a API
- * GET /public/api/user?api_token=TOKENKEY
+ * GET /public/api/user
  */
 Route::get('/user', 'Api\ApiController@register')->middleware('auth:api');
 

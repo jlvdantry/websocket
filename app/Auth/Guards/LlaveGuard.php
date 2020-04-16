@@ -144,7 +144,7 @@ class LlaveGuard implements Guard{
                 $cdmxAuth = new LlaveCDMX;
                 $res = $cdmxAuth->authenticate($_code);
                 if(isset($res->error)){
-                    Logg::log(__METHOD__.' '.pathinfo(__FILE__, PATHINFO_FILENAME),$res->errorDescription, 401);
+                    Logg::log(__METHOD__,$res->errorDescription, 401);
                     abort(401,$res->errorDescription);
                 }
                 if(isset($res->accessToken)){
