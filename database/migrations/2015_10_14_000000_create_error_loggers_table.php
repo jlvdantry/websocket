@@ -16,8 +16,8 @@ class CreateErrorLoggersTable extends Migration
         Schema::create('t001803_error', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('tx_uuid', 50);
-            $table->string('tx_nivel', 70);
-            $table->string('tx_detalle', 500);
+            $table->string('tx_nivel', 1000);
+            $table->string('tx_detalle', 3000);
             $table->string('tx_request_uri', 2000);
             $table->string('tx_session_token', 1000);
             $table->integer('nu_http_response')->unsigned();
