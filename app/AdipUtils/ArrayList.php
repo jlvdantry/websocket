@@ -13,28 +13,20 @@ class ArrayList implements IAbstractReturnType{
 		;
 	}
 
-	public function add($item){
-		if(is_object($item)){
-			$this->arreglo[] = $item ;
-		}else{
-                    
-		}
+	public function add(Object $item){
+		$this->arreglo[] = $item;
 	}
 
-	public function addFromArray($a){
-		if(is_array($a)){
-			for($x=0;$x<count($a);$x++){
-				if(is_object($a[$x])){
-					$this->add($a[$x]);
-				}else{
-                                    
-				}
+	public function addFromArray(Array $a){		
+		for($x=0;$x<count($a);$x++){
+			if(is_object($a[$x])){
+				$this->add($a[$x]);
 			}
 		}
 	}
 
-	public function isEmpty(){
-		return $this->size()==0;
+	public function isEmpty():bool{
+		return (bool)$this->size()==0;
 	}
 
 	public function clear(){
@@ -51,15 +43,11 @@ class ArrayList implements IAbstractReturnType{
 		$this->arreglo[$item]=NULL;
 	}
 
-	public function size(){
-		$size = 0;
-		foreach ($this->arreglo as $item) {
-		   $size++;
-		}
-		return $size;
+	public function size():int{
+		return count($this->arreglo);
 	}
 
-	public function toArray(){
+	public function toArray():Array{
 		$ret=array();
 		foreach ($this->arreglo as $item) {
 		   $ret[]=$item;
@@ -67,7 +55,7 @@ class ArrayList implements IAbstractReturnType{
 		return $ret;
 	}
 
-	public function getItem($item){
+	public function getItem(int $item):Object{
 		return $this->arreglo[$item];
 	}
 }

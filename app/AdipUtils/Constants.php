@@ -15,6 +15,8 @@ final class Constants{
 
     public static function mes($m){
         $m=(int)$m;
+        $m=$m>12?0:$m;
+        $m=$m<0?0:$m;
         $meses =[
             '','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
         ];

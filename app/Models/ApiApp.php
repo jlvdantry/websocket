@@ -15,6 +15,7 @@ class ApiApp extends Authenticatable
     public $timestamps = FALSE;
     protected $primaryKey = 'id';
     protected $table = 'apps_api';
+    protected $hidden = ['created_at', 'updated_at', 'api_token'];
     
 }
 

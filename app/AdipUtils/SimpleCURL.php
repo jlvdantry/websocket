@@ -51,7 +51,7 @@ final class SimpleCURL{
 		$this->method = 'GET';
 	}
 
-    public function useAuthBasic($username ='', $password=''){
+    public function useAuthBasic(String $username ='', String $password=''){
 		$this->useAuthBasic = TRUE;
 		$this->authBasicData = ['username' => $username, 'password'=>$password];
 	}
@@ -161,7 +161,7 @@ final class SimpleCURL{
 		$this->isPrepared = TRUE;
 	}
 
-	public function isPrepared(){
+	public function isPrepared():bool{
 		return $this->isPrepared;
 	}
 
@@ -188,7 +188,7 @@ final class SimpleCURL{
 		return '{"Simple cURL":{"url": "'.$this->url.'","userAgent":"'.$this->userAgent.'","method":"'.$this->method.'","isPrepared": "'.$this->isPrepared.'","useAuthBasic":"'.$this->useAuthBasic.'"}}';
 	}
 
-    public static function isRunnable(){
+    public static function isRunnable():bool{
         return
             function_exists('curl_init')
             && function_exists('curl_setopt')

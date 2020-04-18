@@ -10,8 +10,9 @@ final class MandrillMail{
     private $curl;
 
     public function __construct($url = ''){
+        throw new \Exception('No implementado');
         if(!SimpleCURL::isRunnable()){
-            Logg::log('construct '.pathinfo(__FILE__, PATHINFO_FILENAME),'No se puede ejecutar una de las dependencias de esta API.', 0);
+            Logg::log(__METHOD__,'No se puede ejecutar una de las dependencias de esta API.', 0);
             throw new \Exception("No se puede ejecutar Mandrill si no está activada la extensión cURL");
         }
         $this->curl = new SimpleCURL;
@@ -36,9 +37,6 @@ final class MandrillMail{
             ],
             'async' => FALSE
         ];
-        //die(var_dump(json_encode($mandrillData)));
-
-
         $this->curl->setUserAgent('Mandrill-Curl/1.0');
         $this->curl->setUrl(env('MANDRILL_URL')); //
         $this->curl->setData(json_encode($mandrillData));

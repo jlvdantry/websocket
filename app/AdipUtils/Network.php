@@ -3,12 +3,7 @@
 namespace App\AdipUtils;
 
 final class Network{
-	
-	// @deprecated
-		public const SPEEDTEST_JS = 'http://10.19.104.29/adip-conectividad-emergencias/public/s/test.js?timestamp=';
-		public const SPEEDTEST_DW_SIZE = 9830447;
-	//
-	
+		
 	private function __construct() { ; }
 	
     /**
@@ -16,7 +11,7 @@ final class Network{
      * Devuelve la dirección IP del cliente
      * @return string
      **/
-    public static function getClientIP(){
+    public static function getClientIP():String{
 		if (isset($_SERVER['HTTP_CLIENT_IP']))
 			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
 		else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
@@ -39,7 +34,7 @@ final class Network{
      * Devuelve la cadena de identificación del agente de usuario
      * @return string
      **/
-	public static function getClientUA(){
+	public static function getClientUA():String{
 		if(!isset($_SERVER['HTTP_USER_AGENT'])) return 'NONE';
 		$ret=strlen(trim($_SERVER['HTTP_USER_AGENT']))>0?$_SERVER['HTTP_USER_AGENT']:'NONE';
 		return $ret;
@@ -52,7 +47,7 @@ final class Network{
      * @pre-requisites: Función shell_exec() habilitada
      * @return string Dirección MAC del cliente o 00:00:00:00:00:00 si algo sale mal
      **/
-	public static function getClientMAC(){
+	public static function getClientMAC():String{
 		$mac=shell_exec("arp -a ".Network::getClientIP());
 		preg_match('/..[:-]..[:-]..[:-]..[:-]..[:-]../', $mac, $matches);
 		$realMac=$matches[0]===NULL?'00:00:00:00:00:00':$matches[0];
@@ -65,7 +60,7 @@ final class Network{
 	 * User-Agent
      * @return string Nombre del sistema operativo
      **/
-	public static function getClientOS($ua=''){
+	public static function getClientOS($ua=''):String{
 		$ua=$ua==''?self::getClientUA():$ua;
 		$ret='Otro';
 		$patterns=[];
