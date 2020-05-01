@@ -31,7 +31,12 @@ class ApiController extends Controller{
     public function register(Request $r){
         // Estas línea es obligatoria, no eliminar
         // (Valida user-agent y/o dependencia-id)
-        $this->validateRequest($r);
+        if(!$this->validateRequest($r)){            
+            return \Response::json([
+                'mensaje' => 'No permitido',
+                'codigo' => 403
+            ], 403);
+        }
         // Comenzar aquí el cuerpo del método
         return Auth::user();
     }
@@ -67,16 +72,6 @@ class ApiController extends Controller{
             if($rr->header('dependencia-id') === NULL ){
                 Logg::log(__METHOD__,'La petición no superó la prueba (dependencia id)', 403);
                 $validated=FALSE;
-            }
-        }
-        if(!$validated){            
-            if($rr->expectsJson()){
-                return \Response::json([
-                    'mensaje' => 'No permitido',
-                    'codigo' => 403
-                ], 403);
-            }else{
-                abort(403);
             }
         }
         return $validated;

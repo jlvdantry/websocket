@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Log;
+use Auth;
 use App\AdipUtils\ErrorLoggerService as Logg;
 
 
@@ -125,20 +126,21 @@ class LlaveGuard implements Guard{
      */
     protected function signInWithLlave(): ?User{
         $_code = $this->request->code;
+        $tk = session()->get('ix_token');
         // Ver si la URL trae código
-        if(strlen(trim($_code))==0){
+        if(strlen(trim($_code))===0){
             //No trae, ver si hay sesion
-            //Log::info("Peticion sin code");
             return $this->searchSession();
         }else{
-            // Sí trae. Ver si el code tiene token
             $oSession = LlaveSesion::where('tx_code', $_code)->first();
-            
             if ($oSession instanceof LlaveSesion){
-                if(NULL===session()->get('ix_token')){
-                    abort(500, 'No pudimos completar el inicio de sesión, el identificador de sesión está en blanco');
+                if(NULL === $tk){
+                    //die('Si no pasa nada, haz clic <a href="'.route('home').'">aquí</a> para continuar');
+                    $html = view('redirect')->render();
+                    die($html);
+                }else{
+                    return $this->validateSession($oSession);
                 }
-                return $this->validateSession($oSession);
             }else{
                 // Autenticación usando Llave CDMX
                 $cdmxAuth = new LlaveCDMX;
@@ -197,7 +199,7 @@ class LlaveGuard implements Guard{
                             session()->put('LlaveUser', $u);
                             session()->put('ix_token', $ixToken);
                         }else{
-                            Logg::log(__METHOD__.' '.pathinfo(__FILE__, PATHINFO_FILENAME),'No se inició la sesión', 500);
+                            Logg::log(__METHOD__,'No se inició la sesión', 500);
                             abort(500, 'No pudimos iniciar la sesión. Por favor intenta de nuevo');
                         }
                         
@@ -205,7 +207,7 @@ class LlaveGuard implements Guard{
                     return $u;
                     
                 }else{
-                    Logg::log(__METHOD__.' '.pathinfo(__FILE__, PATHINFO_FILENAME),'No se inició la sesión. Error en LlaveCDMX '.$res, 500);
+                    Logg::log(__METHOD__,'No se inició la sesión. Error en LlaveCDMX '.$res, 500);
                     abort(500,'Ocurrió un error al comunicarnos con los servicios de LlaveCDMX. Ya lo estamos solucionando.');
                 }
             }
@@ -230,7 +232,7 @@ class LlaveGuard implements Guard{
 
     private function validateSession(LlaveSesion $oSession): ?User{
         // Hay sesion con ese código, ver si es válida
-        //dd(session()->get('ix_token'),$oSession->ix_token);
+        
         if(!(session()->get('ix_token')==$oSession->ix_token)){
             LogSesion::create([
                 'ix_token' => session()->get('ix_token')
@@ -244,7 +246,7 @@ class LlaveGuard implements Guard{
         // Ver si está abierta
         if($oSession->st_abierta !== LlaveSesion::OPEN){
             LogSesion::create([
-                'ix_token' => session()->get('ix_token')
+                'ix_token' => $oSession->ix_token
                 ,'tx_mensaje' => 'La sesión fue cerrada'
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
@@ -257,7 +259,7 @@ class LlaveGuard implements Guard{
         $ahora = microtime(true);
         if($ahora>$finn){
             LogSesion::create([
-                'ix_token' => session()->get('ix_token')
+                'ix_token' => $oSession->ix_token
                 ,'tx_mensaje' => 'La sesión ha caducado'
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
@@ -268,7 +270,7 @@ class LlaveGuard implements Guard{
         // User agent
         if($oSession->tx_user_agent !== Network::getClientUA()){
             LogSesion::create([
-                'ix_token' => session()->get('ix_token')
+                'ix_token' => $oSession->ix_token
                 ,'tx_mensaje' => 'Posible intento de sesion hijacking, el agente de usuario no coincide.'
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
@@ -280,7 +282,7 @@ class LlaveGuard implements Guard{
         // IP
         if($oSession->tx_ip != Network::getClientIP()){
             LogSesion::create([
-                'ix_token' => session()->get('ix_token')
+                'ix_token' => $oSession->ix_token
                 ,'tx_mensaje' => 'Se detectó un cambio de red. Posible intento de session hijacking.'
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
