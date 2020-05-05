@@ -135,7 +135,6 @@ class LlaveGuard implements Guard{
             $oSession = LlaveSesion::where('tx_code', $_code)->first();
             if ($oSession instanceof LlaveSesion){
                 if(NULL === $tk){
-                    //die('Si no pasa nada, haz clic <a href="'.route('home').'">aquí</a> para continuar');
                     $html = view('redirect')->render();
                     die($html);
                 }else{
