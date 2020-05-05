@@ -45,7 +45,9 @@ class ApiController extends Controller{
      * Insertar aquí los nuevos métodos
      */
     // public function miSuperMetodo(Request $r){
-    //     $this->validateRequest($r);
+        // if(!$this->validateRequest($r)){            
+        //     // Cuerpo del método aquí
+        // }
     // }
 
 

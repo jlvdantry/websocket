@@ -43,14 +43,14 @@ final class LlaveCDMX{
             if(strlen(trim($this->authUser))==0)     throw new \Exception('No se definió usuario Basic Auth para Llave CDMX');
             if(strlen(trim($this->authPassword))==0) throw new \Exception('No se definió contraseña Basic Auth para Llave CDMX');
         }catch(\Exception $e){
-            Logg::log('__construct '.pathinfo(__FILE__, PATHINFO_FILENAME),$e->getMessage(), 500);
+            Logg::log(__METHOD__,$e->getMessage(), 500);
             abort(500, $e->getMessage());
         }
     }
 
     public function authenticate(String $kod):Object{
         if(strlen(trim($kod))==0){
-            Logg::log('authenticate '.pathinfo(__FILE__, PATHINFO_FILENAME),'No se envió ningún código al método authenticate()', 500);
+            Logg::log(__METHOD__,'No se envió ningún código al método authenticate()', 500);
             throw new \Exception('No se envió ningún código al método authenticate()');
         }
         $my_cURL = new SimpleCURL;
@@ -71,7 +71,7 @@ final class LlaveCDMX{
 
     public function getUser(String $tokeen):?User{
         if(strlen(trim($tokeen))==0){
-            Logg::log('getUser '.pathinfo(__FILE__, PATHINFO_FILENAME),'No se envió ningún token al método getUser()', 500);
+            Logg::log(__METHOD__,'No se envió ningún token al método getUser()', 500);
             throw new \Exception('No se envió ningún token al método getUser()');
         }
         $ret=NULL;
@@ -92,7 +92,7 @@ final class LlaveCDMX{
 
     public function getRoles(String $tokeen, User $u):ArrayList{
         if(strlen(trim($tokeen))==0){
-            Logg::log('getRoles '.pathinfo(__FILE__, PATHINFO_FILENAME),'No se envió ningún token al método getRoles()', 500);
+            Logg::log(__METHOD__,'No se envió ningún token al método getRoles()', 500);
             throw new \Exception('No se envió ningún token al método getRoles()');
         }
         $ret=new ArrayList;
@@ -111,7 +111,7 @@ final class LlaveCDMX{
             for($r=0;$r<count($oTemp);$r++){
                 $permiso_user = Permiso::where('nb_permiso', $oTemp[$r]->rol)->first();
                 if(NULL === $permiso_user){
-                    Logg::log(__METHOD__.' '.pathinfo(__FILE__, PATHINFO_FILENAME),'Permiso LlaveCDMX no reconocido '.$oTemp[$r]->rol, 400);
+                    Logg::log(__METHOD__,'Permiso LlaveCDMX no reconocido '.$oTemp[$r]->rol, 400);
                     abort(400, 'El sistema LlaveCDMX ha enviado un permiso que esta aplicación no reconoce ('.$oTemp[$r]->rol.')');
                 }else{
                     $ret->add($permiso_user);

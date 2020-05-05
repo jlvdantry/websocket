@@ -23,7 +23,7 @@ class SessionService extends Controller
      */
     public function getSession(Request $r){
 		if(! $r->ajax()){
-            Logg::log('getSession '.pathinfo(__FILE__, PATHINFO_FILENAME),'El recurso solo está disponible vía AJAX', 403);
+            Logg::log(__METHOD__,'El recurso solo está disponible vía AJAX', 403);
 			return \Response::json([
 				'mensaje' => 'No permitido',
 				'codigo' => -1,

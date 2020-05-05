@@ -169,7 +169,7 @@ final class SimpleCURL{
 		if($this->isPrepared()){
 			$ret = curl_exec($this->cURL_executor);
 			if($ret  === FALSE){
-				$l = Logg::log('execute '.pathinfo(__FILE__, PATHINFO_FILENAME),$this.' '.curl_error($this->cURL_executor), 500);
+				$l = Logg::log(__METHOD__,$this.' '.curl_error($this->cURL_executor), 500);
 				abort(500, 'Falló la ejecución de SimpleCURL');
 			}
 		}else{
