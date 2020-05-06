@@ -63,7 +63,34 @@
                     <p>La aplicación incluye un validador de sesión activa (intervalos de 5 minutos). Si la sesión ha caducado, se mostrará un modal con un aviso</p>
                     <p>Para desactivarlo, editar el archivo app.js en resources y comentar la siguiente línea:</p>
                     <code>timercito = setInterval(laSesion, 5*60*1000); // minutostimer * 60 * 1000</code>
-
+                    <hr>
+                    <h2>Envío de correos</h2>
+                    <p>En PHP se considera mala práctica de programación realizar envío de correos "al vuelo", es 
+                    realizar el envío dentro de la programación que implica lógica de negocio. Por ejemplo</p>
+                    @php
+                    $foo = '$solicitud->actualizar();'.PHP_EOL;
+                    $foo.= '$to = $solicitud->usuario()->email;'.PHP_EOL;
+                    $foo.= 'Mail::to($to)->send(\'solicitud-validada\'); // Esta línea en Laravel envía el correo'.PHP_EOL;
+                    $foo.= 'return view(\'solicitud.actualizada\');'.PHP_EOL;
+                    @endphp
+                    <code>{!! nl2br($foo) !!}</code>
+                    <p>En el ejemplo anterior si el envío de correo demora 25000 milisegundos (25 segundos), ese tiempo se verá reflejado
+                    en el tiempo que tarda la página en cargar, lo cual disminuye la experiencia de usaurio.</p>
+                    <p>Para solventar este comportamiento el arquetipo incluye un servicio de envío de correos, usando dicho
+                    servicio, se elimina el tiempo de respuesta de envío de correo. (en el ejemplo anterior, los 25 segundos)</p>
+                    <p>El servicio envía los correos pendientes mediante una tarea programada. Consulta el manual técnico para obtener los detalles.</p>
+                    @php
+                    $foo = '$html = view(\'emails.email\')->render();'.PHP_EOL;
+                    $foo .= '$correo = ['.PHP_EOL;
+                    $foo .= '    \'tx_from\' => env(\'MAIL_FROM_ADDRESS\', \'no-reply@cdmx.gob.mx\')'.PHP_EOL;
+                    $foo .= '    ,\'tx_to\' => $solicitud->tx_email'.PHP_EOL;
+                    $foo .= '    ,\'tx_subject\' => \'Alta Vehicular / Validando documentos\''.PHP_EOL;
+                    $foo .= '    ,\'tx_body\' => $html'.PHP_EOL;
+                    $foo .= '    ,\'nu_priority\' => 0'.PHP_EOL;
+                    $foo .= '];'.PHP_EOL;
+                    $foo .= 'Correo::create($correo);'.PHP_EOL;
+                    @endphp
+                    <code>{!! nl2br($foo) !!}</code>
                 </div>
             </div>
         </div>

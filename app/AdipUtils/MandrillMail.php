@@ -3,14 +3,13 @@
 namespace App\AdipUtils;
 
 use App\AdipUtils\SimpleCURL;
-use App\Models\CorreoTramite;
+use App\Models\Correo;
 
 final class MandrillMail{
     
     private $curl;
 
     public function __construct($url = ''){
-        throw new \Exception('No implementado');
         if(!SimpleCURL::isRunnable()){
             Logg::log(__METHOD__,'No se puede ejecutar una de las dependencias de esta API.', 0);
             throw new \Exception("No se puede ejecutar Mandrill si no está activada la extensión cURL");
@@ -18,14 +17,14 @@ final class MandrillMail{
         $this->curl = new SimpleCURL;
 	}
 	
-	public function sendMail(CorreoTramite $correo){
+	public function sendMail(Correo $correo){
         $mandrillData=[
             'key' => env('MANDRILL_SECRET'),
             'message' => [
                 'html' => $correo->tx_body,
                 'text' => strip_tags($correo->tx_body),
                 'subject' => $correo->tx_subject,
-                'from_email' => env('MAIL_FROM_ADDRESS'),
+                'from_email' => $correo->tx_from,
                 'from_name' => env('MAIL_FROM_NAME'),
                 'to' => [0 => [
                     'email' => $correo->tx_to,
