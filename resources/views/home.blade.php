@@ -59,12 +59,12 @@
                         <button type="submit" class="btn btn-cdmx btn-shadow">Enviar</button>
                     </form>
                     <hr>
-                    <h2>Validación de sesiones</h2>
-                    <p>La aplicación incluye un validador de sesión activa (intervalos de 5 minutos). Si la sesión ha caducado, se mostrará un modal con un aviso</p>
+                    <h1>Validación de sesiones</h1>
+                    <p>La aplicación incluye un validador de sesión activa (intervalos de 5 minutos). Si la sesión ha caducado, se mostrará un modal con un aviso.</p>
                     <p>Para desactivarlo, editar el archivo app.js en resources y comentar la siguiente línea:</p>
                     <code>timercito = setInterval(laSesion, 5*60*1000); // minutostimer * 60 * 1000</code>
                     <hr>
-                    <h2>Envío de correos</h2>
+                    <h1>Envío de correos</h1>
                     <p>En PHP se considera mala práctica de programación realizar envío de correos "al vuelo", es 
                     realizar el envío dentro de la programación que implica lógica de negocio. Por ejemplo</p>
                     @php
