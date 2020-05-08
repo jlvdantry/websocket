@@ -65,7 +65,7 @@
                     <code>timercito = setInterval(laSesion, 5*60*1000); // minutostimer * 60 * 1000</code>
                     <hr>
                     <h1>Envío de correos</h1>
-                    <p>En PHP se considera mala práctica de programación realizar envío de correos "al vuelo", es 
+                    <p>En PHP se considera mala práctica de programación realizar envío de correos "al vuelo", es decir,  
                     realizar el envío dentro de la programación que implica lógica de negocio. Por ejemplo</p>
                     @php
                     $foo = '$solicitud->actualizar();'.PHP_EOL;

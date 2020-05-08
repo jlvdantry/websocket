@@ -17,7 +17,7 @@ final class MandrillMail{
         $this->curl = new SimpleCURL;
 	}
 	
-	public function sendMail(Correo $correo){
+	public function sendMail(Correo $correo):Array{
         $mandrillData=[
             'key' => env('MANDRILL_SECRET'),
             'message' => [
