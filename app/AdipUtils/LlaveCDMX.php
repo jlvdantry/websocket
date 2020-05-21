@@ -120,6 +120,9 @@ final class LlaveCDMX{
         }
         // Todos son ciudadanos
         $citizen = Permiso::where('nb_permiso', Permiso::NB_CIUDADANO)->first();
+        if(NULL === $citizen){
+            abort(500, 'No hay permiso de ciudadano. Si esta es una App nueva, asegúrate de haber ejecutado el seeder de permisos. (php artisan db:seed --class=PermisosTableSeeder');
+        }
         $ret->add($citizen);
         return  $ret;
     }

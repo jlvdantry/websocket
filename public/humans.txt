@@ -2,7 +2,7 @@
 	Subject: Agencia Digital de Innovación Pública
 	From: Mexico City, Mexico
 
-	Web developers: JGHC, FT
+	Web developers: JGHC
 	From: Mexico City, Mexico
 
 /* SITE */
