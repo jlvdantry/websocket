@@ -23,18 +23,22 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="author" type="text/plain" href="{{asset('humans.txt')}}" charset="UTF-8" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="no" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<link rel="apple-touch-startup-image" href="{{ asset('images/favicon.png') }}">
-	<link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}" />
+	<link rel="apple-touch-startup-image" href="{{ asset('images/apple-bg-start.jpg') }}">
+	<link rel="apple-touch-icon" href="{{ asset('images/favicon192.png') }}" />
 	<link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}" />
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon192.png') }}" />
     
     <meta property="og:url" content="{{route('welcome')}}" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="{{env('APP_NAME')}} | Ciudad de México" />
     <meta property="og:description" content="{{env('APP_DESCRIPTION')}}" />
-    <meta property="og:image" content="{{ asset('images/favicon.png') }}" />
+    <meta property="og:image" content="{{ asset('images/thumb.jpg') }}" />
+    <meta property="og:image:type" content="image/jpg"/>
+    <meta property="og:image:width" content="615"/>
+    <meta property="og:image:height" content="485"/>
+
 
 </head>
 <body class="d-flex flex-column">
