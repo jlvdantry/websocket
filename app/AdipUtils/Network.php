@@ -50,7 +50,11 @@ final class Network{
 	public static function getClientMAC():String{
 		$mac=shell_exec("arp -a ".Network::getClientIP());
 		preg_match('/..[:-]..[:-]..[:-]..[:-]..[:-]../', $mac, $matches);
-		$realMac=$matches[0]===NULL?'00:00:00:00:00:00':$matches[0];
+		if(is_array($matches) && count($matches)>0){
+			$realMac=$matches[0]===NULL?'00:00:00:00:00:00':$matches[0];
+		}else{
+			$realMac='00:00:00:00:00:00';
+		}
 		return strtoupper($realMac);
 	}
 
