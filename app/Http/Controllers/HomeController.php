@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Correo;
+use App\AdipUtils\ArrayList;
+use App\AdipUtils\ErrorLoggerService as Logg;
 
 class HomeController extends Controller
 {
@@ -24,16 +26,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $html = view('correotemplate')->render();
-        $correo = [
-        'tx_from' => env('MAIL_FROM_ADDRESS', 'no-reply@cdmx.gob.mx')
-        ,'tx_to' => 'memito__1981@hotmail.com'
-        ,'tx_subject' => 'Asunto del correo'
-        ,'tx_body' => $html
-        ,'nu_priority' => 0
-        ];
-        Correo::create($correo);
-        \Artisan::call('llave:enviar-correos');
         return view('home');
     }
 }

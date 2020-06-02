@@ -17,11 +17,11 @@ class ApiController extends Controller{
     private const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; WOW64) ADIP(CDMX)/Endpoint Client';
 
     // Activar o desactivar validaciones
-    // de user-agent y dependencia y dependencia-id
+    // de user-agent y dependencia-id
     private $validateUA = TRUE;
     private $validateDependencia = TRUE;
 
-    // Identificador de peticion
+    // Identificador de peticion (no editar)
     private $requuid;
 
 
@@ -29,7 +29,7 @@ class ApiController extends Controller{
      * Metodo de ejemplo que muestra los datos de la app que consume la API
      */
     public function register(Request $r){
-        // Estas línea es obligatoria, no eliminar
+        // Estas sección es obligatoria, no eliminar
         // (Valida user-agent y/o dependencia-id)
         if(!$this->validateRequest($r)){            
             return \Response::json([
@@ -45,9 +45,16 @@ class ApiController extends Controller{
      * Insertar aquí los nuevos métodos
      */
     // public function miSuperMetodo(Request $r){
+        // Estas sección es obligatoria, no eliminar
+        // (Valida user-agent y/o dependencia-id)
         // if(!$this->validateRequest($r)){            
-        //     // Cuerpo del método aquí
+        //     return \Response::json([
+        //         'mensaje' => 'No permitido',
+        //         'codigo' => 403
+        //     ], 403);
         // }
+        // Comenzar aquí el cuerpo del método
+        
     // }
 
 

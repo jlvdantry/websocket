@@ -13,7 +13,7 @@ final class Constants{
     // Paginador
     public const RESULTS_PER_PAGE = 15;
 
-    public static function mes($m){
+    public static function mes($m):String{
         $m=(int)$m;
         $m=$m>12?0:$m;
         $m=$m<0?0:$m;

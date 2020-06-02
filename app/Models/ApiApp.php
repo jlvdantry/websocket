@@ -16,6 +16,14 @@ class ApiApp extends Authenticatable
     protected $primaryKey = 'id';
     protected $table = 'apps_api';
     protected $hidden = ['created_at', 'updated_at', 'api_token'];
+    protected $fillable = [
+        'nb_aplicacion'
+        ,'tx_descripcion_app'
+        ,'api_token'
+        ,'st_activo'
+        ,'created_at'
+        ,'updated_at'
+    ];
     
 }
 
