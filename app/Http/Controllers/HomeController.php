@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Correo;
-use App\AdipUtils\ArrayList;
-use App\AdipUtils\ErrorLoggerService as Logg;
+use App\AdipUtils\MailFactory;
 
 class HomeController extends Controller
 {
@@ -26,6 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $foo = MailFactory::sendMail(
+            new Correo([
+                'tx_from' => env('MAIL_FROM_ADDRESS', 'no-reply@cdmx.gob.mx')
+                ,'tx_to' => 'memito__1981@hotmail.com'
+                ,'tx_subject' => 'Asunto del correo'
+                ,'tx_body' => 'Prueba de mensaje'
+                ,'nu_priority' => 0        
+            ])
+        );
         return view('home');
     }
 }
