@@ -28,4 +28,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 // todo lo que tenga que ver con servicios
 Route::group(['prefix' => 'service', 'namespace'=>'AdipServices'], function() {    
     Route::get('/session/getSession', 'SessionService@getSession')->name('getSession');
+    
+    Route::get('/storage/getFile/{uuid}', 'StorageController@getFileByUuid')->name('getFileByUuid');
+    
 });
