@@ -4,7 +4,7 @@
 <nav class="text-right container-fluid secciones" id="nav-secciones">&nbsp;</nav>
 <div class="plecota">
 
-    <h2 class="encabezado-tramites pt-2 pl-5">{{env('APP_NAME')}}</h2>
+    <h2 class="encabezado-tramites pt-2 pl-5">{{config('app.name')}}</h2>
 </div>
 
 <div class="row align-items-center justify-content-center height-60">

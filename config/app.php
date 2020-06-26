@@ -15,6 +15,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'description' => env('APP_DESCRIPTION'),
+    
+    'dependencia' => env('APP_DEPENDENCIA'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -40,6 +44,11 @@ return [
     */
 
     'debug' => (bool) env('APP_DEBUG', false),
+    'debug_blacklist' => [
+        '_COOKIE' => array_keys($_COOKIE),
+        '_SERVER' => array_keys($_SERVER),
+        '_ENV' => array_keys($_ENV),        
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +89,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------

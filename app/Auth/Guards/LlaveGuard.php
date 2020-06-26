@@ -174,7 +174,7 @@ class LlaveGuard implements Guard{
                         }
                         $ixToken=hash('sha256', microtime(true).'ADIP/CDMX'.Network::getClientIP().Network::getClientUA().Str::random(30));;
                         $tsIni=microtime(true);
-                        $tsFin=$tsIni + ((int)env('SESSION_LIFETIME'))*60;
+                        $tsFin=$tsIni + ((int)config('session.lifetime'))*60;
                         $pSesion=[
                             'tx_code' => $_code
                             ,'tx_token' => $res->accessToken

@@ -23,16 +23,16 @@ final class LlaveCDMX{
      */
     public function __construct(){
         try{
-            $this->clientId = env('LLAVE_CLIENT_ID');
-            $this->redirectTo = env('LLAVE_URL_REDIRECT', route('welcome'));
-            $this->clientDescription = env('LLAVE_DESCRIPTION','Generic Client Llave CDMX');
-            $this->authURI = env('LLAVE_SERVER');
-            $this->tokenURI = env('LLAVE_GET_TOKEN');
-            $this->userURI = env('LLAVE_GET_USER');
-            $this->rolesURI = env('LLAVE_GET_ROLES');
-            $this->secret = env('LLAVE_APP_SECRET');
-            $this->authUser = env('LLAVE_DOMAIN_USER');
-            $this->authPassword =env('LLAVE_DOMAIN_PASSWORD');
+            $this->clientId = config('llave.idcliente');
+            $this->redirectTo = config('llave.redirect', route('welcome'));
+            $this->clientDescription = config('app.name','Generic Client Llave CDMX');
+            $this->authURI = config('llave.server');
+            $this->tokenURI = config('llave.gettoken');
+            $this->userURI = config('llave.getuser');
+            $this->rolesURI = config('llave.getroles');
+            $this->secret = config('llave.secret');
+            $this->authUser = config('llave.domainuser');
+            $this->authPassword =config('llave.domainpassword');
 
             if(strlen(trim($this->clientId))==0)     throw new \Exception('No se definió ID de cliente para Llave CDMX');
             if(strlen(trim($this->authURI))==0)      throw new \Exception('No se definió URL de redireccionamiento para Llave CDMX');

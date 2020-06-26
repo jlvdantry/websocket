@@ -20,8 +20,9 @@ class StorageController extends Controller
      * @param String $uuid
      * @return \Illuminate\Http\Response
      */
-    public function getFileByUuid(Request $r, $uuid){
-		return FileService::getFile($uuid);
+    public function showFileByUuid(Request $r, $uuid){
+        $file =  FileService::getFile($uuid);
+        return response()->file($file->real_path);
     }
 
     /**
@@ -31,8 +32,9 @@ class StorageController extends Controller
      * @param String $uuid
      * @return \Illuminate\Http\Response
      */
-    public function downloadFileByUuid(Request $r){
-		return FileService::getFile($uuid, TRUE);
+    public function downloadFileByUuid(Request $r, $uuid){
+          $file =  FileService::getFile($uuid);
+          return response()->download($file->real_path, $file->archivo->nb_archivo, ['Content-Type' => $file->archivo->tx_mime_type]);
     }
 
 }
