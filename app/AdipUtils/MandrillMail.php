@@ -19,13 +19,13 @@ final class MandrillMail{
 	
 	public function sendMail(Correo $correo):Array{
         $mandrillData=[
-            'key' => env('MANDRILL_SECRET'),
+            'key' => config('engine.mandrillsecret'),
             'message' => [
                 'html' => $correo->tx_body,
                 'text' => strip_tags($correo->tx_body),
                 'subject' => $correo->tx_subject,
                 'from_email' => $correo->tx_from,
-                'from_name' => env('MAIL_FROM_NAME'),
+                'from_name' => config('mail.from.name'),
                 'to' => [0 => [
                     'email' => $correo->tx_to,
                     'name' => '',
@@ -37,7 +37,7 @@ final class MandrillMail{
             'async' => FALSE
         ];
         $this->curl->setUserAgent('Mandrill-Curl/1.0');
-        $this->curl->setUrl(env('MANDRILL_URL')); //
+        $this->curl->setUrl(config('engine.mandrillurl')); //
         $this->curl->setData(json_encode($mandrillData));
         $this->curl->addHeader(['name'=>'Content-Type','value'=>'application/json']);
         $this->curl->prepare();

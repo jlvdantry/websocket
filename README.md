@@ -40,12 +40,14 @@ Para la instalación del cliente, realizar los siguientes pasos:
 Para verificar la instalación, acceder a la URL de la aplicación e intentar iniciar sesion con Llave.
 
 ## Nuevas funciones!
-Servicio para envío de correos!
+Storage Service, servicio para almacenar de manera segura los documentos que se envían por formulario.
 
 ## Changelog
 08/04/2020 - Version inicial.
 
-08/04/2020 - Soporte para exponer servicios API
+08/04/2020 - Soporte para exponer servicios API.
 
-08/05/2020 - Servicio para envío de correos
+08/05/2020 - Servicio para envío de correos.
+
+01/07/2020 - Storage Service.
 

@@ -6,9 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="urlbase" content="{{ url('') }}">
     <meta name="author" content="Agencia Digital de Innovavión Pública">
-    <meta name="description" content="{{env('APP_NAME')}}">
+    <meta name="description" content="{{config('app.name')}}">
 
-    <title>{{env('APP_NAME')}}</title>
+    <title>{{config('app.name')}}</title>
 
     <script>
         var ubase = "{{ route('welcome')}}";
@@ -32,8 +32,8 @@
     
     <meta property="og:url" content="{{route('welcome')}}" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="{{env('APP_NAME')}} | Ciudad de México" />
-    <meta property="og:description" content="{{env('APP_DESCRIPTION')}}" />
+    <meta property="og:title" content="{{config('app.name')}} | Ciudad de México" />
+    <meta property="og:description" content="{{config('app.description')}}" />
     <meta property="og:image" content="{{ asset('images/thumb.jpg') }}" />
     <meta property="og:image:type" content="image/jpg"/>
     <meta property="og:image:width" content="615"/>
@@ -57,7 +57,7 @@
                 <div class="collapse navbar-collapse bar" id="navbarSupportedContent">
                     <div class="linea auto-hide"></div>
                     <div class="jeader-title auto-hide">
-                        {{env('APP_NAME')}}
+                        {{config('app.name')}}
                     </div>
                 </div>
                 @guest
@@ -66,7 +66,7 @@
                                 <a class="nav-link" href="{{ route('login') }}">
                                     <img src="{{asset('images/btn-llave-sm.png')}}" title="Iniciar sesión con Llave CDMX">
                                 </a>
-                            <div class="tx-crea-cuenta">¿Aún no tienes cuenta? <a href="{{env('LLAVE_CREATE_ACCOUNT')}}" target="_blank">Crea una</a></p>
+                            <div class="tx-crea-cuenta">¿Aún no tienes cuenta? <a href="{{config('llave.createaccount')}}" target="_blank">Crea una</a></p>
                         </li>
                     </ul>
                 @else
@@ -127,8 +127,8 @@
             <img class="img-footer brand-logo-cdmx pi-footer" src="{{asset('images/adip-footer.svg')}}" alt="">
         </div>
         <div>
-            <p class="label-footer">{{env('APP_NAME')}}</p>
-            <p class="label-footer"><strong>Diseñado por la Agencia Digital de Innovación Pública. {{env('APP_DEPENDENCIA')}}</strong></p>
+            <p class="label-footer">{{config('app.name')}}</p>
+            <p class="label-footer"><strong>Diseñado por la Agencia Digital de Innovación Pública. {{config('app.dependencia')}}</strong></p>
         </div>
         <div id="footer-mark"></div>
     </footer>

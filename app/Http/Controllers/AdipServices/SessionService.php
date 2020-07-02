@@ -15,10 +15,9 @@ class SessionService extends Controller
     }
 
     /**
-     * Obtiene lineas de vehículo por marca.
+     * Obtiene validacion de sesion.
      * 
      * @param  \Illuminate\Http\Request  $r
-     * @param  int $idMarca
      * @return \Illuminate\Http\Response
      */
     public function getSession(Request $r){
