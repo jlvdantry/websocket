@@ -16,7 +16,7 @@ final class FileService{
     private function __construct(){	}
 
     
-    public static function getFile(String $uuid){
+    public static function getFile(String $uuid):Object{
         $archs = Archivo::where('tx_uuid','=',$uuid)->get();
         if(count($archs)===1){
             $arch = $archs[0];
@@ -44,6 +44,7 @@ final class FileService{
         $archivo->storeAs(self::STORAGE_FOLDER_NAME, $toSave->tx_uuid.'.dat');
         $toSave->save();
         return (Object)[
+            'id' => $toSave->id,
             'nb_archivo' => $toSave->nb_archivo,
             'tx_mime_type' => $toSave->tx_mime_type,
             'nu_tamano' => $toSave->nu_tamano,
