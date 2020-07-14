@@ -4,6 +4,7 @@ namespace App\AdipUtils;
 
 use App\Models\{User, Permiso};
 use App\AdipUtils\ErrorLoggerService as Logg;
+use Log;
 
 final class LlaveCDMX{
 
@@ -43,7 +44,7 @@ final class LlaveCDMX{
             if(strlen(trim($this->authUser))==0)     throw new \Exception('No se definió usuario Basic Auth para Llave CDMX');
             if(strlen(trim($this->authPassword))==0) throw new \Exception('No se definió contraseña Basic Auth para Llave CDMX');
         }catch(\Exception $e){
-            Logg::log(__METHOD__,$e->getMessage(), 500);
+            //Logg::log(__METHOD__,$e->getMessage(), 500);
             abort(500, $e->getMessage());
         }
     }
@@ -60,6 +61,7 @@ final class LlaveCDMX{
         $my_cURL->useAuthBasic($this->authUser,$this->authPassword);
         $my_cURL->prepare();
         $resultToken = $my_cURL->execute();
+        Log::info('SimpleCURL: '.$my_cURL);
         $oResult = json_decode($resultToken);
         if(NULL===$oResult){
             Logg::log(__METHOD__,'LlaveCDMX devolvió un objeto vacío a la hora de solicitar el primer token', 0);
@@ -111,7 +113,7 @@ final class LlaveCDMX{
             for($r=0;$r<count($oTemp);$r++){
                 $permiso_user = Permiso::where('nb_permiso', $oTemp[$r]->rol)->first();
                 if(NULL === $permiso_user){
-                    Logg::log(__METHOD__,'Permiso LlaveCDMX no reconocido '.$oTemp[$r]->rol, 400);
+                    //Logg::log(__METHOD__,'Permiso LlaveCDMX no reconocido '.$oTemp[$r]->rol, 400);
                     abort(400, 'El sistema LlaveCDMX ha enviado un permiso que esta aplicación no reconoce ('.$oTemp[$r]->rol.')');
                 }else{
                     $ret->add($permiso_user);

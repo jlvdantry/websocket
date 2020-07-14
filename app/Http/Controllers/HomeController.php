@@ -25,15 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $foo = MailFactory::sendMail(
-            new Correo([
-                'tx_from' => config('mail.from.adderss', 'no-reply@cdmx.gob.mx')
-                ,'tx_to' => 'memito__1981@hotmail.com'
-                ,'tx_subject' => 'Asunto del correo'
-                ,'tx_body' => 'Prueba de mensaje'
-                ,'nu_priority' => 0        
-            ])
-        );
+        // $foo = MailFactory::sendMail(
+        //     new Correo([
+        //         'tx_from' => config('mail.from.adderss', 'no-reply@cdmx.gob.mx')
+        //         ,'tx_to' => 'memito__1981@hotmail.com'
+        //         ,'tx_subject' => 'Asunto del correo'
+        //         ,'tx_body' => 'Prueba de mensaje'
+        //         ,'nu_priority' => 0        
+        //     ])
+        // );
         return view('home');
     }
 }

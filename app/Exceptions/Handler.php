@@ -48,8 +48,27 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    // public function render($request, Throwable $exception)
+    // {
+    //     return parent::render($request, $exception);
+    // }
+
+    /**
+     * @override
+     */
+    protected function prepareResponse($request, $e)
     {
-        return parent::render($request, $exception);
+        
+        if(
+            $e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+            || $e instanceof \Illuminate\Http\Exceptions\PostTooLargeException
+            // || $e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+        ){
+            // By overriding this function, I make Laravel display my custom 500 error page instead of the
+            // 'Whoops, looks like something went wrong.' message in Symfony\Component\Debug\ExceptionHandler
+            return response()->view("llave.runtime-error", ['exception' => $e], 500);
+        }else{
+            return $this->toIlluminateResponse($this->renderHttpException($e), $e);
+        }
     }
 }

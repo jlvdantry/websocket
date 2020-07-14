@@ -126,6 +126,7 @@ class LlaveGuard implements Guard{
      */
     protected function signInWithLlave(): ?User{
         $_code = $this->request->code;
+
         $tk = session()->get('ix_token');
         // Ver si la URL trae código
         if(strlen(trim($_code))===0){
@@ -133,6 +134,7 @@ class LlaveGuard implements Guard{
             return $this->searchSession();
         }else{
             $oSession = LlaveSesion::where('tx_code', $_code)->first();
+            //Log::info('Sesion: '.$oSession);
             if ($oSession instanceof LlaveSesion){
                 if(NULL === $tk){
                     $html = view('redirect')->render();
@@ -145,8 +147,11 @@ class LlaveGuard implements Guard{
                 $cdmxAuth = new LlaveCDMX;
                 $res = $cdmxAuth->authenticate($_code);
                 if(isset($res->error)){
-                    Logg::log(__METHOD__,$res->errorDescription, 401);
-                    abort(401,$res->errorDescription);
+                    //Logg::log(__METHOD__,$res->errorDescription, 401);
+                    // abort(401,$res->errorDescription);
+                    header('HTTP/1.1 401 '.$res->errorDescription,TRUE,401);
+                    $e = view('llave.auth-error')->with(compact('res'))->render();
+                    die ($e);
                 }
                 if(isset($res->accessToken)){
                     // Obtener el user
@@ -198,16 +203,20 @@ class LlaveGuard implements Guard{
                             session()->put('LlaveUser', $u);
                             session()->put('ix_token', $ixToken);
                         }else{
-                            Logg::log(__METHOD__,'No se inició la sesión', 500);
-                            abort(500, 'No pudimos iniciar la sesión. Por favor intenta de nuevo');
+                            //Logg::log(__METHOD__,'No se inició la sesión', 500);
+                            //abort(500, 'No pudimos iniciar la sesión. Por favor intenta de nuevo');
+                            header('HTTP/1.1 500 No pudimos iniciar la sesión',TRUE,500);
+                            die('<pre>No pudimos iniciar la sesión</pre>');
                         }
                         
                     }
                     return $u;
                     
                 }else{
-                    Logg::log(__METHOD__,'No se inició la sesión. Error en LlaveCDMX '.$res, 500);
-                    abort(500,'Ocurrió un error al comunicarnos con los servicios de LlaveCDMX. Ya lo estamos solucionando.');
+                    //Logg::log(__METHOD__,'No se inició la sesión. Error en LlaveCDMX '.$res, 500);
+                    //abort(500,'Ocurrió un error al comunicarnos con los servicios de LlaveCDMX. Ya lo estamos solucionando.');
+                    header('HTTP/1.1 500 Ocurrió un error al comunicarnos con los servicios de LlaveCDMX',TRUE,500);
+                    die('<pre>Ocurrió un error al comunicarnos con los servicios de LlaveCDMX</pre>');
                 }
             }
         }
