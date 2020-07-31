@@ -100,6 +100,7 @@
                 
             </nav>
         </header>
+        @include('llave/noscript')
         <main>
             @yield('content')
         </main>
@@ -132,7 +133,5 @@
         </div>
         <div id="footer-mark"></div>
     </footer>
-
-    
 </body>
 </html>
