@@ -33,7 +33,27 @@ final class FileService{
         }
     }
 
-    public static function store(UploadedFile $archivo):Object{
+    public static function getPublicFile(String $uuid):Object{
+        $archs = Archivo::where('tx_uuid','=',$uuid)->get();
+        if(count($archs)===1){
+            $arch = $archs[0];
+            if($arch->st_public !== 1){
+                abort(403, "El recurso no es de acceso público");
+            }
+            $realArch = storage_path('app'.DIRECTORY_SEPARATOR.self::STORAGE_FOLDER_NAME.DIRECTORY_SEPARATOR.$arch->tx_uuid.'.dat');
+            if ( file_exists($realArch) ){
+                return (Object)['real_path' => $realArch, 'archivo' => $arch];
+            }else{
+                Logg::log(__METHOD__,'No se encontró el archivo '.$uuid, 404);
+                abort(404, "No encontrado");
+            }
+        }else{
+            Logg::log(__METHOD__,'El UUID devuelve un valor diferente a 1.', 500);
+            abort(500);
+        }
+    }
+
+    public static function store(UploadedFile $archivo, $isPublic = FALSE):Object{
         $toSave = new Archivo;
         $toSave->nb_archivo = $archivo->getClientOriginalName();
         $toSave->tx_mime_type = $archivo->getMimeType();
@@ -41,6 +61,7 @@ final class FileService{
         $toSave->tx_uuid = Str::uuid()->toString();
         $toSave->tx_sha256 = hash_file('sha256',$archivo->path());
         $toSave->usr_alta = Auth::user()->idUsuario;
+        $toSave->st_public = (int)$isPublic;
         $archivo->storeAs(self::STORAGE_FOLDER_NAME, $toSave->tx_uuid.'.dat');
         $toSave->save();
         return (Object)[

@@ -22,6 +22,12 @@
                     <pre>{{route('downloadFileByUuid',['uuid' => $saved->tx_uuid])}}</pre>
                     <p><strong>Permalink (Content-Disposition: inline):</strong></p>
                     <pre>{{route('showFileByUuid',['uuid' => $saved->tx_uuid])}}</pre>
+                    @if($public)
+                    <h2>Descarga de el archivo (public)</h2>
+                    <p>Haz clic <a target="_blank" href="{{route('publicFileByUuid',['uuid' => $saved->tx_uuid])}}">aquí</a></p>
+                    <p><strong>Permalink (Content-Disposition: inline):</strong></p>
+                    <pre>{{route('publicFileByUuid',['uuid' => $saved->tx_uuid])}}</pre>
+                    @endif
 
                 </div>
             </div>

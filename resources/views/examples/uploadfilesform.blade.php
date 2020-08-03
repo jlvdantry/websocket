@@ -19,6 +19,10 @@
                             <label for="biArchivo" class="control-label form-label-cdmx">Agregar archivo:</label>
                             <input type="file" name="biArchivo" id="biArchivo" class="form-control form-control-cdmx" required>
                         </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="chkPublic" id="chkPublic" value="1">
+                            <label for="chkPublic" class="control-label form-label-cdmx">Es de acceso público</label>
+                        </div>
                         <hr>
                         <button type="submit" id="btn_send" class="btn btn-cdmx btn-shadow">Enviar</button>
                     </form>

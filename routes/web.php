@@ -31,6 +31,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'service', 'namespace'=>'AdipServices'], function() {    
     Route::get('/session/getSession', 'SessionService@getSession')->name('getSession');
     
+    Route::get('/storage/public/{uuid}', 'StorageController@showPublicFileByUuid')->name('publicFileByUuid');
     Route::get('/storage/getFile/{uuid}', 'StorageController@downloadFileByUuid')->name('downloadFileByUuid');
     Route::get('/storage/viewFile/{uuid}', 'StorageController@showFileByUuid')->name('showFileByUuid');
     Route::post('/storage/upload/', 'StorageController@uploadFile')->name('uploadFile');

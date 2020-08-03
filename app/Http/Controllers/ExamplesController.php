@@ -12,10 +12,11 @@ class ExamplesController extends Controller
     }
 
     
-    public function uploadFile(Request $r){        
+    public function uploadFile(Request $r){
         if($r->hasFile('biArchivo')){
-            $saved = FileService::store($r->file('biArchivo'));
-            return view('examples.file-uploaded')->with(compact('saved'));
+            $public = isset($r->chkPublic) && $r->chkPublic == 1;
+            $saved = FileService::store($r->file('biArchivo'), $public);
+            return view('examples.file-uploaded')->with(compact('saved', 'public'));
         }
     }
 }

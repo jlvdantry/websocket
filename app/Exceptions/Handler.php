@@ -62,8 +62,7 @@ class Handler extends ExceptionHandler
             return response()->view("llave.runtime-error", ['exception' => $exception], 500);
         }else{
             return parent::render($request, $exception);
-        }
-        
+        }   
     }
 
 

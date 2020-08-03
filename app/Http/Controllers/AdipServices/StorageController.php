@@ -10,7 +10,7 @@ use App\AdipUtils\FileService;
 class StorageController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['showPublicFileByUuid']);
     }
 
     /**
@@ -22,6 +22,18 @@ class StorageController extends Controller
      */
     public function showFileByUuid(Request $r, $uuid){
         $file =  FileService::getFile($uuid);
+        return response()->file($file->real_path);
+    }
+
+    /**
+     * Obtiene archivo por Uuid sin autenticar
+     * 
+     * @param  \Illuminate\Http\Request  $r
+     * @param String $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function showPublicFileByUuid(Request $r, $uuid){
+        $file =  FileService::getPublicFile($uuid);
         return response()->file($file->real_path);
     }
 
