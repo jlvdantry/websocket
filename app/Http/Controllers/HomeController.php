@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Correo;
-use App\AdipUtils\MailFactory;
+// use App\AdipUtils\FileService;
+
 
 class HomeController extends Controller
 {
@@ -25,15 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $foo = MailFactory::sendMail(
-        //     new Correo([
-        //         'tx_from' => config('mail.from.adderss', 'no-reply@cdmx.gob.mx')
-        //         ,'tx_to' => 'memito__1981@hotmail.com'
-        //         ,'tx_subject' => 'Asunto del correo'
-        //         ,'tx_body' => 'Prueba de mensaje'
-        //         ,'nu_priority' => 0        
-        //     ])
+        // $f = new \SplFileInfo(
+        //     storage_path('app'.DIRECTORY_SEPARATOR.'cron_manual_3.log')
         // );
+        // $res = FileService::addToStorage($f);
+
         return view('home');
     }
 }

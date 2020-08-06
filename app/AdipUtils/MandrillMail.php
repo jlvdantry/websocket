@@ -3,6 +3,7 @@
 namespace App\AdipUtils;
 
 use App\AdipUtils\SimpleCURL;
+use App\AdipUtils\FileService;
 use App\Models\Correo;
 
 final class MandrillMail{
@@ -18,6 +19,7 @@ final class MandrillMail{
 	}
 	
 	public function sendMail(Correo $correo):Array{
+        $att = $this->prepareAttachments($correo);
         $mandrillData=[
             'key' => config('engine.mandrillsecret'),
             'message' => [
@@ -32,6 +34,7 @@ final class MandrillMail{
                     'type' => 'to'
                     ]
                 ],
+                'attachments' => $att,
                 'important' => $correo->nu_priority===1,
             ],
             'async' => FALSE
@@ -44,5 +47,19 @@ final class MandrillMail{
         $resultMail = $this->curl->execute();
         $oResult = json_decode($resultMail);
 		return $oResult;
-	}
+    }
+    
+    private function prepareAttachments(Correo $c):Array{
+        $at = [];
+        if(count($c->archivos)===0) return [];
+        $adjuntos = $c->archivos;
+        foreach($adjuntos as $adjunto){
+            $at[] = [
+                'type' => $adjunto->tx_mimetype,
+                'name' => $adjunto->nb_archivo,
+                'content' => base64_encode(file_get_contents(FileService::getFile($adjunto->tx_uuid)->real_path))
+            ];
+        }
+        return $at;
+    }
 }

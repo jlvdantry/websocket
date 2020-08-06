@@ -18,7 +18,7 @@ final class MailFactory{
         $mail = new MandrillMail;
         $res = $mail->sendMail($correo);
         $status = $res[0]->status;
-        if($status !== 'sent'){
+        if($status !== 'sent' && $status !== 'queued'){
             $correo->tx_reject_reason = $res[0]->reject_reason;
             $ret = (Object)[
                 'success'=> FALSE,

@@ -57,7 +57,7 @@ class LlaveEnviaCorreos extends Command
                 $correito->nu_intentos++;
                 $res = $mail->sendMail($correito);
                 $status = $res[0]->status;
-                if($status !== 'sent'){
+                if($status !== 'sent' && $status !== 'queued'){
                     $correito->tx_reject_reason = $res[0]->reject_reason;
                     $this->error('      -> Failed: '.$res[0]->reject_reason);
                 }else{

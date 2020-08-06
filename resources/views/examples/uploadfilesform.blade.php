@@ -23,8 +23,12 @@
                             <input type="checkbox" name="chkPublic" id="chkPublic" value="1">
                             <label for="chkPublic" class="control-label form-label-cdmx">Es de acceso público</label>
                         </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="chkSendMail" id="chkSendMail" value="1">
+                            <label for="chkSendMail" class="control-label form-label-cdmx">Enviar por correo electrónico</label>
+                        </div>
                         <hr>
-                        <button type="submit" id="btn_send" class="btn btn-cdmx btn-shadow">Enviar</button>
+                        <button type="submit" id="btn-send" class="btn btn-cdmx btn-shadow">Enviar</button>
                     </form>
                     <hr>
                     

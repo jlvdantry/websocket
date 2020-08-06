@@ -11,7 +11,7 @@ use Illuminate\Http\UploadedFile;
 
 final class FileService{
 
-    private const STORAGE_FOLDER_NAME = 'app_archivos';
+    public const STORAGE_FOLDER_NAME = 'app_archivos';
     
     private function __construct(){	}
 
@@ -63,6 +63,30 @@ final class FileService{
         $toSave->usr_alta = Auth::user()->idUsuario;
         $toSave->st_public = (int)$isPublic;
         $archivo->storeAs(self::STORAGE_FOLDER_NAME, $toSave->tx_uuid.'.dat');
+        $toSave->save();
+        return (Object)[
+            'id' => $toSave->id,
+            'nb_archivo' => $toSave->nb_archivo,
+            'tx_mime_type' => $toSave->tx_mime_type,
+            'nu_tamano' => $toSave->nu_tamano,
+            'tx_uuid' => $toSave->tx_uuid,
+        ];
+    }
+
+    public static function addToStorage(\SplFileInfo $archivo, $isPublic = FALSE):Object{
+        if(!is_file($archivo->getRealPath())){ abort(404, $archivo->getFilename().' no es un archivo'); }
+        $toSave = new Archivo;
+        $toSave->nb_archivo = $archivo->getFilename();
+        $toSave->tx_mime_type = mime_content_type($archivo->getRealPath());
+        $toSave->nu_tamano = $archivo->getSize();
+        $toSave->tx_uuid = Str::uuid()->toString();
+        $toSave->tx_sha256 = hash_file('sha256',$archivo->getRealPath());
+        $toSave->usr_alta = 0;
+        $toSave->st_public = (int)$isPublic;
+        \File::copy(
+            $archivo->getRealPath()
+            ,storage_path('app'.DIRECTORY_SEPARATOR.self::STORAGE_FOLDER_NAME.DIRECTORY_SEPARATOR.$toSave->tx_uuid.'.dat')
+        );
         $toSave->save();
         return (Object)[
             'id' => $toSave->id,
