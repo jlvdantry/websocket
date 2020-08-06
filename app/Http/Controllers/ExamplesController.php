@@ -21,7 +21,7 @@ class ExamplesController extends Controller
             $saved = FileService::store($r->file('biArchivo'), $public);
             /* Envía como archivo adjunto un archivo cargado por el usuario */
             if($sendMailWithFile){
-                // Ejemplo 1: Con lista de correo
+                // Ejemplo 1: Con lista de correo (deberá haber cron que ejecute los envíos)
                 $korreo = new Correo([
                     'tx_from' => config('mail.from.adderss', 'no-reply@cdmx.gob.mx')
                     ,'tx_to' => 'underdog1987@yandex.ru'
@@ -31,7 +31,7 @@ class ExamplesController extends Controller
                 ]);
                 $korreo->save();
                 $korreo->archivos()->attach($saved->id);
-                // Ejemplo 2: Con MailFactory
+                // Ejemplo 2: Con MailFactory (envío al vuelo)
                 // $korreo = new Correo([
                 //     'tx_from' => config('mail.from.adderss', 'no-reply@cdmx.gob.mx')
                 //     ,'tx_to' => 'underdog1987@yandex.ru'
