@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Archivo;
-use App\AdipUtils\ArrrayList;
+use App\AdipUtils\ArrayList;
 use App\AdipUtils\FileService;
 
 class Correo extends Model{
@@ -24,7 +24,7 @@ class Correo extends Model{
         if($archivos instanceof ArrayList){
             for($a = 0; $a < $archivos->size(); $a++){
                 $archivaldo = $archivos->getItem($a);
-                $this->adjuntar($a);
+                $this->adjuntar($archivaldo);
             }
         }else{
             $this->adjuntar($archivos);
