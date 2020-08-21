@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -42,7 +42,7 @@
 
 </head>
 <body class="d-flex flex-column">
-    <div id="app" class="flex-fill container-fluid">
+    <div id="app" class="flex-fill">
         <header>
             <nav class="navbar navbar-expand-sm navbar-light bg-white">
                 <a class="navbar-brand" href="{{ route('welcome') }}">
@@ -62,9 +62,9 @@
                 </div>
                 @guest
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item btn-sesion-pad-r">
+                        <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">
-                                    <img src="{{asset('images/btn-llave-sm.png')}}" title="Iniciar sesión con Llave CDMX">
+                                    <img src="{{asset('images/inicia-llave.svg')}}" title="Iniciar sesión con Llave CDMX">
                                 </a>
                             <div class="tx-crea-cuenta">¿Aún no tienes cuenta? <a href="{{config('llave.createaccount')}}" target="_blank">Crea una</a></p>
                         </li>
@@ -125,7 +125,7 @@
 
     <footer>
         <div style="float:left">
-            <img class="img-footer brand-logo-cdmx pi-footer" src="{{asset('images/adip-footer.svg')}}" alt="">
+            <img class="img-footer pi-footer" src="{{asset('images/adip-footer.svg')}}" alt="">
         </div>
         <div>
             <p class="label-footer">{{config('app.name')}}</p>
