@@ -14,7 +14,7 @@ class Correo extends Model{
     
     protected $table = 't001300_correo_app';
     protected $fillable= ['tx_from','tx_to','tx_cc','tx_cco','tx_subject', 'tx_body','nu_priority'];
-    // protected $files = NULL;
+    protected $dates = ['fh_proximo_intento'];
     
     public function archivos(){
         return $this->belongsToMany(Archivo::class, 't001500_correo_archivo', 'id_correo','id_archivo');
