@@ -73,7 +73,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
 
-                        <li class="nav-item dropdown btn-sesion-pad-r">
+                        <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 <img src="{{asset('images/user-ico-sm.png')}}" alt="Usuario" class="user-ico">
                                 <span class="nb-usuario">{{ strtolower(Auth::user()->nombre.' '.Auth::user()->primerApellido) }}</span> <span class="caret"></span>

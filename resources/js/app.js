@@ -4,9 +4,10 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-// Test
+// Boostrap Core
 require('./bootstrap');
 
+// Datatables
 var dt = require( 'datatables.net' );
 require('datatables.net-buttons');
 
@@ -110,6 +111,13 @@ $(document).ready(function(){
     event.preventDefault();
     event.stopPropagation();
     location.href=uHome;
+  });
+
+  /**
+   * Convertir a mayúsculas los campos
+   */
+  $('.to-uppercase').keyup( function(){
+    $(this).val($(this).val().toUpperCase());
   });
 
 });

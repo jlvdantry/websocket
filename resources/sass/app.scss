@@ -4,19 +4,6 @@
 // Variables
 @import "variables";
 
-// Colores
-@import "general";
-@import "colores";
-@import "fonts";
-@import "botones";
-@import "formularios";
-@import "elementos";
-@import "progressbar";
-@import "table";
-@import "mapas";
-@import "modal";
-@import "mensajes";
-
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
@@ -38,7 +25,7 @@
 
 body {
   min-height: 100vh;
-  background-color: #fff;
+  background-color: $white-two;
   font-family: "Metropolis" !important;
 }
 
@@ -50,10 +37,19 @@ body {
   font-style: normal;
   line-height: 1.17;
   letter-spacing: normal;
-  color: #898d8d;
+  color: $bluish-grey;
   text-transform: uppercase;
   padding: 5px 10px;
   margin: 5px;
+}
+
+header {
+  border-bottom: 5px solid $gray-01;
+  padding: 0em 0rem 0rem;
+  nav {
+      margin: 0 auto;
+      max-width: 6000px;
+  }
 }
 
 @media only screen and (max-width: 585px) {
@@ -65,7 +61,7 @@ body {
 .linea {
   width: 0.3px !important;
   height: 34.6px;
-  border-right: solid 2px #898d8d;
+  border-right: solid 2px $bluish-grey;
   margin: 5px !important;
 }
 
@@ -83,13 +79,12 @@ body {
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
-  color: #5d5d5d;
+  color: $brownish-grey;
 }
 
 .tx-crea-cuenta a {
-  color: #00b140;
+  color: $shamrock;
 }
-
 
 strong {
   font-weight: bolder;
@@ -109,20 +104,26 @@ p {
   padding-bottom: 10px;
 }
 
-.dropdown-item {
+.dropdown-item{
   font-size: 12px;
+}
+.dropdown-item:hover {
+  color:$white-two;
+  background-color: $shamrock;
+}
+.dropdown-item:focus {
+  color:$white-two;
+  background-color: $dark-green;
 }
 
 .bar {
   align-items: flex-end;
 }
 
-.btn-sesion-pad-r {
-  padding-right: 3.5rem;
-}
+
 
 .nb-usuario {
-  color: #00b140;
+  color: $shamrock;
   width: 73px;
   height: 20px;
   font-size: 13px;
@@ -136,7 +137,7 @@ p {
 }
 
 .navbar-light .navbar-nav .nav-link {
-  color: #0f4c42 !important;
+  color: $pine-green !important;
 }
 
 .user-ico {
@@ -145,7 +146,7 @@ p {
 
 footer {
   height: auto !important;
-  background-color: #2e2e32;
+  background-color: $bastille;
   width: 100% !important;
   bottom: 0 !important;
   left: 0 !important;
@@ -194,7 +195,7 @@ footer {
   line-height: 1.27;
   letter-spacing: normal;
   text-align: justify;
-  color: #ffffff;
+  color: $white-two;
   padding-left: 3px;
   padding-right: 3px;
 }
@@ -216,7 +217,7 @@ footer {
 .plecota {
   margin-top: 0px;
   padding-top: 10px;
-  background-color: #0f4c42;
+  background-color: $pine-green;
   padding-bottom: 10px;
   position: relative;
   background-image: url("../images/pleca.svg");
@@ -234,28 +235,28 @@ footer {
   line-height: 1.45;
   letter-spacing: 0.18px;
   text-align: right;
-  color: #0f4c42;
+  color: $pine-green;
   padding-right: 30px;
 }
 
-.encabezado-tramites {
+.encabezado-cdmx {
   font-size: 24px;
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.33;
   letter-spacing: normal;
-  color: #00b140;
+  color: $shamrock;
   padding-bottom: 20px;
 }
 
 .instrucciones-pleca {
-  color: #fff;
+  color: $white-two;
   font-size: 14px;
 }
 .btn-cdmx {
-  background-color: #00b140;
-  color: #fff !important;
+  background-color: $shamrock;
+  color: $white-two !important;
   font-family: "Metropolis";
   font-size: 12px;
   font-weight: bold;
@@ -270,7 +271,7 @@ footer {
 }
 
 .btn-cdmx:hover {
-  color: #fff;
+  color: $pine-green;
 }
 
 .btn-shadow {
@@ -286,22 +287,22 @@ footer {
 
 .form-control-cdmx {
   border-radius: 0.5rem;
-  border: 0.0625rem solid #c1c7d0;
-  color: #383b41;
+  border: 0.0625rem solid $light-blue-grey;
+  color: $charcoal-grey-four;
   font-size: 1rem;
   background-color: transparent;
 }
 
 .form-control-cdmx:focus {
-  color: #495057;
-  background-color: #fff;
-  border-color: #009288 !important;
+  color: $contornocdmx;
+  background-color: $white-two;
+  border-color: $teal-two !important;
   outline: 0;
   box-shadow: 0 0 0 0.1rem rgba(0, 146, 136, 0.25) !important;
 }
 
 .form-label-cdmx {
-  color: #009288;
+  color: $teal-two;
   font-weight: 700;
   font-size: 12px;
   font-weight: bold;
@@ -336,13 +337,10 @@ footer {
   line-height: 1.33;
   letter-spacing: normal;
   text-align: center;
-  color: #00b140;
+  color: $shamrock;
 }
 
-header nav {
-  max-width: 5000px!important;
-}
-
-header{
-  padding: 0em 0rem 0rem!important;
+.has {
+  position: fixed;
+  top: -1000px;
 }
