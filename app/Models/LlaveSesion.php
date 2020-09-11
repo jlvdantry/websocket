@@ -6,12 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class LlaveSesion extends Model{
 
+    /**
+     * Constantes del modelo
+     */
     public const OPEN   = 1;
     public const CLOSED = 0;
-    //
+
+
+    /**
+     * Desactivar campos created_at y updated_at
+     * 
+     * @var bool
+     */
     public $timestamps = false;
     protected $table='t001800_sesion';
 
+    
     /**
      * The attributes that are mass assignable.
      *
