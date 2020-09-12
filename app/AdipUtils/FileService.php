@@ -11,11 +11,25 @@ use Illuminate\Http\UploadedFile;
 
 final class FileService{
 
+    /**
+     * Constantes del modelo
+     */
     public const STORAGE_FOLDER_NAME = 'app_archivos';
     
+
+    /**
+     * Desactivar instanciación de clase
+     */
     private function __construct(){	}
 
     
+    /**
+     * Obtiene información de un archivo almacenado
+     * 
+     * @param String $uuid Identificador de archivo
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return Object
+     */
     public static function getFile(String $uuid):Object{
         $archs = Archivo::where('tx_uuid','=',$uuid)->get();
         if(count($archs)===1){
@@ -33,6 +47,14 @@ final class FileService{
         }
     }
 
+    
+    /**
+     * Obtiene información de un archivo almacenado como público
+     * 
+     * @param String $uuid Identificador de archivo
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return Object
+     */
     public static function getPublicFile(String $uuid):Object{
         $archs = Archivo::where('tx_uuid','=',$uuid)->get();
         if(count($archs)===1){
@@ -53,6 +75,14 @@ final class FileService{
         }
     }
 
+    
+    /**
+     * Almacena un archivo en el Storage del arquetipo
+     * 
+     * @param Illuminate\Http\UploadedFile $archivo
+     * @param bool $isPublic
+     * @return Object
+     */
     public static function store(UploadedFile $archivo, $isPublic = FALSE):Object{
         $toSave = new Archivo;
         $toSave->nb_archivo = $archivo->getClientOriginalName();
@@ -73,6 +103,14 @@ final class FileService{
         ];
     }
 
+    
+    /**
+     * Copia un archivo del sistema de archivos al storage del arquetipo
+     * 
+     * @param \SplFileInfo $archivo
+     * @param bool $isPublic
+     * @return Object
+     */
     public static function addToStorage(\SplFileInfo $archivo, $isPublic = FALSE):Object{
         if(!is_file($archivo->getRealPath())){ abort(404, $archivo->getFilename().' no es un archivo'); }
         $toSave = new Archivo;

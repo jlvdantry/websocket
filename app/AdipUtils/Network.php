@@ -3,13 +3,16 @@
 namespace App\AdipUtils;
 
 final class Network{
-		
+			
+    /**
+     * Desactivar instanciación de clase
+     */
 	private function __construct() { ; }
 	
     /**
-     * getClientIP
      * Devuelve la dirección IP del cliente
-     * @return string
+	 * 
+     * @return String
      **/
     public static function getClientIP():String{
 		if (isset($_SERVER['HTTP_CLIENT_IP']))
@@ -30,9 +33,9 @@ final class Network{
 	}
     
     /**
-     * getClientUA
      * Devuelve la cadena de identificación del agente de usuario
-     * @return string
+	 * 
+     * @return String
      **/
 	public static function getClientUA():String{
 		if(!isset($_SERVER['HTTP_USER_AGENT'])) return 'NONE';
@@ -41,11 +44,11 @@ final class Network{
 	}
     
     /**
-     * getClientMAC
      * Devuelve la dirección física de un equipo de red dada la IP del mismo
      * Solo funciona para equipos que se envuentren en el mismo segmento de la red
-     * @pre-requisites: Función shell_exec() habilitada
-     * @return string Dirección MAC del cliente o 00:00:00:00:00:00 si algo sale mal
+	 * 
+     * @pre-requisites: shell_exec()
+     * @return String Dirección MAC del cliente o 00:00:00:00:00:00 si algo sale mal
      **/
 	public static function getClientMAC():String{
 		$mac=shell_exec("arp -a ".Network::getClientIP());
@@ -59,10 +62,10 @@ final class Network{
 	}
 
     /**
-     * getClientOS
      * Intenta obtener el sistema operativo del cliente a traves de la cadena
 	 * User-Agent
-     * @return string Nombre del sistema operativo
+	 * 
+     * @return String Nombre del sistema operativo
      **/
 	public static function getClientOS($ua=''):String{
 		$ua=$ua==''?self::getClientUA():$ua;

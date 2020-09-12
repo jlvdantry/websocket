@@ -8,8 +8,20 @@ use Auth;
 
 class ErrorLoggerService
 {
+    /**
+     * Desactivar instanciación de clase
+     */
     private function __construct(){}
-    //
+    
+
+    /**
+     * Almacena un registro en la bitácora de errores/eventos del arquetipo
+     * 
+     * @param String $nivel Origen del error, se recomienda usar __METHOD__
+     * @param String $desc Descripcion del error (informacion para el desarrollador)
+     * @param int $response Código de respuesta HTTP que se enviará, 0 si no hay
+     * @return String $uuid ID de petición
+     */
     public static function log(String $nivel, String $desc, int $response = 0):String{
         $idUsuario = Auth::user()!==NULL? Auth::user()->idUsuario:0;
         

@@ -8,9 +8,19 @@ use Carbon\Carbon;
 
 final class MailFactory{
     
+    /**
+     * Desactivar instanciación de clase
+     */
     private function __construct(){	}
 	
-	public static function sendMail(Correo $correo):Object{
+    
+    /**
+     * Envía una petición de envío de mail al servicio de Mandrill
+     * 
+     * @param Correo $correo
+     * @return Object
+     */
+    public static function sendMail(Correo $correo):Object{
         $correo->save();
         $idCorreo = $correo->id;
 

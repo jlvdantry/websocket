@@ -4,6 +4,9 @@ namespace App\AdipUtils;
 
 final class Constants{
 
+    /**
+     * Desactivar instanciación de clase
+     */
     private function __construct(){}
     
     // Status
@@ -13,6 +16,13 @@ final class Constants{
     // Paginador
     public const RESULTS_PER_PAGE = 15;
 
+    /**
+     * Devuelve una representació de texto correspondiente
+     * al mes dado por $m
+     * 
+     * @param int
+     * @return String
+     */
     public static function mes($m):String{
         $m=(int)$m;
         $m=$m>12?0:$m;

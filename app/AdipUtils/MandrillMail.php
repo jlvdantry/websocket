@@ -8,8 +8,19 @@ use App\Models\Correo;
 
 final class MandrillMail{
     
+    /**
+     * Instancia de SimpleCURL para comunicacion con
+     * servicio de Mandrill
+     * 
+     * @var SimpleCURL
+     */
     private $curl;
 
+    /**
+     * Crera una nueva instancia de SimpleCURL
+     * 
+     * @throws \Exception
+     */
     public function __construct($url = ''){
         if(!SimpleCURL::isRunnable()){
             Logg::log(__METHOD__,'No se puede ejecutar una de las dependencias de esta API.', 0);
@@ -18,7 +29,13 @@ final class MandrillMail{
         $this->curl = new SimpleCURL;
 	}
 	
-	public function sendMail(Correo $correo):Array{
+    /**
+     * Envía un mail a la cola de envío de Mandrill
+     * 
+     * @param Correo
+     * @return Array
+     */
+    public function sendMail(Correo $correo):Array{
         $att = $this->prepareAttachments($correo);
         $mandrillData=[
             'key' => config('engine.mandrillsecret'),
@@ -49,6 +66,14 @@ final class MandrillMail{
 		return $oResult;
     }
     
+    
+    /**
+     * Verifica si un correo tiene datos adjuntos y los prepara para el envío
+     * al correo dado en $c
+     * 
+     * @param Correo $c
+     * @return Array
+     */
     private function prepareAttachments(Correo $c):Array{
         $at = [];
         if(count($c->archivos)===0) return [];

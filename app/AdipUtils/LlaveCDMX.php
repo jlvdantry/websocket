@@ -8,19 +8,80 @@ use Log;
 
 final class LlaveCDMX{
 
+    /**
+     * ID de cliente en LlaveCDMX
+     * @var String
+     */
     private $clientId;
-    private $redirectTo;
-    private $clientDescription;
-    private $authURI;
-    private $tokenURI;
-    private $userURI;
-    private $rolesURI;
-    private $secret;
-    private $authUser;
-    private $authPassword;
+
 
     /**
+     * URL a la que redirecciona despues de iniciar sesion
+     * @var String
+     */
+    private $redirectTo;
+    
+    
+    /**
+     * Descripción del sistema
+     * @var String
+     */
+    private $clientDescription;
+    
+    
+    /**
+     * URL del servidor LlaveCDMX
+     * @var String
+     */
+    private $authURI;
+    
+    
+    /**
+     * URL para obtener token de autenticacion en Llave
+     * @var String
+     */
+    private $tokenURI;
+    
+    
+    /**
+     * URL para obtener info del usuario en Llave
+     * @var String
+     */
+    private $userURI;
+    
+    
+    /**
+     * URL para obtener los roles del usuario
+     * @var String
+     */
+    private $rolesURI;
+    
+    
+    /**
+     * Secret code del cliente Llave
+     * @var String
+     */
+    private $secret;
+    
+    
+    /**
+     * Domain user Llave
+     * @var String
+     */
+    private $authUser;
+
+
+    /**
+     * Domain password Llave
+     * @var String
+     */
+    private $authPassword;
+
+
+    /**
+     * Crea una instancia de LlaveCDMX
      * 
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException|\Exception
      */
     public function __construct(){
         try{
@@ -49,6 +110,14 @@ final class LlaveCDMX{
         }
     }
 
+
+    /**
+     * Intenta autenticar en Llave
+     * 
+     * @param String $code
+     * @return Object
+     * @throws \Exception
+     */
     public function authenticate(String $kod):Object{
         if(strlen(trim($kod))==0){
             Logg::log(__METHOD__,'No se envió ningún código al método authenticate()', 500);
@@ -67,10 +136,17 @@ final class LlaveCDMX{
             Logg::log(__METHOD__,'LlaveCDMX devolvió un objeto vacío a la hora de solicitar el primer token', 0);
             die('<h3>Authentication required (LlaveCDMX)</h3>');
         }
-
         return $oResult;
     }
 
+
+    /**
+     * Obtiene los datos del usuario que inició sesión
+     * 
+     * @param String $tokeen
+     * @return NULL|User
+     * @throws \Exception
+     */
     public function getUser(String $tokeen):?User{
         if(strlen(trim($tokeen))==0){
             Logg::log(__METHOD__,'No se envió ningún token al método getUser()', 500);
@@ -92,6 +168,14 @@ final class LlaveCDMX{
         return  $ret;
     }
 
+    
+    /**
+     * Obtiene los roles del usuario que inició sesión
+     * 
+     * @param String $tokeen
+     * @return ArrayList
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException|\Exception
+     */
     public function getRoles(String $tokeen, User $u):ArrayList{
         if(strlen(trim($tokeen))==0){
             Logg::log(__METHOD__,'No se envió ningún token al método getRoles()', 500);
@@ -129,34 +213,84 @@ final class LlaveCDMX{
         return  $ret;
     }
 
-	public function getClientId():String{
+    
+    /**
+     * Devuelve el ID de cliente de Llave
+     * 
+     * @return String
+     */
+    public function getClientId():String{
 		return $this->clientId;
 	}
 
-	public function getRedirectTo():String{
+    
+    /**
+     * Devuelve la URL de redirección
+     * 
+     * @return String
+     */
+    public function getRedirectTo():String{
 		return $this->redirectTo;
 	}
 
-	public function getClientDescription():String{
+    
+    /**
+     * Devuelve la descripción de cliente de Llave
+     * 
+     * @return String
+     */
+    public function getClientDescription():String{
 		return $this->clientDescription;
 	}
 
-	public function getAuthURI():String{
+    
+    /**
+     * Devuelve la URL del servicio de autenticación de Llave
+     * 
+     * @return String
+     */
+    public function getAuthURI():String{
 		return $this->authURI;
 	}
 
-	public function getTokenURI():String{
+    
+    /**
+     * Devuelve la URL de obtención de token de Llave
+     * 
+     * @return String
+     */
+    public function getTokenURI():String{
 		return $this->tokenURI;
     }
 
-	public function getUserURI():String{
+    
+    /**
+     * Devuelve la URL para obtener el usuario autenticado
+     * en Llave
+     * 
+     * @return String
+     */
+    public function getUserURI():String{
 		return $this->userURI;
     }
 
+    
+    /**
+     * Devuelve el secret code de la aplicación
+     * 
+     * @return String
+     */
     public function getSecret():String{
 		return $this->secret;
     }
     
+    
+    /**
+     * Crea el "paquete de autenticación" para iniciar sesión en LlaveCDMX
+     * 
+     * @param String $c
+     * @return Object
+     */
     private function createAuthPacket(String $c){
         return (object)[
             'grantType'=>"authorization_code",

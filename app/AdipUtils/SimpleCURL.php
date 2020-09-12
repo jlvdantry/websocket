@@ -6,23 +6,101 @@ use App\AdipUtils\ErrorLoggerService as Logg;
 
 final class SimpleCURL{
     
+    /**
+     * URL a la que se enviará la petición
+     * 
+     * @var String
+     */
 	private $url;
+	
+	
+    /**
+     * Agente de usuario que se envía en la petición
+     * 
+     * @var String
+     */
 	private $userAgent;
+	
+	
+    /**
+     * Método HTTP, default POST
+     * 
+     * @var String
+     */
 	private $method;
+	
+	
+    /**
+     * Ruta absoluta de certificados .crt o .pem para peticiones HTTPS
+     * 
+     * @var String
+     */
 	private $caInfo;
 
+	
+    /**
+     * Encabezados enviados con la peticion
+     * 
+     * @var Array
+     */
 	private $headers;
-    private $cookies;
+	
+	
+    /**
+     * Cookies enviadas con la petición
+     * 
+     * @var Array
+     */
+	private $cookies;
     
-    private $cURL_executor;
+	
+	
+    /**
+     * Recurso cURL
+     * 
+     * @var cURL_resource
+     */
+	private $cURL_executor;
+	
+	
+    /**
+     * Payload de la petición
+     * 
+     * @var String
+     */
 	private $data;
+	
+	
+    /**
+     * Peticion preparada para envío o no
+     * 
+     * @var bool
+     */
 	private $isPrepared;
 
+	
+    /**
+     * Credenciales de Basic Auth
+     * 
+	 * @deprecated
+     * @var Array
+     */
 	private $authBasicData;
+
+
+    /**
+     * Uso de auth basic 
+     * 
+     * @var bool
+     */
 	private $useAuthBasic;
 
 
-    public function __construct($url = ''){
+	/**
+	 * Crea una nueva instancia de SimpleCURL
+	 * 
+	 */
+	public function __construct($url = ''){
 		$this->url = $url;
         $this->userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) ADIP/CDMX(Simple cURL Client)';
         $this->method = 'POST';
@@ -39,27 +117,64 @@ final class SimpleCURL{
 		$this->authBasicData = [];
 	}
 	
+	
+	/**
+	 * Especifica la URL a la que se envía en la petición
+	 * 
+	 * @param String $url
+	 */
 	public function setUrl(String $url){
 		$this->url = $url;
 	}
 
+	
+	/**
+	 * Especifica el agente de usuario que se envía en la petición
+	 * 
+	 * @param String $ua
+	 */
 	public function setUserAgent(String $ua){
 		$this->userAgent = $ua;
 	}
 
-    public function isGet(){
+	
+	/**
+	 * Establece la petición como método GET
+	 */
+	public function isGet(){
 		$this->method = 'GET';
 	}
 
-    public function useAuthBasic(String $username ='', String $password=''){
+	
+	/**
+	 * Establece los valores de usuario/contraseña para AuthBasic en la petición
+	 * 
+	 * @param String $username
+	 * @param String $password
+	 */
+	public function useAuthBasic(String $username ='', String $password=''){
 		$this->useAuthBasic = TRUE;
 		$this->authBasicData = ['username' => $username, 'password'=>$password];
 	}
 	
+	
+	/**
+	 * Establece la ruta absoluta para los certificados en peticiones https
+	 * 
+	 * @param String $cainf
+	 */
 	public function setCaInfo(String $cainf){
 		$this->caInfo = $cainf;
 	}
 
+
+	/**
+	 * Agrega un encabezado a la petición cURL
+	 * El encabezado se pasa como un Array asociativo con las claves name y value
+	 * 
+	 * @param Array
+     * @throws \Exception
+	 */
     public function addHeader(Array $header){
 		if(is_array($header) && isset($header['name'], $header['value'])){
 			if(strlen(trim($header['name'])) == 0 || strlen(trim($header['value'])) == 0 ){
@@ -72,7 +187,15 @@ final class SimpleCURL{
 		}
 	}
 
-    public function addCookie(Array $cookie){
+	
+	/**
+	 * Agrega una cookie a la petición cURL
+	 * La cookie se pasa como un Array asociativo con las claves name y value
+	 * 
+	 * @param Array
+     * @throws \Exception
+	 */
+	public function addCookie(Array $cookie){
 		if(is_array($cookie) && isset($cookie['name'], $cookie['value'])){
 			if(strlen(trim($cookie['name'])) == 0 || strlen(trim($cookie['value'])) == 0 ){
 				throw new \Exception('No se puede agregar una cookie sin nombre o sin valor');
@@ -84,10 +207,22 @@ final class SimpleCURL{
 		}
 	}
 	
+	
+	/**
+	 * Establece el payload (datos) que se ha de enviar en la petición cURL
+	 * 
+	 * @param String $strData
+	 */
 	public function setData($strData){
 		$this->data=$strData;
 	}
 
+	
+	/**
+	 * Prepara la petición cURL configurada para su envío
+	 * 
+     * @throws \Exception
+	 */
 	public function prepare(){
 		// Validar que traiga URL y que sea válida
 		if(strlen(trim($this->url))==0 ){
@@ -161,10 +296,23 @@ final class SimpleCURL{
 		$this->isPrepared = TRUE;
 	}
 
+	
+	/**
+	 * Devuelve TRUE si la petición cURL está lista para ser enviada
+	 * 
+	 * @return bool
+	 */
 	public function isPrepared():bool{
 		return $this->isPrepared;
 	}
 
+	
+	/**
+	 * Envía la petición cURL recién configurada
+	 * 
+	 * @return mixed $ret
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException|\Exception
+	 */
 	public function execute(){
 		if($this->isPrepared()){
 			$ret = curl_exec($this->cURL_executor);
@@ -178,17 +326,34 @@ final class SimpleCURL{
 		return $ret;
 	}
 
-    public function __destruct(){
+	
+	/**
+	 * Elimina la instancia de SimpleCURL
+	 * 
+	 */
+	public function __destruct(){
         if($this->cURL_executor){
 			curl_close($this->cURL_executor);
         }
 	}
 	
+	
+	/**
+	 * Devuelve información del objeto SimpleCURL en formato string
+	 * 
+	 * @return String
+	 */
 	public function __toString(){
 		return '{"Simple cURL":{"url": "'.$this->url.'","userAgent":"'.$this->userAgent.'","method":"'.$this->method.'","isPrepared": "'.$this->isPrepared.'","useAuthBasic":"'.$this->useAuthBasic.'"}}';
 	}
 
-    public static function isRunnable():bool{
+	
+	/**
+	 * Determina si se puede ejecutar SimpleCURL en el servidor
+	 * 
+	 * @return bool
+	 */
+	public static function isRunnable():bool{
         return
             function_exists('curl_init')
             && function_exists('curl_setopt')
