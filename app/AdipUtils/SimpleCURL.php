@@ -140,6 +140,7 @@ final class SimpleCURL{
 	
 	/**
 	 * Establece la petición como método GET
+	 * 
 	 */
 	public function isGet(){
 		$this->method = 'GET';
@@ -172,7 +173,7 @@ final class SimpleCURL{
 	 * Agrega un encabezado a la petición cURL
 	 * El encabezado se pasa como un Array asociativo con las claves name y value
 	 * 
-	 * @param Array
+	 * @param Array $header
      * @throws \Exception
 	 */
     public function addHeader(Array $header){
@@ -192,7 +193,7 @@ final class SimpleCURL{
 	 * Agrega una cookie a la petición cURL
 	 * La cookie se pasa como un Array asociativo con las claves name y value
 	 * 
-	 * @param Array
+	 * @param Array $cookie
      * @throws \Exception
 	 */
 	public function addCookie(Array $cookie){

@@ -20,7 +20,7 @@ final class Constants{
      * Devuelve una representació de texto correspondiente
      * al mes dado por $m
      * 
-     * @param int
+     * @param int $m
      * @return String
      */
     public static function mes($m):String{

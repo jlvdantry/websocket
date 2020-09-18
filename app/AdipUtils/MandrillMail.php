@@ -17,7 +17,7 @@ final class MandrillMail{
     private $curl;
 
     /**
-     * Crera una nueva instancia de SimpleCURL
+     * Crera una nueva instancia de MandrillMail
      * 
      * @throws \Exception
      */

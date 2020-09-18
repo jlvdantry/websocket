@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.error')
 
 @section('content')
 <nav class="text-right container-fluid secciones" id="nav-secciones">&nbsp;</nav>

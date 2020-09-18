@@ -17,6 +17,7 @@ use App\AdipUtils\ErrorLoggerService as Logg;
 
 /**
  * Class LlaveGuard
+ * 
  */
 class LlaveGuard implements Guard{
     /**

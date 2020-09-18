@@ -21,7 +21,7 @@ class ArrayList implements IAbstractReturnType{
 	/**
 	 * Crea una instancia de ArrayList
 	 * 
-	 * @returns ArrayList
+	 * @return ArrayList
 	 */
 	public function __construct(){
 		$this->arreglo = array();
@@ -39,7 +39,7 @@ class ArrayList implements IAbstractReturnType{
 	/**
 	 * Agrega un objeto al Array
 	 * 
-	 * @param Object
+	 * @param Object $item
 	 */
 	public function add(Object $item){
 		$this->arreglo[] = $item;
@@ -49,7 +49,7 @@ class ArrayList implements IAbstractReturnType{
 	/**
 	 * Agrega los elementos de un Array al ArrayList, siempre que sean Objetos
 	 * 
-	 * @param Array
+	 * @param Array $a
 	 */
 	public function addFromArray(Array $a){		
 		for($x=0;$x<count($a);$x++){
@@ -82,7 +82,7 @@ class ArrayList implements IAbstractReturnType{
 	/**
 	 * Elimina el elemento cuyo índice sea el dado en $item
 	 * 
-	 * @param int 
+	 * @param int $item
 	 */
 	public function remove($item){
 		unset($this->arreglo[$item]);
@@ -93,6 +93,8 @@ class ArrayList implements IAbstractReturnType{
 	
 	/**
 	 * Establece a NULL el elemento cuy índice sea dado en $item
+	 * 
+	 * @param int $item
 	 */
 	public function leave($item){
 		$this->arreglo[$item]=NULL;
@@ -103,6 +105,7 @@ class ArrayList implements IAbstractReturnType{
 	 * Devuelve el número de elementos contenidos en el Arraylist
 	 * aun si son NULL
 	 * 
+	 * @return int
 	 */
 	public function size():int{
 		return count($this->arreglo);
@@ -125,6 +128,8 @@ class ArrayList implements IAbstractReturnType{
 	
 	/**
 	 * Obtiene el elemento cuyo índice sea dado en $item
+	 * 
+	 * @param int $item
 	 */
 	public function getItem(int $item):Object{
 		return $this->arreglo[$item];

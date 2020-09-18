@@ -173,6 +173,7 @@ final class LlaveCDMX{
      * Obtiene los roles del usuario que inició sesión
      * 
      * @param String $tokeen
+     * @param User $u
      * @return ArrayList
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException|\Exception
      */

@@ -46,6 +46,7 @@
                         <p>Este formulario usa la validación de la App</p><div class="form-group">
                             <label for="txPrueba2" class="control-label form-label-cdmx">Escribe tu nombre:</label>
                             <input type="text" name="txPrueba2" id="txPrueba2" class="form-control form-control-cdmx" required>
+                            <div class="invalid-feedback" id="feedback-txPrueba2"></div>
                         </div><hr><button type="submit" class="btn btn-cdmx btn-shadow">Enviar</button></form>
                         ', ENT_QUOTES, 'UTF-8'); !!}
                     </code>
@@ -54,6 +55,7 @@
                         <div class="form-group">
                             <label for="txPrueba2" class="control-label form-label-cdmx">Escribe tu nombre:</label>
                             <input type="text" name="txPrueba2" id="txPrueba2" class="form-control form-control-cdmx" required>
+                            <div class="invalid-feedback" id="feedback-txPrueba2"></div>
                         </div>
                         <hr>
                         <button type="submit" class="btn btn-cdmx btn-shadow">Enviar</button>
