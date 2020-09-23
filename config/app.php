@@ -13,11 +13,11 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME_APP_SUFIX', 'Laravel'),
 
-    'description' => env('APP_DESCRIPTION'),
+    'description' => env('APP_DESCRIPTION_APP_SUFIX'),
     
-    'dependencia' => env('APP_DEPENDENCIA'),
+    'dependencia' => env('APP_DEPENDENCIA_APP_SUFIX'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV_APP_SUFIX', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -43,12 +43,23 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG_APP_SUFIX', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Prevents server info disclousure
+    |--------------------------------------------------------------------------
+    |
+    | Información sensible que se ha de omitir en las páginas de error
+    | cuando degub está encencido
+    |
+    */
     'debug_blacklist' => [
         '_COOKIE' => array_keys($_COOKIE),
         '_SERVER' => array_keys($_SERVER),
         '_ENV' => array_keys($_ENV),        
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -61,7 +72,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL_APP_SUFIX', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -128,7 +139,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY_APP_SUFIX'),
 
     'cipher' => 'AES-256-CBC',
 

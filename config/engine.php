@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'mandrillsecret' => env('MANDRILL_SECRET'),
+    'mandrillsecret' => env('MANDRILL_SECRET_APP_SUFIX'),
 
-    'mandrillurl' => env('MANDRILL_URL'),
+    'mandrillurl' => env('MANDRILL_URL_APP_SUFIX'),
 
     
     /*
@@ -27,7 +27,7 @@ return [
     | una vez que se lleve a cabo un inicio de sesión exitoso.
     */
 
-    'gmaps' => env('GMAPS_API_KEY'),
+    'gmaps' => env('GMAPS_API_KEY_APP_SUFIX'),
 
 
 ];

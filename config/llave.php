@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'idcliente' => env('LLAVE_CLIENT_ID'),
+    'idcliente' => env('LLAVE_CLIENT_ID_APP_SUFIX'),
 
     
     /*
@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'redirect' => env('LLAVE_URL_REDIRECT'),
+    'redirect' => env('LLAVE_URL_REDIRECT_APP_SUFIX'),
 
     
     /*
@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'secret' => env('LLAVE_APP_SECRET'),
+    'secret' => env('LLAVE_APP_SECRET_APP_SUFIX'),
 
 
     /*
@@ -51,15 +51,15 @@ return [
     |
     */
 
-    'server' => env('LLAVE_SERVER'),
+    'server' => env('LLAVE_SERVER_APP_SUFIX'),
 
-    'gettoken' => env('LLAVE_GET_TOKEN'),
+    'gettoken' => env('LLAVE_GET_TOKEN_APP_SUFIX'),
 
-    'getuser' => env('LLAVE_GET_USER'),
+    'getuser' => env('LLAVE_GET_USER_APP_SUFIX'),
 
-    'getroles' => env('LLAVE_GET_ROLES'),
+    'getroles' => env('LLAVE_GET_ROLES_APP_SUFIX'),
 
-    'createaccount' => env('LLAVE_CREATE_ACCOUNT'),
+    'createaccount' => env('LLAVE_CREATE_ACCOUNT_APP_SUFIX'),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'domainuser' => env('LLAVE_DOMAIN_USER'),
-    'domainpassword' => env('LLAVE_DOMAIN_PASSWORD'),
+    'domainuser' => env('LLAVE_DOMAIN_USER_APP_SUFIX'),
+    'domainpassword' => env('LLAVE_DOMAIN_PASSWORD_APP_SUFIX'),
 
 ];

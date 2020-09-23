@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_CONNECTION_APP_SUFIX', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,18 +51,18 @@ return [
 
         'sqs' => [
             'driver' => 'sqs',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'prefix' => env('SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
-            'queue' => env('SQS_QUEUE', 'your-queue-name'),
-            'suffix' => env('SQS_SUFFIX'),
-            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'key' => env('AWS_ACCESS_KEY_ID_APP_SUFIX'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY_APP_SUFIX'),
+            'prefix' => env('SQS_PREFIX_APP_SUFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
+            'queue' => env('SQS_QUEUE_APP_SUFIX', 'your-queue-name'),
+            'suffix' => env('SQS_SUFFIX_APP_SUFIX'),
+            'region' => env('AWS_DEFAULT_REGION_APP_SUFIX', 'us-east-1'),
         ],
 
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'queue' => env('REDIS_QUEUE', 'default'),
+            'queue' => env('REDIS_QUEUE_APP_SUFIX', 'default'),
             'retry_after' => 90,
             'block_for' => null,
         ],
@@ -81,8 +81,8 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database'),
-        'database' => env('DB_CONNECTION', 'mysql'),
+        'driver' => env('QUEUE_FAILED_DRIVER_APP_SUFIX', 'database'),
+        'database' => env('DB_CONNECTION_APP_SUFIX', 'mysql'),
         'table' => 'failed_jobs',
     ],
 

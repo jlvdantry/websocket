@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DRIVER_APP_SUFIX', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
+    'cloud' => env('FILESYSTEM_CLOUD_APP_SUFIX', 's3'),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,17 +51,17 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL_APP_SUFIX').'/storage',
             'visibility' => 'public',
         ],
 
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'endpoint' => env('AWS_URL'),
+            'key' => env('AWS_ACCESS_KEY_ID_APP_SUFIX'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY_APP_SUFIX'),
+            'region' => env('AWS_DEFAULT_REGION_APP_SUFIX'),
+            'bucket' => env('AWS_BUCKET_APP_SUFIX'),
+            'endpoint' => env('AWS_URL_APP_SUFIX'),
         ],
 
     ],

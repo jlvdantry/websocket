@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_DRIVER', 'file'),
+    'default' => env('CACHE_DRIVER_APP_SUFIX', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -79,11 +79,11 @@ return [
 
         'dynamodb' => [
             'driver' => 'dynamodb',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
-            'table' => env('DYNAMODB_CACHE_TABLE', 'cache'),
-            'endpoint' => env('DYNAMODB_ENDPOINT'),
+            'key' => env('AWS_ACCESS_KEY_ID_APP_SUFIX'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY_APP_SUFIX'),
+            'region' => env('AWS_DEFAULT_REGION_APP_SUFIX', 'us-east-1'),
+            'table' => env('DYNAMODB_CACHE_TABLE_APP_SUFIX', 'cache'),
+            'endpoint' => env('DYNAMODB_ENDPOINT_APP_SUFIX'),
         ],
 
     ],
@@ -99,6 +99,6 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME_APP_SUFIX', 'laravel'), '_').'_cache'),
 
 ];

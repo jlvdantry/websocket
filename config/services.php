@@ -31,7 +31,7 @@ return [
     ],
 
     'mandrill' => [
-        'secret' => env('MANDRILL_SECRET', 'MANDRIL_KEY_NOT_DEFINED'),
+        'secret' => env('MANDRILL_SECRET_APP_SUFIX', 'MANDRIL_KEY_NOT_DEFINED'),
     ],
 
 ];

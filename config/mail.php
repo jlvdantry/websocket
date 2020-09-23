@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER_APP_SUFIX', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,11 +36,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
+            'host' => env('MAIL_HOST_APP_SUFIX', 'smtp.mailgun.org'),
+            'port' => env('MAIL_PORT_APP_SUFIX', 587),
+            'encryption' => env('MAIL_ENCRYPTION_APP_SUFIX', 'tls'),
+            'username' => env('MAIL_USERNAME_APP_SUFIX'),
+            'password' => env('MAIL_PASSWORD_APP_SUFIX'),
             'timeout' => null,
         ],
 
@@ -83,8 +83,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS_APP_SUFIX', 'hello@example.com'),
+        'name' => env('MAIL_FROM_NAME_APP_SUFIX', 'Example'),
     ],
 
     /*

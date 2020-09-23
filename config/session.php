@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    'driver' => env('SESSION_DRIVER_APP_SUFIX', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => env('SESSION_LIFETIME_APP_SUFIX', 120),
 
     'expire_on_close' => true,
 
@@ -126,7 +126,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+        Str::slug(env('APP_NAME_APP_SUFIX', 'laravel'), '_').'_session'
     ),
 
     /*
@@ -140,7 +140,7 @@ return [
     |
     */
 
-    'path' => env('SESSION_PATH',base_path()),
+    'path' => env('SESSION_PATH_APP_SUFIX',base_path()),
 
     /*
     |--------------------------------------------------------------------------
