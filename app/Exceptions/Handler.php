@@ -47,6 +47,7 @@ class Handler extends ExceptionHandler
             || $exception instanceof \ErrorException // Errores lanzados en tienmpo de ejecucion con trigger_error()
             || $exception instanceof \Illuminate\Database\QueryException // Errores de Base de Datos
             || $exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException // Subida de archivos excede tamaño
+            || $exception instanceof \UnexpectedValueException // Valores no esperados
             )
         ){
             
