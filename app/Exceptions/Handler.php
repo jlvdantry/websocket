@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Models\Correo;
+use App\AdipUtils\MailFactory;
 
 class Handler extends ExceptionHandler
 {
@@ -37,6 +39,27 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         parent::report($exception);
+        
+        if( config('app.debug')===false &&
+            config('engine.mailing_errors')!='' && 
+            (
+               $exception instanceof \Error // Parse errors, class not found y similares
+            || $exception instanceof \ErrorException // Errores lanzados en tienmpo de ejecucion con trigger_error()
+            || $exception instanceof \Illuminate\Database\QueryException // Errores de Base de Datos
+            || $exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException // Subida de archivos excede tamaño
+            )
+        ){
+            
+            MailFactory::sendMail(
+                new Correo([
+                    'tx_from' => config('mail.from.address')
+                    ,'tx_to' => config('engine.mailing_errors')
+                    ,'tx_subject' => 'Informe de error en '.config('app.name')
+                    ,'tx_body' => view('errors.report')->with(compact('exception'))->render()
+                    ,'nu_priority' => 1
+                ])
+            );
+        }
     }
 
     /**
@@ -54,11 +77,8 @@ class Handler extends ExceptionHandler
             (
             $exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
             || $exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException
-            // || $e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
             )
         ){
-            // By overriding this function, I make Laravel display my custom 500 error page instead of the
-            // 'Whoops, looks like something went wrong.' message in Symfony\Component\Debug\ExceptionHandler
             return response()->view("llave.runtime-error", ['exception' => $exception], 500);
         }else{
             return parent::render($request, $exception);

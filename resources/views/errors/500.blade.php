@@ -24,5 +24,7 @@
         </div>
     </div>
 </div>
-<!--{{ $exception->getTraceAsString()??''}}-->
+<!--
+{!! $exception->getTraceAsString()??''!!}
+-->
 @endsection

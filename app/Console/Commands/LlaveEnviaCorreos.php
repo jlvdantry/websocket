@@ -77,7 +77,7 @@ class LlaveEnviaCorreos extends Command
                         $res[0]->reject_reason = $r->message;
                     }
                     $status = $res[0]->status;
-                    if($status !== 'sent'){
+                    if($status !== 'sent' && $status !== 'queued'){
                         switch($correito->nu_intentos){
                             case 0:{
                                 $correito->fh_proximo_intento = $carbonTS->addMinutes(self::FIVE_MINUTES);

@@ -30,4 +30,17 @@ return [
     'gmaps' => env('GMAPS_API_KEY_APP_SUFIX'),
 
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reporte de errores por correo
+    |--------------------------------------------------------------------------
+    |
+    | En este valor se especifica un correo electrónico al cual se envian los
+    | reportes de error especificados en Handler::report().
+    */
+
+    'mailing_errors' => env('ERROR_REPORT_MAIL_APP_SUFIX'),
+
+
 ];
