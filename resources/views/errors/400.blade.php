@@ -6,7 +6,7 @@
 
     <h2 class="encabezado-cdmx pt-2 pl-5">{{config('app.name')}}</h2>
 </div>
-<div class="row align-items-center justify-content-center height-60">
+<div class="align-items-center justify-content-center height-60">
     <div class="col-12">
         <div class="d-flex flex-column flex-md-row justify-content-center">
             <div class="col-12 col-md-3 d-flex flex-column justify-content-center align-items-center">

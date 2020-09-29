@@ -1,33 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+<div>
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header">Dashboard</div>
                 <div class="card-body">
                     <h1>Controles</h1>
                     <h2>Botones</h2>
-                    <p>Botón CDMX</p>
-                    <code>{!! htmlentities('<button class="btn btn-cdmx" type="button" >Aceptar</button>', ENT_QUOTES, 'UTF-8') !!}</code>
-                    <hr><button class="btn btn-cdmx" type="button" >Aceptar</button><hr>
+                    <p>Se incluyen varios estilos de botones</p>
+                    <p>
+                        <button class="btn btn-cdmx" type="button" >Verde</button>
+                        <button class="btn btn-cdmx-gris" type="button" >Gris</button>
+                        <button class="btn btn-cdmx-amarillo" type="button" >Amarillo</button>
+                        <button class="btn btn-cdmx-rojo" type="button" >Rojo</button>
+                    </p>
+                    <textarea rows="4" readonly class="form-control form-control-cdmx"><button class="btn btn-cdmx btn-shadow" type="button" >Verde</button>
+<button class="btn btn-cdmx-gris" type="button" >Gris</button>
+<button class="btn btn-cdmx-amarillo" type="button" >Amarillo</button>
+<button class="btn btn-cdmx-rojo" type="button" >Rojo</button></textarea>
+                    
                     <p>Botón CDMX con sombra</p>
-                    <code>{!! htmlentities('<button class="btn btn-cdmx btn-shadow" type="button" >Botón sombra</button>', ENT_QUOTES, 'UTF-8') !!}</code>
-                    <hr><button class="btn btn-cdmx btn-shadow" type="button" >Botón sombra</button><hr>
+                    <p><button class="btn btn-cdmx btn-shadow" type="button" >Botón sombra</button></p>
+                    <textarea rows="1" readonly class="form-control form-control-cdmx"><button class="btn btn-cdmx" type="button" >Botón sombra</button></textarea>
+                    <hr>
 
+                    <p>Botón CDMX con icono</p>
+                    <p>
+                        <button class="btn btn-cdmx btn-shadow" type="button" ><span class="fa fa-home"> </span> Inicio</button>
+                        <button class="btn btn-cdmx-gris btn-shadow" type="button">Siguiente <span class="fa fa-arrow-right"> </span></button>
+                        <button class="btn btn-cdmx-amarillo btn-shadow" type="button"><span class="fa fa-exclamation-triangle"> </span> Aviso</button>
+                        <button class="btn btn-cdmx-rojo btn-shadow" type="button"><span class="fa fa-window-close"> </span> Cancelar</button>
+                    </p>
+                    <textarea rows="4" readonly class="form-control form-control-cdmx"><button class="btn btn-cdmx btn-shadow" type="button" ><span class="fa fa-home"> </span> Inicio</button>
+<button class="btn btn-cdmx-gris btn-shadow" type="button">Siguiente <span class="fa fa-arrow-right"> </span></button>
+<button class="btn btn-cdmx-amarillo btn-shadow" type="button"><span class="fa fa-exclamation-triangle"> </span> Aviso</button>
+<button class="btn btn-cdmx-rojo btn-shadow" type="button"><span class="fa fa-window-close"> </span> Cancelar</button></textarea>
+                    <p>Para obtener más detalles consulta la documentación de Font Awesome</p><hr>
                     <h1>Formulario CDMX</h1>
                     <h2>Validación con HTML5</h2>
                     <p>Para usar la validacion de formularios incluida en los navegadores, basta con incluir los atributos de validación
                     de HTML5, por ejemplo <em>required</em> y <em>pattern</em>, como en el siguiente ejemplo:</p>
-                    <code>
-                    {!! htmlentities('<form name="test" id="test" class="form-search">
-                        <p>Este formulario usa la validación de HTML5</p><div class="form-group">
-                            <label for="txPrueba" class="control-label form-label-cdmx">Escribe tu nombre:</label>
-                            <input type="text" name="txPrueba" id="txPrueba" class="form-control form-control-cdmx" required>
-                        </div><hr><button type="submit" class="btn btn-cdmx btn-shadow">Enviar</button></form>
-                        ', ENT_QUOTES, 'UTF-8'); !!}
-                    </code>
+                    <textarea class="form-control form-control-cdmx" readonly rows="9"><form name="test" id="test" class="form-search">
+    <p>Este formulario usa la validación de HTML5</p>
+    <div class="form-group">
+        <label for="txPrueba" class="control-label form-label-cdmx">Escribe tu nombre:</label>
+        <input type="text" name="txPrueba" id="txPrueba" class="form-control form-control-cdmx" required>
+    </div>
+    <hr>
+    <button type="submit" class="btn btn-cdmx btn-shadow">Enviar</button>
+</form>
+                    </textarea>
                     <form name="test" id="test" class="form-search">
                         <p>Este formulario usa la validación de HTML5</p>
                         <div class="form-group">
@@ -39,17 +63,20 @@
                     </form>
                     <hr />
                     <h2>Validación con el validador de la App</h2>
-                    <p>Para usar la validacion de formularios incluida en la aplicación, se debe incluir los atributos de validación
+                    <p>Para usar la validacion de formularios incluida en el arquetipo, se debe incluir los atributos de validación
                     de HTML5, por ejemplo <em>required</em> y <em>pattern</em>, además, incluir el atributo <em>novalidate</em> y la clase
                     <em>needs-validation</em> en la etiqueta <strong>form</strong> como en el siguiente ejemplo:</p>
-                    <code>{!! htmlentities('<form name="test2" id="test2" class="form-search needs-validation" novalidate>
-                        <p>Este formulario usa la validación de la App</p><div class="form-group">
-                            <label for="txPrueba2" class="control-label form-label-cdmx">Escribe tu nombre:</label>
-                            <input type="text" name="txPrueba2" id="txPrueba2" class="form-control form-control-cdmx" required>
-                            <div class="invalid-feedback" id="feedback-txPrueba2"></div>
-                        </div><hr><button type="submit" class="btn btn-cdmx btn-shadow">Enviar</button></form>
-                        ', ENT_QUOTES, 'UTF-8'); !!}
-                    </code>
+                    <textarea class="form-control form-control-cdmx" rows="10" readonly><form name="test2" id="test2" class="form-search needs-validation" novalidate>
+    <p>Este formulario usa la validación de la App</p>
+    <div class="form-group">
+        <label for="txPrueba2" class="control-label form-label-cdmx">Escribe tu nombre:</label>
+        <input type="text" name="txPrueba2" id="txPrueba2" class="form-control form-control-cdmx" required>
+        <div class="invalid-feedback" id="feedback-txPrueba2"></div>
+    </div>
+    <hr>
+    <button type="submit" class="btn btn-cdmx btn-shadow">Enviar</button>
+</form>
+</textarea>
                     <form name="test2" id="test2" class="form-search needs-validation" novalidate>
                         <p>Este formulario usa la validación de la App</p>
                         <div class="form-group">
@@ -66,33 +93,9 @@
                     <p>Para desactivarlo, editar el archivo app.js en resources y comentar la siguiente línea:</p>
                     <code>timercito = setInterval(laSesion, 5*60*1000); // minutostimer * 60 * 1000</code>
                     <hr>
-                    <h1>Envío de correos</h1>
-                    <p>En PHP se considera mala práctica de programación realizar envío de correos "al vuelo", es decir,  
-                    realizar el envío dentro de la programación que implica lógica de negocio. Por ejemplo</p>
-                    @php
-                    $foo = '$solicitud->actualizar();'.PHP_EOL;
-                    $foo.= '$to = $solicitud->usuario()->email;'.PHP_EOL;
-                    $foo.= 'Mail::to($to)->send(\'solicitud-validada\'); // Esta línea en Laravel envía el correo'.PHP_EOL;
-                    $foo.= 'return view(\'solicitud.actualizada\');'.PHP_EOL;
-                    @endphp
-                    <code>{!! nl2br($foo) !!}</code>
-                    <p>En el ejemplo anterior si el envío de correo demora 25000 milisegundos (25 segundos), ese tiempo se verá reflejado
-                    en el tiempo que tarda la página en cargar, lo cual disminuye la experiencia de usaurio.</p>
-                    <p>Para solventar este comportamiento el arquetipo incluye un servicio de envío de correos, usando dicho
-                    servicio, se elimina el tiempo de respuesta de envío de correo. (en el ejemplo anterior, los 25 segundos)</p>
-                    <p>El servicio envía los correos pendientes mediante una tarea programada. Consulta el manual técnico para obtener los detalles.</p>
-                    @php
-                    $foo = '$html = view(\'emails.email\')->render();'.PHP_EOL;
-                    $foo .= '$correo = ['.PHP_EOL;
-                    $foo .= '    \'tx_from\' => env(\'MAIL_FROM_ADDRESS\', \'no-reply@cdmx.gob.mx\')'.PHP_EOL;
-                    $foo .= '    ,\'tx_to\' => $solicitud->tx_email'.PHP_EOL;
-                    $foo .= '    ,\'tx_subject\' => \'Alta Vehicular / Validando documentos\''.PHP_EOL;
-                    $foo .= '    ,\'tx_body\' => $html'.PHP_EOL;
-                    $foo .= '    ,\'nu_priority\' => 0'.PHP_EOL;
-                    $foo .= '];'.PHP_EOL;
-                    $foo .= 'Correo::create($correo);'.PHP_EOL;
-                    @endphp
-                    <code>{!! nl2br($foo) !!}</code>
+                    <h1>Consultar la documentación completa</h1>
+                    <p>Para consultar la documentación completa, <a href="https://codigofuente.cdmx.gob.mx/adip.dev/php/laravel/archetype_laravel7.5_with_llavecdmx/wikis/home" target="_blank">visita la Wiki del arquetipo.</a></p>
+                    <p><a href="https://codigofuente.cdmx.gob.mx/adip.dev/php/laravel/archetype_laravel7.5_with_llavecdmx/wikis/pages" target="_blank">Índice de temas</a></p>
                 </div>
             </div>
         </div>

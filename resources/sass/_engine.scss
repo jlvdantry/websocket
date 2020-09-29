@@ -299,6 +299,28 @@ footer {
   text-decoration: none;
 }
 
+.btn-cdmx-amarillo {
+  background-color: $yellow-chrome;
+  color: $white-two !important;
+  font-family: "Metropolis";
+  font-size: 12px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2.67;
+  letter-spacing: normal;
+  text-align: center;
+  border-radius: 0.5rem;
+  margin-right: 5px;
+  padding: 0rem 0.5rem !important;
+}
+
+.btn-cdmx-amarillo:hover {
+  color: $white-two;
+  background-color: $orangey-yellow;
+  text-decoration: none;
+}
+
 .btn-shadow {
   -webkit-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.28);
   -moz-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.28);

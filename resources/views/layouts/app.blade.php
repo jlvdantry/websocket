@@ -14,7 +14,7 @@
         var ubase = "{{ route('welcome')}}";
         var uHome = "{{ route('home')}}";
     </script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}?v={{microtime(true)}}" defer></script>
 
 
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,7 +22,7 @@
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}?v={{microtime(true)}}" rel="stylesheet">
     <link rel="author" type="text/plain" href="{{asset('humans.txt')}}" charset="UTF-8" />
 	<meta name="apple-mobile-web-app-capable" content="no" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -102,7 +102,7 @@
             </nav>
         </header>
         @include('llave/noscript')
-        <main>
+        <main class="container-fluid">
             @yield('content')
         </main>
 
