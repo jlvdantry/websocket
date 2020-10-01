@@ -48,6 +48,7 @@ class Handler extends ExceptionHandler
             || $exception instanceof \Illuminate\Database\QueryException // Errores de Base de Datos
             || $exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException // Subida de archivos excede tamaño
             || $exception instanceof \UnexpectedValueException // Valores no esperados
+            || $exception instanceof LlaveException // LlaveCDMX
             )
         ){
             
