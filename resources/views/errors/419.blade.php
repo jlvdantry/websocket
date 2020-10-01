@@ -13,8 +13,9 @@
                 <h3 class="mt-5 encabezado-cdmx">419</h3>
             </div>
             <div class="col-12 col-md-6 d-flex flex-column border-left-thin-grey justify-content-center pl-md-4 pl-lg-5">
-                <h3 class="error-title mt-5">{{ strlen(trim($exception->getMessage()))==0?'Token erróneo':$exception->getMessage()}}</h3>
-                <p class="grey-light">Se envió un identificador de sesión desconocido. Para volver a enviar el formulario
+                <h3 class="error-title mt-5">{{ $exception instanceof \Throwable ? $exception->getMessage():'Identificador de sesión erróneo'}}</h3>
+                <p class="grey-light">
+                    Se envió un identificador de sesión desconocido. Para volver a enviar el formulario
                     presona "Reenviar formulario", si eso no resulta, puedes intentar regresar a la página de inicio.
                 </p>
                 <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>

@@ -23,7 +23,7 @@ class ErrorLoggerService
      * @return String $uuid ID de petición
      */
     public static function log(String $nivel, String $desc, int $response = 0):String{
-        $idUsuario = Auth::user()!==NULL? Auth::user()->idUsuario:0;
+        $idUsuario = Auth::check()?Auth::user()->idUsuario:0;
         
         $uuid = session()->get('requuid');
         ErrorLogger::create(

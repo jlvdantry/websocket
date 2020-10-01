@@ -14,7 +14,9 @@
             </div>
             <div class="col-12 col-md-6 d-flex flex-column border-left-thin-grey justify-content-center pl-md-4 pl-lg-5">
                 <h3 class="error-title mt-5">Puerta de enlace incorrecta</h3>
-                <p class="grey-light">La respuesta del servicio web es incorrecta o no se recibió a tiempo.</p>
+                <p class="grey-light">
+                    {{ $exception instanceof \Throwable ? $exception->getMessage():'La respuesta del servicio web es incorrecta o no se recibió a tiempo'}}  
+                    </p>
                 <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>
                 <div class="align-self-lg-end mt-3">
                     <a href="javascript:location.reload();" class="btn btn-warning btn-sm">Volver a intentar</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

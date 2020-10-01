@@ -42,8 +42,8 @@ final class FileService{
                 abort(404, "No encontrado");
             }
         }else{
-            Logg::log(__METHOD__,'El UUID devuelve un valor diferente a 1.', 500);
-            abort(500);
+            Logg::log(__METHOD__,'El UUID devuelve un valor diferente a 1.', 422);
+            abort(422, 'El identificador del archivo no es válido');
         }
     }
 
@@ -60,6 +60,7 @@ final class FileService{
         if(count($archs)===1){
             $arch = $archs[0];
             if($arch->st_public !== 1){
+                Logg::log(__METHOD__,'Se intentó acceder al recurso no público '.$uuid.' usando getPublicFile()', 403);
                 abort(403, "El recurso no es de acceso público");
             }
             $realArch = storage_path('app'.DIRECTORY_SEPARATOR.self::STORAGE_FOLDER_NAME.DIRECTORY_SEPARATOR.$arch->tx_uuid.'.dat');
@@ -70,8 +71,8 @@ final class FileService{
                 abort(404, "No encontrado");
             }
         }else{
-            Logg::log(__METHOD__,'El UUID devuelve un valor diferente a 1.', 500);
-            abort(500);
+            Logg::log(__METHOD__,'El UUID devuelve un valor diferente a 1.', 422);
+            abort(422, 'El identificador del archivo no es válido');
         }
     }
 

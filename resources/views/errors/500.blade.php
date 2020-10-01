@@ -25,6 +25,6 @@
     </div>
 </div>
 <!--
-{!! $exception->getTraceAsString()??''!!}
+{!! $exception instanceof \Throwable ? $exception->getTraceAsString():''!!}
 -->
 @endsection
