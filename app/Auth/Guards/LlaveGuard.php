@@ -286,21 +286,23 @@ class LlaveGuard implements Guard{
                 ,'tx_mensaje' => 'Posible intento de sesion hijacking, el agente de usuario no coincide.'
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
-            $this->logout();
-            abort(418,'El agente de usuario no coincide. Cerramos tu sesión por seguridad');
-            //return NULL;
+            if(config('engine.validate_ua')){
+                $this->logout();
+                abort(418,'El agente de usuario no coincide. Cerramos tu sesión por seguridad');
+            }
         }
         
-        // IP
+        // IP        
         if($oSession->tx_ip != Network::getClientIP()){
             LogSesion::create([
                 'ix_token' => $oSession->ix_token
                 ,'tx_mensaje' => 'Se detectó un cambio de red. Posible intento de session hijacking.'
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
-            $this->logout();
-            abort(418,'Detectamos un cambio de red. Cerramos tu sesión por seguridad');
-            //return NULL;
+            if(config('engine.validate_ip')){
+                $this->logout();
+                abort(418,'Detectamos un cambio de red. Cerramos tu sesión por seguridad');
+            }
         }
         
         // Armar user aquí

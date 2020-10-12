@@ -43,4 +43,30 @@ return [
     'mailing_errors' => env('ERROR_REPORT_MAIL_APP_SUFIX'),
 
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Prevenir session-hijacking
+    |--------------------------------------------------------------------------
+    |
+    | En este valor se especifica TRUE o FALSE para indicar si se cierra la
+    | sesión al cambiar el user agent. Predeterminado: TRUE
+    */
+
+    'validate_ua' => env('VALIDATE_UA_APP_SUFIX', TRUE),
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Prevenir session-hijacking
+    |--------------------------------------------------------------------------
+    |
+    | En este valor se especifica TRUE o FALSE para indicar si se cierra la
+    | sesión al cambiar la IP. Predeterminado: TRUE
+    */
+
+    'validate_ip' => env('VALIDATE_UA_APP_SUFIX', TRUE),
+
+
 ];
