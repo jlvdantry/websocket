@@ -10,7 +10,7 @@ require('./bootstrap');
 
 // Datatables
 var dt = require( 'datatables.net' );
-require('datatables.net-buttons');
+var buttons = require('datatables.net-buttons');
 
 // Global
 var token = document.head.querySelector('meta[name="csrf-token"]');

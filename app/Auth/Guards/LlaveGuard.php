@@ -169,6 +169,9 @@ class LlaveGuard implements Guard{
                             $u->descripcionRol = $permisosLlave->getItem(0)->nb_permiso;
                             $u->update();
                         }else{
+                            if($u->login !== $uBase->login){
+                                $uBase->login = $u->login;
+                            }
                             $permisosLlave = $cdmxAuth->getRoles($res->accessToken, $uBase);
                             $uBase->permisos()->detach();
                             for($p=0;$p<$permisosLlave->size();$p++){
