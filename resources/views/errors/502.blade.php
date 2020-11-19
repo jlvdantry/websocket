@@ -17,7 +17,7 @@
                 <p class="grey-light">
                     {{ $exception instanceof \Throwable ? $exception->getMessage():'La respuesta del servicio web es incorrecta o no se recibió a tiempo'}}  
                     </p>
-                <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>
+                <small><strong>ID de petición:</strong> {{session()->get('requuid')??'N/A'}}</small>
                 <div class="align-self-lg-end mt-3">
                     <a href="javascript:location.reload();" class="btn btn-warning btn-sm">Volver a intentar</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{route('home')}}" class="btn btn-success btn-sm">Regresar al inicio</a>

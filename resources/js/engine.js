@@ -1,8 +1,65 @@
-
-// Funciones
+/**
+ * Apartado de configuración del arquetipo
+ */
 
 /**
- * crearMensaje (tomado de Mi Unidad) xD
+ * Mostrar o no mostrar el aviso Anti-Self XSS en la consola de desarrollo
+ * 
+ * @var boolean
+ */
+var __antiSelfXSSWarning = true;
+
+
+/**
+ * Validacion de sesión
+ * 
+ * @var boolean
+ */
+var __kValidateSession = true;
+
+
+/**
+ * Validacion de conexión
+ * 
+ * @var boolean
+ */
+var __kCheckCon = true;
+
+
+/**
+ * Intervalo de validación de sesión en minutos
+ * 
+ * @var int
+ */
+var __vInterval = 5;
+
+
+/**
+ * Mostrar o no mostrar el aviso Anti-Self XSS en la consola de desarrollo
+ * 
+ * @var boolean
+ */
+var __antiSelfXSSWarning = true;
+
+
+/**
+ * Tamaño máximo de carga de archivos (en Mbi). Predeterminado: 5
+ * 
+ * @var int
+ */
+var __maxUploadFileSize = 5;
+
+/**
+ * Apartado de funciones del arquetipo
+ */
+
+/**
+ * Muestra un mensaje en la esquina superior derecha del viewport
+ * 
+ * @param boolean error 
+ * @param String titulo 
+ * @param String mensaje 
+ * @param int tiempo 
  */
 window.crearMensaje = function (error,titulo,mensaje,tiempo=3500){
     var clase_mensaje = error==true?"alert-danger":"alert-success";
@@ -15,98 +72,157 @@ window.crearMensaje = function (error,titulo,mensaje,tiempo=3500){
     setTimeout(function(){
       $(".msj_js").remove();
     }, tiempo);
-  }
+}
   
-  /***
-   * Estar validando la sesion
-   */
-  function laSesion(){
-    $.ajax({
-      url: ubase+'/service/session/getSession',
-      dataType: 'json',
-      type: 'GET',
-      success: function(data) {
-          //
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        if(jqXHR.status === 401){
-          crearMensaje(true,"Error","Tu sesión ha caducado");
-        }
-        if(jqXHR.status === 418){
-          crearMensaje(true,"Error",data.mensaje||data.message);
-        }
-        $('#modal-logo').modal({
-          backdrop: 'static',
-          keyboard: false
-        });
-        clearInterval(timercito);
+/**
+ * Valida que la sesión siga activa
+ * 
+ */
+function laSesion(){
+  $.ajax({
+    url: ubase+'/service/session/getSession',
+    dataType: 'json',
+    type: 'GET',
+    success: function(data) {
+        //
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      if(jqXHR.status === 401){
+        crearMensaje(true,"Error","Tu sesión ha caducado");
       }
-    });
-  }
-  
-  /**
-   * Prepara para enviar CSRF token en las peticiones AJAX
-   */
-  $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      if(jqXHR.status === 418){
+        crearMensaje(true,"Error",data.mensaje||data.message);
+      }
+      $('#modal-logo').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+      clearInterval(timercito);
     }
   });
-  
-  /* Aviso en la consola */
-  function antiXSS(){
-    console.log("%c¡Detente!", "color: red; font-size:30px;");
-    console.log("%cEsta función del navegador es solo para desarrolladores.", "color: red; font-size:15px;");
-    console.log("%cSi alguien te indicó que copiaras y pegaras algo aquí para obtener acceso no autorizado a esta aplicación, se trata de un engaño. Si lo haces, esta persona podrá acceder a los datos de tu cuenta. Consulta https://es.wikipedia.org/wiki/Self-XSS para obtener más información.", "color: red; font-size:20px;");
+}
+
+/**
+ * Prepara para enviar CSRF token en las peticiones AJAX
+ * 
+ */
+$.ajaxSetup({
+  headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+
+/**
+ * Muestra un Aviso en la consola para prevenir Self-XSS
+ * 
+ * @see https://es.wikipedia.org/wiki/Self-XSS
+ */
+function antiXSS(){
+  console.log("%c¡Detente!", "color: red; font-size:30px;");
+  console.log("%cEsta función del navegador es solo para desarrolladores.", "color: red; font-size:15px;");
+  console.log("%cSi alguien te indicó que copiaras y pegaras algo aquí para obtener acceso no autorizado a esta aplicación, se trata de un engaño. Si lo haces, esta persona podrá acceder a los datos de tu cuenta. Consulta https://es.wikipedia.org/wiki/Self-XSS para obtener más información.", "color: red; font-size:20px;");
+}
+
+
+/**
+ * Valida que la conexion a Internet
+ * 
+ */
+function laConexion(){
+  $.ajax({
+    url: '/',
+    type: 'HEAD',
+    success: function(data) {
+      $('#msg-nonetwork').hide('slow');
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $('#msg-nonetwork').show('slow');
+    }
+  });
+}
+
+
+$(document).ready(function(){
+
+  if(__kValidateSession){
+    timercito = setInterval(laSesion, __vInterval*60*1000);
   }
   
-  $(document).ready(function(){
-    timercito = setInterval(laSesion, 5*60*1000); // minutostimer * 60 * 1000
-    //setInterval(antiXSS, 60000); // minutostimer * 60 * 1000
+  if(__antiSelfXSSWarning){
     antiXSS();
-    $('.tooltiptable').tooltip({html:true, trigger:'manual'});
+  }
   
-    $('.tooltiptable').on('click', function(e){
-       var revisar = $(this);
-      $.each($('.tooltiptable'), function( index, value ) {
-        // console.log("Revisando: " + revisar.attr('id') + " tt actual: " + $(value).attr('id'));
-        if($(value).attr('id')!==revisar.attr('id')){
-          $(value).tooltip('hide');
-        }
-      });
-      revisar.tooltip('toggle');
-    });
-  
-    /**
-     * no enviar forms con enter
-     */
-    $('form input').on('keydown', function (e) {
-      if (e.keyCode == 13) {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
+  if(__kCheckCon){
+    laConexion();
+    timercitoCon = setInterval(laConexion, 60000);
+  }
+
+  $('.tooltiptable').tooltip({html:true, trigger:'manual'});
+
+  $('.tooltiptable').on('click', function(e){
+      var revisar = $(this);
+    $.each($('.tooltiptable'), function( index, value ) {
+      // console.log("Revisando: " + revisar.attr('id') + " tt actual: " + $(value).attr('id'));
+      if($(value).attr('id')!==revisar.attr('id')){
+        $(value).tooltip('hide');
       }
     });
-  
-    /**
-     * Mandar a login si la sesión caducó
-     */
-    $('#relogi').on('click', function(e){
-      event.preventDefault();
-      event.stopPropagation();
-      location.href=uHome;
-    });
-  
-    /**
-     * Convertir a mayúsculas los campos
-     */
-    $('.to-uppercase').on('keyup', function(){
-      $(this).val($(this).val().toUpperCase());
-    });
-  
+    revisar.tooltip('toggle');
   });
+
+  /**
+   * Deshabilita el envío de forms con Enter
+   * 
+   */
+  $('form input').on('keydown', function (e) {
+    if (e.keyCode == 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+  });
+
+  /**
+   * Mandar a login si la sesión caducó
+   * 
+   */
+  $('#relogi').on('click', function(e){
+    event.preventDefault();
+    event.stopPropagation();
+    location.href=uHome;
+  });
+
+  /**
+   * Convertir a mayúsculas los campos
+   * 
+   */
+  $('.to-uppercase').on('keyup', function(){
+    $(this).val($(this).val().toUpperCase());
+  });
+
+
+  /**
+   * Aviso de tamaño máximo de archivo
+   * 
+   */
+  $('input[type="file"]').on("change", function(){
+    var file = this.files[0],
+    fileName = file.name,
+    fileSize = file.size;
+    kb=fileSize/1024;
+    __mfs = __maxUploadFileSize * 1024
+    if(kb>__mfs){
+        this.value='';
+        alert(fileName + ', este archivo no será cargado porque excede el tamaño permitido de '+__maxUploadFileSize+' megas.');
+    }
+  });
+
+});
   
-  // Validacion de formularios
+  /**
+   * Valida formularios
+   * 
+   */
   (function() {
     'use strict';
     window.addEventListener('load', function() {

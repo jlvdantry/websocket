@@ -15,7 +15,7 @@
             <div class="col-12 col-md-6 d-flex flex-column border-left-thin-grey justify-content-center pl-md-4 pl-lg-5">
                 <h3 class="error-title mt-5">Error interno del servidor</h3>
                 <p class="grey-light">Lo sentimos, no fue posible porcesar la solicitud ahora.</p>
-                <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>
+                <small><strong>ID de petición:</strong> {{session()->get('requuid')??'N/A'}}</small>
                 <div class="align-self-lg-end mt-3">
                     <a href="javascript:location.reload();" class="btn btn-warning btn-sm">Reintentar</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{route('home')}}" class="btn btn-success btn-sm">Regresar al inicio</a>

@@ -19,7 +19,7 @@
                 <p class="grey-light">Puede ser que el recurso haya sido movido desde la última vez que visitaste la página,
                     o que haya escrito incorrectamente la dirección.
                 </p>
-                <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>
+                <small><strong>ID de petición:</strong> {{session()->get('requuid')??'N/A'}}</small>
                 <div class="align-self-lg-end mt-3">
                     <a href="{{route('home')}}" class="btn btn-cdmx">Regresar al inicio</a>
                 </div>

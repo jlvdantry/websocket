@@ -17,7 +17,7 @@
                 <p class="grey-light">
                     No has iniciado sesión. Inicia sesión para acceder a este recurso.
                 </p>
-                <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>
+                <small><strong>ID de petición:</strong> {{session()->get('requuid')??'N/A'}}</small>
                 <div class="align-self-lg-end mt-3">
                     <a href="{{route('home')}}" class="btn btn-cdmx">Iniciar sesión</a>
                 </div>

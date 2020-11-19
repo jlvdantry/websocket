@@ -20,7 +20,7 @@
                     Detectamos actividad que podría suponer un riesgo a la seguridad de la sesión. 
                     Para mitigar este posible riesgo, es necesario que inicies sesión de nuevo.
                 </p>
-                <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>
+                <small><strong>ID de petición:</strong> {{session()->get('requuid')??'N/A'}}</small>
                 <div class="align-self-lg-end mt-3">
                     <a href="{{route('home')}}" class="btn btn-cdmx">Volver a iniciar sesión</a>
                 </div>

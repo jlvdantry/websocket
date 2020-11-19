@@ -102,6 +102,7 @@
             </nav>
         </header>
         @include('llave/noscript')
+        @include('llave/nonetwork')
         <main class="container-fluid">
             @yield('content')
         </main>

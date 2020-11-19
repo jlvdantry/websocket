@@ -18,7 +18,7 @@
                     Se envió un identificador de sesión desconocido. Para volver a enviar el formulario
                     presona "Reenviar formulario", si eso no resulta, puedes intentar regresar a la página de inicio.
                 </p>
-                <small><strong>ID de incidencia:</strong> {{session()->get('requuid')??'N/A'}}</small>
+                <small><strong>ID de petición:</strong> {{session()->get('requuid')??'N/A'}}</small>
                 <div class="align-self-lg-end mt-3">
                     <a href="javascript:location.reload();" class="btn btn-warning btn-sm">Reenviar formulario</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
