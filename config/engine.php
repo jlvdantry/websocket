@@ -23,8 +23,8 @@ return [
     | Google Maps
     |--------------------------------------------------------------------------
     |
-    | En este valor se especifica la URL a la que direcciona el sistema llave
-    | una vez que se lleve a cabo un inicio de sesión exitoso.
+    | En este valor se especifica el API KEY de Google Maps que usará el
+    | aplicativo
     */
 
     'gmaps' => env('GMAPS_API_KEY_APP_SUFIX'),
@@ -68,5 +68,19 @@ return [
 
     'validate_ip' => env('VALIDATE_UA_APP_SUFIX', TRUE),
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Basic Auth
+    |--------------------------------------------------------------------------
+    |
+    | En este valor se especifica el usuario de Basic Auth que usarán otras
+    | aplicaciones para consumir servicios expuestos que usen dicho tipo de
+    | autenticación
+    */
+
+    'basic_auth_usr' => env('BA_USER'),
+    'basic_auth_pwd' => env('BA_PASSWORD'),
 
 ];

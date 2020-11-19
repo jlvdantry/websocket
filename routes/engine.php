@@ -34,4 +34,7 @@ Route::group(['prefix' => 'service', 'namespace'=>'AdipServices'], function() {
 Route::group(['prefix' => 'examples'], function() { 
     Route::get('/upload-files.php', function () { return view('examples.uploadfilesform'); })->middleware('auth')->name('examples.uploadfilesform');
     Route::post('/upload-filesB.php', 'ExamplesController@uploadFile')->name('examples.uploadfiles');
+
+    Route::get('/hello-basic-auth', 'Examples\BasicAuthController@index')->name('examples.basicauth');
+
 });
