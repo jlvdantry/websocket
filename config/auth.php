@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'invitado',
         //'passwords' => 'users',
     ],
 
@@ -46,6 +46,11 @@ return [
             'provider' => 'apps_api',
             'hash' => false,
         ],
+
+        'invitado' => [
+            'driver' => 'session',
+            'provider' => 'invitados',
+        ],
     ],
 
     /*
@@ -76,6 +81,11 @@ return [
             'model' => App\Models\ApiApp::class,
         ],
 
+        'invitados' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Invitado::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -97,14 +107,20 @@ return [
     |
     */
 
-    // 'passwords' => [
-    //     'users' => [
-    //         'provider' => 'users',
-    //         'table' => 'password_resets',
-    //         'expire' => 60,
-    //         'throttle' => 60,
-    //     ],
-    // ],
+    'passwords' => [
+        // 'users' => [
+        //     'provider' => 'users',
+        //     'table' => 'password_resets',
+        //     'expire' => 60,
+        //     'throttle' => 60,
+        // ],
+
+        'invitados' => [
+            'provider' => 'invitados',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

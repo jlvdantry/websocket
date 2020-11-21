@@ -39,9 +39,11 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->middleware('guest:invitado')->except('logout');
     }
 
     public function showLoginForm(){
+        
         $autenticator = new LlaveCDMX;
         $srvLlave=$autenticator->getAuthURI();
         $clientID=$autenticator->getClientId();

@@ -25,11 +25,11 @@ class AuthServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot(){
+        $this->registerPolicies();
+        
         Auth::extend('llave', function (Container $app) {
             return new LlaveGuard($app['request']);
         });
-        $this->registerPolicies();
-
-        //
+        
     }
 }

@@ -16,11 +16,20 @@ class RedirectIfAuthenticated
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
-    {
-        if (Auth::guard($guard)->check()) {
-            return redirect(RouteServiceProvider::HOME);
+    public function handle($request, Closure $next, $guard = null){
+        switch ($guard) {
+            case 'invitado' :
+                if (Auth::guard($guard)->check()) {
+                    return redirect()->route(RouteServiceProvider::HOME_INVITADO);
+                }
+                break;
+            default:
+                if (Auth::guard($guard)->check()) {
+                    return redirect()->route(RouteServiceProvider::HOME);
+                }
+                break;
         }
+
 
         return $next($request);
     }

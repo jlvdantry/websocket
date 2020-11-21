@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use App\Models\Correo;
 use App\AdipUtils\MailFactory;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -87,5 +88,18 @@ class Handler extends ExceptionHandler
         }   
     }
 
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+    
+        if ($request->is('examples/invitado-auth')) {
+            return redirect()->guest('/control-center/login');
+        }
+    
+        return redirect()->guest(route('login'));
+    }
 
 }
