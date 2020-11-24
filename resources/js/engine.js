@@ -135,7 +135,7 @@ function laConexion(){
 }
 
 
-$(document).ready(function(){
+jQuery(function(){
 
   if(__kValidateSession){
     timercito = setInterval(laSesion, __vInterval*60*1000);

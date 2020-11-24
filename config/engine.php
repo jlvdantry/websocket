@@ -83,4 +83,30 @@ return [
     'basic_auth_usr' => env('BA_USER_APP_SUFIX'),
     'basic_auth_pwd' => env('BA_PASSWORD_APP_SUFIX'),
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Zona de invitados
+    |--------------------------------------------------------------------------
+    |
+    | En este valor se indica el nombre que tendrá la zona de invitados
+    | Considerar que el acceso a la zona de invitados por URL varia de 
+    | acuerdo a cómo está instalada la aplicación:
+    |
+    |   https://misistema.cdmx.gob.mx/{guest_zone}
+    |   https://subdominio.cdmx.gob.mx/mi-sistema/public/{guest_zone}
+    |
+    | El valor establecido en esta variable debe coincidir con la constante
+    |
+    |   App\Providers\RouteServiceProvider::HOME_INVITADO
+    |
+    | Ej. Si el nombre de la zona de invitados es "proveedores"
+    | La constante deberá declararse como:
+    |
+    |   public const HOME_INVITADO = '/proveedores';
+    */
+
+    'guest_zone' => env('ZONA_INVITADOS_APP_SUFIX', 'invitados'),
+
 ];
