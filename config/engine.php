@@ -80,7 +80,7 @@ return [
     | autenticación
     */
 
-    'basic_auth_usr' => env('BA_USER'),
-    'basic_auth_pwd' => env('BA_PASSWORD'),
+    'basic_auth_usr' => env('BA_USER_APP_SUFIX'),
+    'basic_auth_pwd' => env('BA_PASSWORD_APP_SUFIX'),
 
 ];

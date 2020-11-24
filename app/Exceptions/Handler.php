@@ -7,6 +7,7 @@ use Throwable;
 use App\Models\Correo;
 use App\AdipUtils\MailFactory;
 use Illuminate\Auth\AuthenticationException;
+use App\AdipUtils\Engine;
 
 class Handler extends ExceptionHandler
 {
@@ -89,16 +90,23 @@ class Handler extends ExceptionHandler
     }
 
 
+    /**
+     * Redirigir si no se está autenticado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  AuthenticationException  $exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
     
-        if ($request->is('examples/invitado-auth')) {
-            return redirect()->guest('/control-center/login');
+        if ($request->is(Engine::guestUrlBase()) || $request->is(Engine::guestUrlBase() . '/*')) {
+            return redirect()->guest(Engine::guestUrlBase().'/login');
         }
-    
         return redirect()->guest(route('login'));
     }
 

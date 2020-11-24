@@ -18,7 +18,7 @@ class CreateInvitadosTable extends Migration
             $table->string('email', 250)->unique();
             $table->string('password',255);
             $table->string('tx_apellido_paterno',255);
-            $table->string('tx_apellido_materno',255);
+            $table->string('tx_apellido_materno',255)->nullable();
             $table->string('tx_nombre',255);
             $table->rememberToken();
             $table->timestamps();

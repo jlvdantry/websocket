@@ -17,9 +17,20 @@ final class Engine{
 
     /**
      * Desactiva la instanciación de la clase
+     * 
      */
     private function __construct(){
 
+    }
+
+
+    /**
+     * URL Base para invitados (doble login)
+     * 
+     * @return String
+     */
+    public static function guestUrlBase():String{
+        return config('engine.guest_url_base', 'invitados');
     }
 
 

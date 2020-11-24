@@ -54492,13 +54492,6 @@ var __kCheckCon = true;
 
 var __vInterval = 5;
 /**
- * Mostrar o no mostrar el aviso Anti-Self XSS en la consola de desarrollo
- * 
- * @var boolean
- */
-
-var __antiSelfXSSWarning = true;
-/**
  * Tamaño máximo de carga de archivos (en Mbi). Predeterminado: 5
  * 
  * @var int
@@ -54647,10 +54640,10 @@ $(document).ready(function () {
    * 
    */
 
-  $('#relogi').on('click', function (e) {
+  $('#relogi').on('click', function (event) {
     event.preventDefault();
     event.stopPropagation();
-    location.href = uHome;
+    location.reload();
   });
   /**
    * Convertir a mayúsculas los campos

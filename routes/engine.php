@@ -37,6 +37,4 @@ Route::group(['prefix' => 'examples'], function() {
 
     Route::get('/hello-basic-auth', 'Examples\BasicAuthController@index')->name('examples.basicauth');
 
-    Route::get('invitado-auth', 'Examples\InvitadoAuthController@index')->name('examples.invitadoauth');
-
 });

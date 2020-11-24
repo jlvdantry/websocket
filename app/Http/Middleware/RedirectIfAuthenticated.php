@@ -18,16 +18,16 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null){
         switch ($guard) {
-            case 'invitado' :
-                if (Auth::guard($guard)->check()) {
-                    return redirect()->route(RouteServiceProvider::HOME_INVITADO);
-                }
-                break;
-            default:
-                if (Auth::guard($guard)->check()) {
-                    return redirect()->route(RouteServiceProvider::HOME);
-                }
-                break;
+        case 'invitado' :
+            if (Auth::guard($guard)->check()) {
+                return redirect()->route('invitados.home');
+            }
+            break;
+        default:
+            if (Auth::guard($guard)->check()) {
+                return redirect()->route('home');
+            }
+            break;
         }
 
 

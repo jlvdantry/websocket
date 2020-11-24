@@ -23,6 +23,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
+
+    /**
+     * La ruta Home para los invitados.
+     *
+     * @var string
+     */
+    public const HOME_INVITADO = '/invitados';
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -48,6 +56,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapEngineRoutes();
+
+        $this->mapInvitadosRoutes();
 
         //
     }
@@ -82,9 +92,8 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application.
+     * Define las rutas reservadas para e arquetipo.
      *
-     * These routes are typically stateless.
      *
      * @return void
      */
@@ -93,5 +102,18 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/engine.php'));
+    }
+
+    /**
+     * Define las rutas reservadas para los invitados.
+     *
+     *
+     * @return void
+     */
+    protected function mapInvitadosRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/invitados.php'));
     }
 }

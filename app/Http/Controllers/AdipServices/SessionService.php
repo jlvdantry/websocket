@@ -11,7 +11,7 @@ use App\AdipUtils\ErrorLoggerService as Logg;
 class SessionService extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -28,11 +28,24 @@ class SessionService extends Controller
 				'codigo' => -1,
 			], 403);
         }
-        if( Auth::user() !==NULL){
-            $u=Auth::user()->idUsuario;
-        }else{
-            $u=0;
+
+        $u=NULL;
+        if(Auth::guard('invitado')->check() ){
+            $u = Auth::guard('invitado')->user()->id;
         }
+
+        if(Auth::check() ){
+            $u = Auth::user()->idUsuario;
+        }
+
+
+        if( $u ===NULL){
+            return \Response::json([
+                'mensaje' => 'No autenticado',
+                'codigo' => 401,
+            ], 401);
+        }
+        
         return \Response::json([
             'mensaje' => 'OK',
             'codigo' => 200,

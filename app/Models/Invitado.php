@@ -37,7 +37,22 @@ class Invitado extends Authenticatable
     ];
 
 
-
+    /**
+     * Define el guard que se usa en la autenticación
+     *
+     * @var String
+     */
     protected $guard = 'invitado';
+
+
+
+    /**
+     * Devuelve el nombre completo del invitado
+     * 
+     * @return Strung
+     */
+    public function getFullName():String{
+        return $this->tx_nombre.' '.$this->tx_apellido_paterno.' '.$this->tx_apellido_materno;
+    }
 
 }

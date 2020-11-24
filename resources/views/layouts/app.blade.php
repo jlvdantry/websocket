@@ -62,6 +62,9 @@
                     </div>
                 </div>
                 @guest
+                    @if(request()->is(\App\AdipUtils\Engine::guestUrlBase()) || request()->is(\App\AdipUtils\Engine::guestUrlBase().'/*'))
+                    <div class="tx-crea-cuenta text-right"><a href="">Iniciar sesión como usuario externo (invitado)</a></p>
+                    @else
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">
@@ -70,10 +73,33 @@
                             <div class="tx-crea-cuenta">¿Aún no tienes cuenta? <a href="{{config('llave.createaccount')}}" target="_blank">Crea una</a></p>
                         </li>
                     </ul>
+                    @endif
                 @else
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
+                        @if(Auth::guard('invitado')->check())
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <img src="{{asset('images/user-ico-sm.png')}}" alt="Usuario" class="user-ico">
+                                <span class="nb-usuario">{{ strtolower(Auth::user()->getFullName()) }}</span> <span class="caret"></span>
+                            </a>
+                            <div class="tp-user">{{ ucfirst(Auth::user()->descripcionRol) }}</div>
 
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('welcome') }}">Inicio</a>
+                                <a class="dropdown-item" href="{{ route('home') }}">Dashboard</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('invitados.logout') }}"
+                                onclick="event.preventDefault();
+                                                document.getElementById('logout-form').submit();">
+                                    Cerrar sesión
+                                </a>
+                                <form id="logout-form" action="{{ route('invitados.logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                        @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 <img src="{{asset('images/user-ico-sm.png')}}" alt="Usuario" class="user-ico">
@@ -95,6 +121,7 @@
                                 </form>
                             </div>
                         </li>
+                        @endif
                     </ul>
                 </div>
                 @endguest

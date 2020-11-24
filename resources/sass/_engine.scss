@@ -391,3 +391,26 @@ footer {
   position: fixed;
   top: -1000px;
 }
+
+.btn-login-invitado {
+	box-shadow: 2px 5px 10px 0px #707070;
+	background-color:#00615b;
+	border-radius:5px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:11px;
+	font-weight:bold;
+	padding:11px 23px;
+	text-decoration:none;
+}
+.btn-login-invitado:hover {
+  background-color:#3da89f;
+  color:#3d3d3d;
+  text-decoration:none;
+}
+.btn-login-invitado:active {
+	position:relative;
+	top:1px;
+}

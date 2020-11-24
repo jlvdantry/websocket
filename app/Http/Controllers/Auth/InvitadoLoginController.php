@@ -53,8 +53,7 @@ class InvitadoLoginController extends Controller
      */
     public function showLoginForm()
     {
-        die('Logi invitado');
-        return view('auth.admin-login');
+        return view('invitados.auth.login');
     }
     
 
