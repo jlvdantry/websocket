@@ -27,6 +27,16 @@ class Invitado extends Authenticatable
         'tx_apellido_paterno', 'tx_apellido_materno', 'tx_nombre', 'email', 'password',
     ];
 
+
+    /**
+     * Nombre de la tabla asociada al modelo
+     * 
+     * @var String
+     */
+    protected $table = 'invitados';
+
+
+
     /**
      * The attributes that should be hidden for arrays.
      *

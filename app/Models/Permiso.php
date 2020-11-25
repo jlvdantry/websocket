@@ -13,10 +13,7 @@ class Permiso extends Model
      * Verificar que correspondan al ID de la tabla Permisos
      */
     public const CIUDADANO      = 1;
-    public const DESARROLLADOR  = 2;
-    
-    public const NB_CIUDADANO      = 'Ciudadano';
-    public const NB_DESARROLLADOR  = 'Desarrollador';
+    public const NB_CIUDADANO   = 'Ciudadano';
 
     
     /**

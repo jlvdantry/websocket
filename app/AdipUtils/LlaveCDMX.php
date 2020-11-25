@@ -202,7 +202,7 @@ final class LlaveCDMX{
                     $permiso_user = Permiso::where('nb_permiso', trim($oTemp[$r]->rol))->first();
                     if(NULL === $permiso_user){
                         //Logg::log(__METHOD__,'Permiso LlaveCDMX no reconocido '.$oTemp[$r]->rol, 400);
-                        throw new LlaveException(400, 'El sistema LlaveCDMX ha enviado un permiso que esta aplicación no reconoce ('.$oTemp[$r]->rol.')');
+                        throw new LlaveException('El sistema LlaveCDMX ha enviado un permiso que esta aplicación no reconoce ('.$oTemp[$r]->rol.')');
                     }else{
                         $ret->add($permiso_user);
                     }
@@ -211,7 +211,7 @@ final class LlaveCDMX{
             // Todos son ciudadanos
             $citizen = Permiso::where('nb_permiso', Permiso::NB_CIUDADANO)->first();
             if(NULL === $citizen){
-                throw new LlaveException(500, 'No hay permiso de ciudadano. Si esta es una App nueva, asegúrate de haber ejecutado el seeder de permisos. (php artisan db:seed --class=PermisosTableSeeder');
+                throw new LlaveException('No hay permiso de ciudadano. Si esta es una App nueva, asegúrate de haber ejecutado el seeder de permisos. (php artisan db:seed --class=PermisosTableSeeder');
             }
             $ret->add($citizen);
             return  $ret;
