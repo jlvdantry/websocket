@@ -199,7 +199,7 @@ final class LlaveCDMX{
             $oTemp = json_decode($resultRoles);
             if(is_array($oTemp)){
                 for($r=0;$r<count($oTemp);$r++){
-                    $permiso_user = Permiso::where('nb_permiso', trim($oTemp[$r]->rol))->first();
+                    $permiso_user = Permiso::where('id', trim($oTemp[$r]->idRol))->first();
                     if(NULL === $permiso_user){
                         //Logg::log(__METHOD__,'Permiso LlaveCDMX no reconocido '.$oTemp[$r]->rol, 400);
                         throw new LlaveException('El sistema LlaveCDMX ha enviado un permiso que esta aplicación no reconoce ('.$oTemp[$r]->rol.')');

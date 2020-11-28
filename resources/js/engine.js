@@ -112,8 +112,7 @@ $.ajaxSetup({
  */
 function antiXSS(){
   console.log("%c¡Detente!", "color: red; font-size:30px;");
-  console.log("%cEsta función del navegador es solo para desarrolladores.", "color: red; font-size:15px;");
-  console.log("%cSi alguien te indicó que copiaras y pegaras algo aquí para obtener acceso no autorizado a esta aplicación, se trata de un engaño. Si lo haces, esta persona podrá acceder a los datos de tu cuenta. Consulta https://es.wikipedia.org/wiki/Self-XSS para obtener más información.", "color: red; font-size:20px;");
+  console.log("%cSi alguien te indicó que copiaras y pegaras algo aquí para obtener acceso no autorizado a esta aplicación, se trata de un engaño. Si lo haces, esta persona podría robar tu identidad. Consulta https://es.wikipedia.org/wiki/Self-XSS para obtener más información.", "color: red; font-size:20px;");
 }
 
 
