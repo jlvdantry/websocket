@@ -23,7 +23,7 @@ var __kValidateSession = true;
  * 
  * @var boolean
  */
-var __kCheckCon = true;
+var __kCheckCon = false;
 
 
 /**

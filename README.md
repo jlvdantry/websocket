@@ -40,14 +40,43 @@ Para la instalación del cliente, realizar los siguientes pasos:
 Para verificar la instalación, acceder a la URL de la aplicación e intentar iniciar sesion con Llave.
 
 ## Nuevas funciones!
-Storage Service, servicio para almacenar de manera segura los documentos que se envían por formulario.
+
+### Middleware Basic Auth
+Se agregó un middleware que solicita autenticación mediante Basic Auth. Este puede usarse para exponer
+servicios sin usar autenticación REST (API).
+
+### Monitoreo de conexión
+Se incluye una rutina que valida cada minuto que el sitio donde está alojada la aplicación sea alcanzable.
+De manera predeterminada este comportamiento está desactivado, se puede activar estableciendo en `true` la 
+variable `__kCheckCon` en el archivo `resources/js/engine.js` (línea 26).
+
+
+### Validación del tamaño de los archivos a cargar antes de enviarlos
+ Los controles `input [type="file"]`  revisan que el archivo seleccionado no exceda el tamaño especificado
+ en `__maxUploadFileSize`. Dicha variable se encuentra en `resources/js/engine.js` (línea 43).
+
+
+ ### Zona de invitados
+Un usuario invitado es todo aquél que deberá tener acceso a cierta área del sistema pero que por cualquier motivo no tiene una cuenta LlaveCDMX, también se puede usar para sistemas que requieran cierto anonimato al ciudadano. Ejemplos:
+
+- Ciudadanos que no tienen Clave Única de Registro de Población.
+- Ciudadanos de otras entidades que no tienen forma de comprobar residencia en CDMX.
+- Sistemas de denuncia anónima.
+
+ ### Bugfixes
+
+ - Busqueda de roles al iniciar sesión
+ - Se agrega la carpeta `storage/fonts` a .gitignore para evitar el error de cache de DOMPDF
+
 
 ## Changelog
-08/04/2020 - Version inicial.
+- 08/04/2020 - Version inicial.
 
-08/04/2020 - Soporte para exponer servicios API.
+- 08/04/2020 - Soporte para exponer servicios API.
 
-08/05/2020 - Servicio para envío de correos.
+- 08/05/2020 - Servicio para envío de correos.
 
-01/07/2020 - Storage Service.
+- 01/07/2020 - Storage Service.
+
+- 01/12/2020 - Zona de invitados.
 

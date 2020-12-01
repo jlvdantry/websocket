@@ -11,7 +11,7 @@ final class Engine{
      * Fecha del arquetipo
      * 
      */
-    public const BUILD_DATE = '2020-10-12 18:21 UTC -5';
+    public const BUILD_DATE = '2020-12-01 12:51 UTC -6';
 
 
 
