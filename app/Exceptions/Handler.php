@@ -104,8 +104,8 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
     
-        if ($request->is(Engine::guestUrlBase()) || $request->is(Engine::guestUrlBase() . '/*')) {
-            return redirect()->guest(Engine::guestUrlBase().'/login');
+        if ($request->is(Engine::guestZone()) || $request->is(Engine::guestZone() . '/*')) {
+            return redirect()->guest(Engine::guestZone().'/login');
         }
         return redirect()->guest(route('login'));
     }

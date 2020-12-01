@@ -29,7 +29,7 @@ final class Engine{
      * 
      * @return String
      */
-    public static function guestUrlBase():String{
+    public static function guestZone():String{
         return config('engine.guest_zone', 'invitados');
     }
 

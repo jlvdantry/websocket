@@ -10,6 +10,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Valores para consumir el API de Mandrill para elenvío de correos
+    | con MailFactory
     |
     */
 
@@ -90,7 +91,7 @@ return [
     | Zona de invitados
     |--------------------------------------------------------------------------
     |
-    | En este valor se indica el nombre que tendrá la zona de invitados
+    | En este valor se indica el nombre que tendrá la zona de invitados.
     | Considerar que el acceso a la zona de invitados por URL varia de 
     | acuerdo a cómo está instalada la aplicación:
     |

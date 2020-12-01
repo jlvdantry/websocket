@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 @guest
-                    @if(request()->is(\App\AdipUtils\Engine::guestUrlBase()) || request()->is(\App\AdipUtils\Engine::guestUrlBase().'/*'))
+                    @if(request()->is(\App\AdipUtils\Engine::guestZone()) || request()->is(\App\AdipUtils\Engine::guestZone().'/*'))
                     <div class="tx-crea-cuenta text-right"><a href="">Iniciar sesión como usuario externo (invitado)</a></p>
                     @else
                     <ul class="navbar-nav ml-auto">
@@ -83,11 +83,11 @@
                                 <img src="{{asset('images/user-ico-sm.png')}}" alt="Usuario" class="user-ico">
                                 <span class="nb-usuario">{{ strtolower(Auth::user()->getFullName()) }}</span> <span class="caret"></span>
                             </a>
-                            <div class="tp-user">{{ ucfirst(Auth::user()->descripcionRol) }}</div>
+                            <div class="tp-user">Invitado</div>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('welcome') }}">Inicio</a>
-                                <a class="dropdown-item" href="{{ route('home') }}">Dashboard</a>
+                                <a class="dropdown-item" href="{{ route('invitados.home') }}">Dashboard</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('invitados.logout') }}"
                                 onclick="event.preventDefault();

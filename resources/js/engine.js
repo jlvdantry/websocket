@@ -54,7 +54,7 @@ var __maxUploadFileSize = 5;
  * @param String mensaje 
  * @param int tiempo 
  */
-window.crearMensaje = function (error,titulo,mensaje,tiempo=3500){
+window.__crearMensaje = function (error,titulo,mensaje,tiempo=3500){
     var clase_mensaje = error==true?"alert-danger":"alert-success";
     var mensaje_alert = '<div class="alertaActivacion alert msj_js '+clase_mensaje+'">';
     mensaje_alert += '<strong id="mensaje_negritas" style="font-size:16px;">'+titulo+'</strong>';
@@ -81,10 +81,10 @@ function laSesion(){
     },
     error: function(jqXHR, textStatus, errorThrown) {
       if(jqXHR.status === 401){
-        crearMensaje(true,"Error","Tu sesión ha caducado");
+        __crearMensaje(true,"Error","Tu sesión ha caducado");
       }
       if(jqXHR.status === 418){
-        crearMensaje(true,"Error",data.mensaje||data.message);
+        __crearMensaje(true,"Error",data.mensaje||data.message);
       }
       $('#modal-logo').modal({
         backdrop: 'static',
@@ -112,7 +112,7 @@ $.ajaxSetup({
  */
 function antiXSS(){
   console.log("%c¡Detente!", "color: red; font-size:30px;");
-  console.log("%cSi alguien te indicó que copiaras y pegaras algo aquí para obtener acceso no autorizado a esta aplicación, se trata de un engaño. Si lo haces, esta persona podría robar tu identidad. Consulta https://es.wikipedia.org/wiki/Self-XSS para obtener más información.", "color: red; font-size:20px;");
+  console.log("%cSi alguien te indicó que copiaras y pegaras algo aquí para obtener acceso no autorizado a esta aplicación, se trata de un engaño. Si lo haces, esta persona podría suplantar tu identidad. Consulta https://es.wikipedia.org/wiki/Self-XSS para obtener más información.", "color: red; font-size:20px;");
 }
 
 
@@ -246,7 +246,7 @@ jQuery(function(){
                 $('#feedback-'+this.id).html($(this).attr('invalid-regex'));
               }
             });
-            crearMensaje(true,"Error","Por favor revisa los campos marcados con rojo.");
+            __crearMensaje(true,"Error","Por favor revisa los campos marcados con rojo.");
           }
           form.classList.add('was-validated');
         }, false);
