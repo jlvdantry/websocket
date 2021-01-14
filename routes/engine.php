@@ -21,6 +21,10 @@ Route::group(['prefix' => 'service', 'namespace'=>'AdipServices'], function() {
 });
 
 
+Route::get('/robots.txt', 'MetaController@getRobotsFile')->name('robots_txt');
+Route::get('/humans.txt', 'MetaController@getHumansFile')->name('humans_txt');
+Route::get('/.well-known/security.txt', 'MetaController@getSecurityFile')->name('security_txt');
+
 
 /*
 |--------------------------------------------------------------------------

@@ -283,12 +283,12 @@ class LlaveGuard implements Guard{
         if($oSession->tx_user_agent !== Network::getClientUA()){
             LogSesion::create([
                 'ix_token' => $oSession->ix_token
-                ,'tx_mensaje' => 'Posible intento de sesion hijacking, el agente de usuario no coincide.'
+                ,'tx_mensaje' => 'Posible intento de sesion hijacking, el agente de usuario no coincide.  Se esperaba '.$oSession->tx_user_agent.' pero se envió '.Network::getClientUA()
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
             if(config('engine.validate_ua')){
                 $this->logout();
-                abort(418,'El agente de usuario no coincide. Cerramos tu sesión por seguridad');
+                abort(418,'El agente de usuario no coincide. Cerramos tu sesión por seguridad.');
             }
         }
         
@@ -296,7 +296,7 @@ class LlaveGuard implements Guard{
         if($oSession->tx_ip != Network::getClientIP()){
             LogSesion::create([
                 'ix_token' => $oSession->ix_token
-                ,'tx_mensaje' => 'Se detectó un cambio de red. Posible intento de session hijacking.'
+                ,'tx_mensaje' => 'Se detectó un cambio de red. Posible intento de session hijacking.  Se esperaba '.$oSession->tx_ip.' pero se envió '.Network::getClientIP()
                 ,'fh_registra' => date("Y-m-d H:i:s")
             ]);
             if(config('engine.validate_ip')){

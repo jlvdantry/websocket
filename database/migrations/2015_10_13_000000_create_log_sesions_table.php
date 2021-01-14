@@ -16,7 +16,7 @@ class CreateLogSesionsTable extends Migration
         Schema::create('t001801_sesion_log', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('ix_token',1000);
-            $table->string('tx_mensaje',500);
+            $table->string('tx_mensaje',1000);
             $table->datetime('fh_registra');
 
             // Relacion

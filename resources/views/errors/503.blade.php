@@ -13,7 +13,7 @@
             </div>
             <div class="col-12 col-md-6 d-flex flex-column border-left-thin-grey justify-content-center pl-md-4 pl-lg-5">
                 <h3 class="error-title mt-5">Mantenimiento programado</h3>
-                <p class="grey-light">Lo sentimos, por el momento esta aplicación no está disponible. ¡Estará de vuelta pronto!.</p>
+                <p class="grey-light">{{ $exception->getMessage()!==''?$exception->getMessage():'Lo sentimos, por el momento esta aplicación no está disponible. ¡Estará de vuelta pronto!.' }}</p>
             </div>
         </div>
     </div>

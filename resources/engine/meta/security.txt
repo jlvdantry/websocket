@@ -1,0 +1,14 @@
+#
+# SECURITY.TXT for ADIP - %APPNAME%
+# If you would like to report a security issue
+# you may report it to us.
+#
+# Our security address
+Contact: mailto:
+Contact: 
+
+# Our PGP key
+Encryption: 
+
+#Preferred languages
+Preferred-Languages: es, en

@@ -2,11 +2,7 @@
 	Subject: Agencia Digital de Innovación Pública
 	From: Mexico City, Mexico
 
-	Web developers: JGHC
-	From: Mexico City, Mexico
-
 /* SITE */
-	Last update:2020/01/27
 	Language: Spanish
 	Doctype: HTML5
 	Dev Tools: Visual Studio Code, Eclipse, Inkscape, Postman & more...

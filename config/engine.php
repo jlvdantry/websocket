@@ -9,7 +9,7 @@ return [
     | Mandrill
     |--------------------------------------------------------------------------
     |
-    | Valores para consumir el API de Mandrill para elenvío de correos
+    | Valores para consumir el API de Mandrill para el envío de correos
     | con MailFactory
     |
     */
@@ -29,6 +29,19 @@ return [
     */
 
     'gmaps' => env('GMAPS_API_KEY_APP_SUFIX'),
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Google Maps
+    |--------------------------------------------------------------------------
+    |
+    | En este valor se especifica el ID de Google Analytics que usará el
+    | aplicativo
+    */
+
+    'gaid' => env('GANALYTICS_ID_APP_SUFIX'),
 
 
 
