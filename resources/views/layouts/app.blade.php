@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="urlbase" content="{{ url('') }}">
     <meta name="author" content="Agencia Digital de Innovavión Pública">
-    <meta name="description" content="{{config('app.name')}}">
+    <meta name="description" content="{{config('app.description')}}">
 
     <title>{{config('app.name')}}</title>
 
@@ -39,6 +39,12 @@
     <meta property="og:image:type" content="image/jpg"/>
     <meta property="og:image:width" content="615"/>
     <meta property="og:image:height" content="485"/>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@LaAgenciaCDMX">
+    <meta name="twitter:title" content="{{ config('app.title') }}">
+    <meta name="twitter:description" content="{{ config('app.description') }}">
+    <meta name="twitter:image" content="{{ asset('images/thumb.jpg') }}">
 
 
 </head>
