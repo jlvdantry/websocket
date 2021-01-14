@@ -42,7 +42,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@LaAgenciaCDMX">
-    <meta name="twitter:title" content="{{ config('app.title') }}">
+    <meta name="twitter:title" content="{{ config('app.name') }} | Ciudad de México">
     <meta name="twitter:description" content="{{ config('app.description') }}">
     <meta name="twitter:image" content="{{ asset('images/thumb.jpg') }}">
 
