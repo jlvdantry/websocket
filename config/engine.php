@@ -122,5 +122,6 @@ return [
     */
 
     'guest_zone' => env('ZONA_INVITADOS_APP_SUFIX', 'invitados'),
+    'guest_zone_enabled' => env('ZONA_INVITADOS_ENABLED_APP_SUFIX', 'invitados'),
 
 ];

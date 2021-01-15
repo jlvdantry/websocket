@@ -34,5 +34,17 @@ final class Engine{
     }
 
 
+
+    /**
+     * Determinar si la zona de invitados está activa o no.
+     * 
+     * @return bool
+     */
+    public static function hasGuestZone():bool{
+        $b = (bool)config('engine.guest_zone_enabled');
+        return $b;
+    }
+
+
     
 }

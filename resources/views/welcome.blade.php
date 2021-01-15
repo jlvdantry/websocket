@@ -17,7 +17,9 @@
                             <img src="{{asset('images/inicia-llave.svg')}}" title="Iniciar sesión con Llave CDMX">
                         </a>
                     </div>
+                    @if(\App\AdipUtils\Engine::hasGuestZone())
                     <div class="col-6 text-center"><a href="{{ route('invitados.login') }}" class="btn-login-invitado">Iniciar sesion como invitado</a></div>
+                    @endif
                 </div>
             </div>
         </div>
