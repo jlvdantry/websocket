@@ -85,12 +85,12 @@ class User extends Authenticatable
     /**
      * Función que determina si un usuario tiene determinado permiso
      * 
-     * @param String|Array $roles Nombre de un permiso o array con nombres de permisos.
-     *                            Si $roles es una cadena vacía, verifica que el usuario
-     *                            tenga por lo menos un rol
+     * @param int|Array $roles    ID de un permiso o array con Id's de permisos.
+     *                            Si $roles se omite o es cero, verifica que el
+     *                            usuario tenga por lo menos un rol
      * @return bool
      */
-    public function hasAnyRole($roles=''){
+    public function hasAnyRole($roles=0){
         if(is_array($roles)) {
             foreach ($roles as $role) {
                 if ($this->hasRole($role)) {
@@ -98,8 +98,8 @@ class User extends Authenticatable
                 }
             }
         }else{
-            if(strlen(trim($roles))===0){
-                $roles = Permiso::NB_CIUDADANO;
+            if($roles===0){
+                $roles = Permiso::CIUDADANO;
             }
             if($this->hasRole($roles)) {
                 return true;
@@ -112,11 +112,11 @@ class User extends Authenticatable
     /**
      * Función que determina si un usuario tiene el permiso dado
      * 
-     * @param String $roles Nombre de un permiso 
+     * @param int $roles ID de un permiso 
      * @return bool TRUE si tiene el permiso o uno de los permisos. FALSE si no
      */
     public function hasRole($role){
-        if ($this->permisos()->where('nb_permiso', $role)->first()) {
+        if ($this->permisos()->where('id', $role)->first()) {
             return true;
         }
         return false;

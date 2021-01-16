@@ -15,7 +15,10 @@ class Permiso extends Model
     public const CIUDADANO      = 1;
     public const NB_CIUDADANO   = 'Ciudadano';
 
-    
+    public const ROL_DEMO      = 247;
+    public const NB_ROL_DEMO   = 'Rol Demo Laravel';
+
+
     /**
      * Relación con usuarios
      *  

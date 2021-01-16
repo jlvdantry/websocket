@@ -17,5 +17,12 @@ class PermisosTableSeeder extends Seeder
         $p->nb_permiso = Permiso::NB_CIUDADANO;
         $p->save();
         unset($p);
+
+        $p = new Permiso;
+        $p->id = Permiso::ROL_DEMO;
+        $p->nb_permiso = Permiso::NB_ROL_DEMO;
+        $p->save();
+        unset($p);
+        
     }
 }
