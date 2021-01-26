@@ -6,6 +6,7 @@
 
     <h2 class="encabezado-cdmx pt-2 pl-5">{{config('app.name')}}</h2>
     <p class="pl-5 instrucciones-pleca"><strong>Bienvenido, realiza bla bla bla.</strong></p>
+    {{$nada}}
 </div>
 <div class="row justify-content-center mt-5">
     <div class="col-md-10">
