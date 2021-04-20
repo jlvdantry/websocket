@@ -43,6 +43,5 @@ class MetaController extends Controller
         $content = file_get_contents($p);
         $content = preg_replace('/%APPNAME%/',config('app.name'), $content);
         return response($content)->header('Content-Type', 'text/plain');
-        return response()->file($p);
     }
 }

@@ -27,6 +27,14 @@ class User extends Authenticatable
 
 
     /**
+     * Campos tratados como objetos fecha
+     * 
+     * @var Array
+     */
+    public $dates = ['fechaNacimiento'];
+
+
+    /**
      * Establecer la clave primaria del modelo
      * 
      * @var String

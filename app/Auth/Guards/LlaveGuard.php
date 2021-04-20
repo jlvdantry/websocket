@@ -158,7 +158,7 @@ class LlaveGuard implements Guard{
                     // Obtener el user
                     $u=$cdmxAuth->getUser($res->accessToken);
                     if($u instanceof User){
-                        $u->fechaNacimiento = Carbon::createFromFormat('d/m/Y', $u->fechaNacimiento);
+                        //$u->fechaNacimiento = Carbon::createFromFormat("d/m/Y", $u->fechaNacimiento);
                         $uBase = User::where('idUsuario',$u->idUsuario)->first();
                         if(!$uBase instanceof User){
                             $permisosLlave = $cdmxAuth->getRoles($res->accessToken, $u);

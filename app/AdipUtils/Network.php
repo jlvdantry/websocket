@@ -103,5 +103,25 @@ final class Network{
 		}
 		return ($ret);
 	}
+
 	
+    /**
+     * isSafariDesktop (beta)
+     * Intenta determinar si el navegador del cliente es Safari de Escritorio
+     * @return bool TRUE si es Safari Desktop, FALSE si no
+     **/
+	public static function isSafariDesktop():bool{
+		$ua = self::getClientUA();
+		if(stripos($ua, 'macintosh')!==FALSE || stripos($ua, 'mac_powerpc')!==FALSE ){ // Mac
+			if(stripos($ua, 'chrome')===FALSE && stripos($ua, 'yowser')===FALSE){ // No dice "chrome" ni Yandex
+				if(stripos($ua, 'safari')!==FALSE){ //Dice "safari"
+					if(stripos($ua, 'mobile')===FALSE){ // pero no mobile
+						return TRUE;
+					}
+				}
+			}
+		}
+		return FALSE;
+	}
+
 }

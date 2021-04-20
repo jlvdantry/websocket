@@ -21,6 +21,19 @@ Route::group(['prefix' => 'service', 'namespace'=>'AdipServices'], function() {
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Rutas perfil de usuario
+|--------------------------------------------------------------------------
+|
+| Las rutas establecidas en este bloque son para el perfil de usuario
+|
+*/
+Route::group(['prefix' => 'user-profile', /*'namespace'=>'AdipServices'*/], function() {    
+    Route::get('/', function () { trigger_error('Not implemented yet'); })->name('engine.user-profile');
+});
+
+
 Route::get('/robots.txt', 'MetaController@getRobotsFile')->name('robots_txt');
 Route::get('/humans.txt', 'MetaController@getHumansFile')->name('humans_txt');
 Route::get('/.well-known/security.txt', 'MetaController@getSecurityFile')->name('security_txt');
@@ -28,7 +41,7 @@ Route::get('/.well-known/security.txt', 'MetaController@getSecurityFile')->name(
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Ejemplos
 |--------------------------------------------------------------------------
 |
 | Rutas con ejemplos. Se pueden comentar o eliminar

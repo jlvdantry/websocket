@@ -76,7 +76,10 @@ class StorageController extends Controller
         if($theFile->archivo->st_public === 1){
             return !(bool)stripos(\App\AdipUtils\Network::getClientUA(),'yowser');
         }else{
-            return \Auth::user()->hasRole(\App\Models\Permiso::ROL_DEMO);
+            if(\Auth::check()){
+                return \Auth::user()->hasRole(\App\Models\Permiso::ROL_DEMO);
+            }
+            return FALSE;
         }
         */
         

@@ -209,6 +209,29 @@ jQuery(function(){
     }
   });
 
+
+  /**
+   * Numeros en notacion cientifica a normal
+   */
+  $("input[type=number]").on("blur", function(){
+    this.value = Number(this.value).toPrecision();
+  });
+
+
+  /**
+   * Visor de archivos
+   * 
+   */
+  $('#fv-modal').on('show.bs.modal', function (event) {
+    var v = $(event.relatedTarget);
+    uuid = v.data('file-viewer-id');
+    t = v.data('type');
+    stil = t.indexOf('pdf') > -1 ? ' style="height: 100vh; min-height: 100vh; min-width:100%" ' : '';
+    newURL = ubase + '/service/storage/' + uuid;
+    $('object').remove();
+    $('<object id="fv-content" data="' + newURL + '" type="' + t + '"' + stil + '></object>').appendTo('#fv-modal .modal-body');
+  });
+
 });
   
   /**

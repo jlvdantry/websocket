@@ -163,6 +163,8 @@ final class LlaveCDMX{
             $my_cURL->prepare();
             $resultUser = $my_cURL->execute();
             $oResult = json_decode($resultUser,TRUE);
+            $fNac = \Carbon\Carbon::createFromFormat("d/m/Y", $oResult['fechaNacimiento']);
+            $oResult['fechaNacimiento'] = $fNac;
             if(is_array($oResult)){
                 $ret = new User($oResult);
             }
