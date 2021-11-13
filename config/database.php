@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION_APP_SUFIX', 'mysql'),
+    'default' => env('DB_CONNECTION_CH', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,20 +37,20 @@ return [
 
         'sqlite' => [
             'driver' => 'sqlite',
-            'url' => env('DATABASE_URL_APP_SUFIX'),
-            'database' => env('DB_DATABASE_APP_SUFIX', database_path('database.sqlite')),
+            'url' => env('DATABASE_URL_CH'),
+            'database' => env('DB_DATABASE_CH', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL_APP_SUFIX'),
-            'host' => env('DB_HOST_APP_SUFIX', '127.0.0.1'),
-            'port' => env('DB_PORT_APP_SUFIX', '3306'),
-            'database' => env('DB_DATABASE_APP_SUFIX', 'forge'),
-            'username' => env('DB_USERNAME_APP_SUFIX', 'forge'),
-            'password' => env('DB_PASSWORD_APP_SUFIX', ''),
+            'url' => env('DATABASE_URL_CH'),
+            'host' => env('DB_HOST_CH', '127.0.0.1'),
+            'port' => env('DB_PORT_CH', '3306'),
+            'database' => env('DB_DATABASE_CH', 'forge'),
+            'username' => env('DB_USERNAME_CH', 'forge'),
+            'password' => env('DB_PASSWORD_CH', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -65,12 +65,12 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL_APP_SUFIX'),
-            'host' => env('DB_HOST_APP_SUFIX', '127.0.0.1'),
-            'port' => env('DB_PORT_APP_SUFIX', '5432'),
-            'database' => env('DB_DATABASE_APP_SUFIX', 'forge'),
-            'username' => env('DB_USERNAME_APP_SUFIX', 'forge'),
-            'password' => env('DB_PASSWORD_APP_SUFIX', ''),
+            'url' => env('DATABASE_URL_CH'),
+            'host' => env('DB_HOST_CH', '127.0.0.1'),
+            'port' => env('DB_PORT_CH', '5432'),
+            'database' => env('DB_DATABASE_CH', 'forge'),
+            'username' => env('DB_USERNAME_CH', 'forge'),
+            'password' => env('DB_PASSWORD_CH', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
@@ -80,12 +80,12 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL_APP_SUFIX'),
-            'host' => env('DB_HOST_APP_SUFIX', 'localhost'),
-            'port' => env('DB_PORT_APP_SUFIX', '1433'),
-            'database' => env('DB_DATABASE_APP_SUFIX', 'forge'),
-            'username' => env('DB_USERNAME_APP_SUFIX', 'forge'),
-            'password' => env('DB_PASSWORD_APP_SUFIX', ''),
+            'url' => env('DATABASE_URL_CH'),
+            'host' => env('DB_HOST_CH', 'localhost'),
+            'port' => env('DB_PORT_CH', '1433'),
+            'database' => env('DB_DATABASE_CH', 'forge'),
+            'username' => env('DB_USERNAME_CH', 'forge'),
+            'password' => env('DB_PASSWORD_CH', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
@@ -119,27 +119,27 @@ return [
 
     'redis' => [
 
-        'client' => env('REDIS_CLIENT_APP_SUFIX', 'phpredis'),
+        'client' => env('REDIS_CLIENT_CH', 'phpredis'),
 
         'options' => [
-            'cluster' => env('REDIS_CLUSTER_APP_SUFIX', 'redis'),
-            'prefix' => env('REDIS_PREFIX_APP_SUFIX', Str::slug(env('APP_NAME_APP_SUFIX', 'laravel'), '_').'_database_'),
+            'cluster' => env('REDIS_CLUSTER_CH', 'redis'),
+            'prefix' => env('REDIS_PREFIX_CH', Str::slug(env('APP_NAME_CH', 'laravel'), '_').'_database_'),
         ],
 
         'default' => [
-            'url' => env('REDIS_URL_APP_SUFIX'),
-            'host' => env('REDIS_HOST_APP_SUFIX', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD_APP_SUFIX', null),
-            'port' => env('REDIS_PORT_APP_SUFIX', '6379'),
-            'database' => env('REDIS_DB_APP_SUFIX', '0'),
+            'url' => env('REDIS_URL_CH'),
+            'host' => env('REDIS_HOST_CH', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD_CH', null),
+            'port' => env('REDIS_PORT_CH', '6379'),
+            'database' => env('REDIS_DB_CH', '0'),
         ],
 
         'cache' => [
-            'url' => env('REDIS_URL_APP_SUFIX'),
-            'host' => env('REDIS_HOST_APP_SUFIX', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD_APP_SUFIX', null),
-            'port' => env('REDIS_PORT_APP_SUFIX', '6379'),
-            'database' => env('REDIS_CACHE_DB_APP_SUFIX', '1'),
+            'url' => env('REDIS_URL_CH'),
+            'host' => env('REDIS_HOST_CH', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD_CH', null),
+            'port' => env('REDIS_PORT_CH', '6379'),
+            'database' => env('REDIS_CACHE_DB_CH', '1'),
         ],
 
     ],

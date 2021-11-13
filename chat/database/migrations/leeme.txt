@@ -1,0 +1,46 @@
+se corrigieron las secuencias.
+
+cambiando
+:1,$s/ORDER  NOCYCLE  NOPARTITION/ORDER  NOCYCLE /g
+
+
+en la creation de vista se quito editonable
+
+  CREATE OR REPLACE EDITIONABLE VIEW
+
+:1,$ s/ REPLACE EDITIONABLE VIEW/ REPLACE VIEW/g
+
+
+:1,$s/USING INDEX  ENABLE/USING INDEX \r\//g
+
+
+:1,$s/("ID_INSTITUCION" NOT NULL ENABLE)/("ID_INSTITUCION" NOT NULL ENABLE) \r\//g
+
+:1,$s/("HORA" NOT NULL ENABLE)/("HORA" NOT NULL ENABLE) \r\//g
+
+/* se quitaron las lineas en UNION ALL */
+  SELECT inst.ID_INSTITUCION as CVE, inst.DESCRIPCION AS CHAT, COUNT(*) AS CONVERSACIONES, 0 AS ABANDONO, 0 AS ESPERA, 0 AS DISPONIBLE, 0 AS PAUSA, 0 AS OCUPADO, 0 AS OPERADORES, 0 AS SUPERVISORES
+  FROM CHAT_CONVERSACIONES cht
+  INNER JOIN CHAT_INSTITUCIONES inst ON inst.ID_INSTITUCION = cht.ID_INSTITUCION
+  WHERE TO_CHAR(cht.FIN,'YYYY-MM-DD')=TO_CHAR(sysdate,'YYYY-MM-DD')
+  GROUP BY inst.ID_INSTITUCION, inst.DESCRIPCION
+
+  UNION ALL
+
+  SELECT inst.ID_INSTITUCION, inst.DESCRIPCION, 0, COUNT(*), 0, 0, 0, 0, 0, 0
+  FROM CHAT_ESPERA chte
+  INNER JOIN CHAT_INSTITUCIONES inst ON inst.ID_INSTITUCION = chte.ID_INSTITUCION
+  WHERE TO_CHAR(chte.ENTRADA,'YYYY-MM-DD')=TO_CHAR(sysdate,'YYYY-MM-DD') AND chte.STATUS=0
+  GROUP BY inst.ID_INSTITUCION, inst.DESCRIPCION
+
+  UNION ALL
+
+
+/* se quito el acento ya que mandaba error de longitud */
+Insert into CHAT_LOCATEL.CHAT_TEMA (ID_TEMA,DESCRIPCION,STATUS,ID_INSTITUCION) values (4,'Solicitud de informacion',1,1);
+
+/* se quitaron los acentos
+Insert into CHAT_LOCATEL.CHAT_SUBTEMA (ID_TEMA,ID_SUBTEMA,DESCRIPCION,STATUS) values (4,28,'Teléfono, dirección, horario de dependencias, instituciones, ONG''S',1);
+Insert into CHAT_LOCATEL.CHAT_SUBTEMA (ID_TEMA,ID_SUBTEMA,DESCRIPCION,STATUS) values (4,28,'Teléfono, dirección, horario de dependencias, instituciones, ONG\'S',1);
+
+

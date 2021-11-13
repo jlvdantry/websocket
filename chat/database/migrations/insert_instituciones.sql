@@ -1,0 +1,11 @@
+--------------------------------------------------------
+-- Archivo creado  - martes-noviembre-09-2021   
+--------------------------------------------------------
+REM INSERTING into CHAT_LOCATEL.CHAT_INSTITUCIONES
+SET DEFINE OFF;
+Insert into CHAT_LOCATEL.CHAT_INSTITUCIONES (ID_INSTITUCION,DESCRIPCION,STATUS) values (1,'Informativos',1);
+Insert into CHAT_LOCATEL.CHAT_INSTITUCIONES (ID_INSTITUCION,DESCRIPCION,STATUS) values (2,'Psicología',1);
+Insert into CHAT_LOCATEL.CHAT_INSTITUCIONES (ID_INSTITUCION,DESCRIPCION,STATUS) values (3,'Jurídico',1);
+Insert into CHAT_LOCATEL.CHAT_INSTITUCIONES (ID_INSTITUCION,DESCRIPCION,STATUS) values (4,'911 CDMX',1);
+Insert into CHAT_LOCATEL.CHAT_INSTITUCIONES (ID_INSTITUCION,DESCRIPCION,STATUS) values (5,'Médico',1);
+Insert into CHAT_LOCATEL.CHAT_INSTITUCIONES (ID_INSTITUCION,DESCRIPCION,STATUS) values (6,'Redes Sociales',1);

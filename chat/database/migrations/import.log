@@ -1,0 +1,8 @@
+;;; 
+Import: Release 11.2.0.2.0 - Production on Thu Nov 4 17:21:33 2021
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+;;; 
+Connected to: Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+ORA-39000: bad dump file specification
+ORA-39142: incompatible version number 4.1 in dump file "/home/chat/SOLOCHAT_20211104.DMP"

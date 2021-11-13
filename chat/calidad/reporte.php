@@ -1,0 +1,6 @@
+<?php 
+echo "<div style='width:80%;height:18px; margin-top:18px; font-weight:bold;align:center;-moz-border-radius: 5px;-webkit-border-radius:5px;border-radius:5px;background-color:#B61B1C;background-image:-webkit-gradient(linear,50% 0,50% 100%,color-stop(20%,#B61B1C),color-stop(90%,#F83437));background-image:-webkit-linear-gradient(#B61B1C 20%,#F83437 90%);background-image:-moz-linear-gradient(#B61B1C 20%,#F83437 90%);background-image:-o-linear-gradient(#B61B1C 20%,#F83437 90%);background-image:linear-gradient(#B61B1C 20%,#F83437 90%);color:#fff;'>Reporte de Calidad</div><br/>";	
+echo "<table><tr><td colspan='2' align='center'><select id='typeChat' class='select' onchange='ChangeId();'><option value='0'>Selecciona el Chat</option><option value='11'>Informativos</option><option value='12'>Psicolog&iacute;a</option></select></td></tr><tr><td><b>Fecha Inicio:</b></td><td><input type='text' id='DTFecha2' class='edit' readonly='readonly' /></td></tr><tr><td><b>Fecha Fin:</b></td><td><input type='text' id='DTFecha3' class='edit' readonly='readonly' value='' /></td></tr>";
+echo "<tr><td colspan='2' align='center'><br /><input type='button' value='Consultar' onclick=\"Reporte_Calidad();\" class='boton'/><br /></td></tr>";
+echo "</table>";
+?>
