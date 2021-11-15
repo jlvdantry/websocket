@@ -25,7 +25,7 @@
 	$rs = $db->Execute($sql);
 	//echo "paso ejecuto sql\n";
 	$respuesta = $rs->RecordCount();
-	//echo "paso recordcount=".$respuesta." estatus=".$rs->fields['STATUS']."\n";
+	echo "paso recordcount=".$respuesta." estatus=".$rs->fields['STATUS']."\n";
 	if($respuesta>0){
 		if($rs->fields['STATUS']==-1){
 			//echo "No es posible Iniciar Sesión<br />Usuario Deshabilitado.";
@@ -43,24 +43,6 @@
 			$db->Close();
 			exit();
 		}
-
-		/*if($rs->fields['PERFIL']==1){
-		   if(substr($ip,0,5)!="10.27" && substr($ip,0,9)!="192.168.6"){
-			  echo "Acceso Denegado!";
-			  $query->Finalizar_Transaccion($db);
-			  $db->Close();
-			  exit();
-			}
-		}else if($rs->fields['PERFIL']==2){
-			$sql = "SELECT count(*) FROM CHAT_OPERADORES WHERE PERFIL=2 AND STATUS=1 AND ID_INSTITUCION=".$rs->fields['ID_INSTITUCION'];
-			$rs_maximo = $db->Execute($sql);
-			if($rs_maximo->fields[0]>4){
-				echo "El Limite de Sesiones<br />de Supervisor ha sido superado";
-			    exit();
-				$query->Finalizar_Transaccion($db);
-				$db->Close();
-			}
-		}*/
 
 		$host = str_replace('$','',getenv("username"));
 		//echo "/valida_sesion_chat antes de navegador";

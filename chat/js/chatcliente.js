@@ -2,9 +2,20 @@ var h_columna1=0;
 var weekday = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado"];
 var a = new Date();
 var dia=weekday[a.getDay()];
+var connection = null;
 $(document).ready(function() {
     h_columna1=$('.columna1').outerHeight(true);
-    console.log('c1-height'+$('.columna1').height()+' c1-oh='+$('.columna1').outerHeight(true));
+	connection = new WebSocket('wss://chat_socket.soluint.com:/ws/');
+	connection.onopen = function () {
+                        var msg = {
+                            msg: 'Entroliga',
+                            date: Date.now()
+                        };
+                         connection.send(JSON.stringify(msg))
+	};
+	connection.onerror = function (event) {
+              console.error("Error en el WebSocket detectado:", event);
+        };
     $('[data-toggle="tooltip"]').tooltip({
               template: '<div class="tooltip tooltip-info"><div class="arrow"></div><div class="tooltip-inner"></div></div>' });
     $('#tuser').focus();
@@ -28,6 +39,32 @@ $(document).ready(function() {
 
 			document.getElementById('btnconecta').style.display='none';
 			var param = 'nombre='+$.trim($('#tuser').val())+'&correo='+$.trim($('#tmail').val().toLowerCase())+'&nombre2='+Limpiar_Cadena($.trim($('#tuser').val()))+'&inst='+$('#id_inst').val();
+			var msg = {
+			    nombre: $.trim($('#tuser').val()),
+			    msg: 'IniciaSessionCliente',
+			    correo:   $.trim($('#tmail').val()),
+                            inst: $('#id_inst').val(),
+			    date: Date.now()
+			};
+                       $('#dmsg').html("<div class='col-lg-12 mb-3 text-center'> <i class='fas fa-sync fa-spin col-2' style='color: #b5131b !important;'></i> </div>");
+			connection.send(JSON.stringify(msg)); // Send the message 'Ping' to the server
+
+			connection.onerror = function (event) {
+			      console.error("Error en el WebSocket detectado:", event);
+			};
+
+			connection.onmessage = function (event) {
+			      console.log("mensaje:", event.data);
+                              switch (event.data) {
+                                  case 'Espera':
+                                       enespera();
+                                       break;
+                                  default:
+                                       console.log('Mensaje no progamado '+event.data);
+                              }
+			};
+
+/*
 			$.ajax({
 				url: 'conecta.php',
 				cache:false,
@@ -76,7 +113,24 @@ $(document).ready(function() {
 				},
 				error: function (request, status, error){$('#dmsg').html(request.responseText);}
 			});
+*/
 		}
+                                                //document.getElementById('layout_chat').style.display='block';
+		window.enespera= function  () {
+                                                document.getElementById('form_chat').style.display='none';
+                                                //var newstr = data.replace("chat/", "", "gi");
+                                                //newstr = newstr.replace("coladeespera", "", "gi");
+                                                //var a=newstr.split('<input');
+                                                //var b=a[1].split('/>')
+                                                //var c=b[0].split('=')
+                                                //var d=c[3].replaceAll("'","").replaceAll(" ","");
+                                                //$('#id_espera').val(d);
+                                                //$('#dmsg').html('<input'+b[0]+' />');
+                                                //$('#dmsg').html(newstr);
+                                                $('#enlazandote').removeClass('d-none');
+                                                overlay();
+                                                $('#dmsg').html('');
+                }
 
 		window.emailCheck= function  (emailStr) {
 			var eml = document.getElementById('temail');

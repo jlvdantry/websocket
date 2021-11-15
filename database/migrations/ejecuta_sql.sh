@@ -19,11 +19,13 @@ cat > $0.sql << fin
 CREATE OR REPLACE FUNCTION DateDiff (units VARCHAR(30), start_t timestamp, end_t timestamp)
      RETURNS numeric AS \$\$
    DECLARE
-     diff time = null;
+     diff timestamp(0) = null;
      total numeric(8)=0; 
    BEGIN
-     diff = end_t - start_t;
-     total = (date_part('hour',diff)*60*60)+(date_part('minute',diff)*60)+date_part('second',diff);
+SELECT ((DATE_PART('day', end_t - start_t) * 24 + 
+                DATE_PART('hour', end_t - start_t)) * 60 +
+                DATE_PART('minute', end_t - start_t)) * 60 +
+                DATE_PART('second', end_t - start_t) into total;
      RETURN total;
    END;
    \$\$ LANGUAGE plpgsql;
