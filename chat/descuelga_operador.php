@@ -6,13 +6,13 @@
 	$query = new Sentencias();
 	$db = $query->Iniciar_Transaccion($query);
 
-	$sql = "update chat_autorizacion set status=0 where id_conversacion in(select id_conversacion from CHAT_CONVERSACIONES where id_operador=".$id." and fin is null)";
+	$sql = "update \"CHAT_AUTORIZACION\" set \"STATUS\"=0 where \"ID_CONVERSACION\" in(select \"ID_CONVERSACION\" from \"CHAT_CONVERSACIONES\" where \"ID_OPERADOR\"=".$id." and \"FIN\" is null)";
 	$rs = $db->Execute($sql);
 	
-	$sql = "UPDATE CHAT_CONVERSACIONES SET FIN=LOCALTIMESTAMP where ID_OPERADOR=".$id." and FIN is null";
+	$sql = "UPDATE \"CHAT_CONVERSACIONES\" SET \"FIN\"=LOCALTIMESTAMP where \"ID_OPERADOR\"=".$id." and \"FIN\" is null";
 	$rs = $db->Execute($sql);
 
-	$sql = "UPDATE CHAT_OPERADORES SET STATUS=4 where ID_OPERADOR=".$id;
+	$sql = "UPDATE \"CHAT_OPERADORES\" SET \"STATUS\"=4 where \"ID_OPERADOR\"=".$id;
 	$rs = $db->Execute($sql);
 
 	$query->Finalizar_Transaccion($db);
