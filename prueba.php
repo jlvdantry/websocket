@@ -3,6 +3,12 @@
 use vakata\websocket\Server;
 
 require_once __DIR__ . '/vendor/autoload.php';
+define ("CIUDADANO", 0);
+define ("OPERADOR", 1);
+define ("LISTAESPERA", 1);
+define ("ENCONVERSACION", 2);
+define ("INICIOSESSION", 0);
+$users=array();
 //echo "dir=".__DIR__."\n";
 $server = new \vakata\websocket\Server('ws://127.0.0.1:15382');
 $server->onMessage(function ($sender, $message, $server) {
@@ -11,37 +17,153 @@ $server->onMessage(function ($sender, $message, $server) {
   echo "socket=".$user."\n";;
   $obj_msg=json_decode($message);
   switch($obj_msg->msg){
-    case "IniciaSessionCliente" : buscaoperador($user,$server);  break;
-    case "IniciaSessionOperador" : $server->send($user,"hola humano");  break;
-/*
-    case "hi"    : send($user->socket,"zup human");                         break;
-    case "name"  : send($user->socket,"my name is Multivac, silly I know"); break;
-    case "age"   : send($user->socket,"I am older than time itself");       break;
-    case "date"  : send($user->socket,"today is ".date("Y.m.d"));           break;
-    case "time"  : send($user->socket,"server time is ".date("H:i:s"));     break;
-    case "thanks": send($user->socket,"you're welcome");                    break;
-    case "bye"   : send($user->socket,"bye");                               break;
-*/
-    default      : $server->send($user," not understood");           break;
+    case "IniciaSessionCliente" : IniciaSessionCliente($user,$server,$obj_msg);  break;
+    case "IniciaSessionOperador" : IniciaSessionOperador($user,$server,$obj_msg);  break;
+    case "Operadordisponible" : BuscaClienteEspera($user,$server,$obj_msg);  break;
+    case "Escribiendo" : AquienEscribe($user,$server,$obj_msg);  break;
+    case "Enviar mensaje" : EnviarMensaje($user,$server,$obj_msg);  break;
+    case "Mensaje recibido" : MensajeRecibido($user,$server,$obj_msg);  break;
+    default      : $msg = array('msg' => 'msg desconocido'); $server->send($user,json_encode($msg));           break;
   }
     
 });
-
-$server->run();
 
 $server->onConnect(function ($server) {
      echo "se conecto\n";
 });
 
-function buscaoperador($socket,$server){
-     echo "entro a buscar operador\n";
-     $server->send($socket,'Espera');
+$server->run();
+
+function validaoperador($socket,$server){
+     echo "operador inicio session ".print_r($socket,true)."\n";
+     $msg = array('msg' => 'Espera');
+     $server->send($socket,'operador valido',json_encode($msg));
+}
+
+function MensajeRecibido($socket,$server,$obj_msg){
+     echo __METHOD__." entro \n";
+     global $users;
+     $found=null;
+    foreach ($users as $user) {
+        echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
+        if ($user->id==$obj_msg->id) {
+            echo __METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true)."\n";
+            $msg = array('msg' => 'Mensaje recibido','date_recibido'=>$obj_msg->date_recibido);
+            $server->send($user->socket,json_encode($msg));
+            return $user->socket;
+        }
+    }
+    echo __METHOD__." no encontro a quien confirmar que fue recibido el mensaje"."\n";
+    return $found;
+}
+
+function EnviarMensaje($socket,$server,$obj_msg){
+     echo __METHOD__." entro \n";
+     global $users;
+     $found=null;
+    foreach ($users as $user) {
+        echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
+        if ($user->id==$obj_msg->id) {
+            echo __METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true)."\n";
+            $msg = array('msg' => 'Mensaje enviado','date'=>$obj_msg->date,'mensaje'=>$obj_msg->mensaje,'nombre'=>$users[(int)$socket]->nombre);
+            $server->send($user->socket,json_encode($msg));
+            //$server->send($socket,json_encode($msg));
+            return $user->socket;
+        }
+    }
+    echo __METHOD__." no encontro a quien enviar el mensaje"."\n";
+    return $found;
+}
+
+function AquienEscribe($socket,$server,$obj_msg){
+     echo __METHOD__." entro \n";
+     global $users;
+     $found=null;
+    foreach ($users as $user) {
+        echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
+        if ($user->id==$obj_msg->id) {
+            echo __METHOD__." encontro a quien escribile=".print_r($user->id,true)."\n";
+            $msg = array('msg' => 'Te estan escribiendo');
+            $server->send($user->socket,json_encode($msg));
+            return $user->socket;
+        }
+    }
+    echo __METHOD__." no encontro a quien le esta escribiendo"."\n";
+    return $found;
+}
+
+function BuscaClienteEspera($socket,$server,$obj_msg){
+     echo __METHOD__." entro a buscar lista de espera\n";
+     global $users;
+     $found=null;
+    foreach ($users as $user) {
+        echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
+        if ($user->perfil == CIUDADANO && $user->estatus==LISTAESPERA) {
+            echo __METHOD__." encontro cliente socket oper=".print_r($socket,true)." user=".print_r($user->socket,true)."\n";
+            $msg = array('msg' => 'Encontro operador','nombre'=>$users[(int)$socket]->nombre,'id'=>$users[(int)$socket]->id);
+            $server->send($user->socket,json_encode($msg));
+            $msg = array('msg' => 'Encontro cliente','nombre'=>$users[(int)$user->socket]->nombre,'id'=>$users[(int)$user->socket]->id);
+            $server->send($socket,json_encode($msg));
+            $users[(int)$user->socket]->estatus=ENCONVERSACION;
+            $users[(int)$socket]->estatus=ENCONVERSACION;
+            return $user->socket;
+        }
+    }
+    echo __METHOD__." no encontro lista de espera"."\n";
+    return $found;
+}
+
+function IniciaSessionOperador($socket,$server,$obj_msg){
+         global $users;
+         $user = new User();
+         $user->id = uniqid();
+         $user->socket = $socket;
+         $user->perfil = OPERADOR;
+         $user->estatus = INICIOSESSION;
+         $user->nombre = $obj_msg->nombre;
+         $users[(int)$socket]=$user;
+         echo __METHOD__." creo operador".print_r($users,true)."\n";
+}
+
+function IniciaSessionCliente($socket,$server,$obj_msg){
+         global $users;
+         $user = new User();
+         $user->id = uniqid();
+         $user->socket = $socket;
+         $user->perfil = CIUDADANO;
+         $user->estatus = LISTAESPERA;
+         $user->nombre = $obj_msg->nombre;
+         $users[(int)$socket]=$user;
+         echo __METHOD__." creo ciudadano".print_r($users,true)."\n";
+         buscaoperadordisponible($socket,$server);
+}
+
+function buscaoperadordisponible($socket,$server){
+     echo __METHOD__." entro a buscar operador\n";
+     global $users;
+     $found=null;
+    foreach ($users as $user) {
+        echo __METHOD__."user perfil=".print_r($user->perfil,true)." estauts ".print_r($user->estatus,true)."\n";
+        if ($user->perfil == OPERADOR && $user->estatus==LISTAESPERA) {
+            $msg = array('msg' => 'Encontro cliente','nombre'=>$users[(int)$socket]->nombre,'id'=>$users[(int)$socket]->id);
+            $server->send($user->socket,json_encode($msg));
+            $msg = array('msg' => 'Encontro operador','nombre'=>$users[(int)$user->socket]->nombre,'id'=>$users[(int)$user->socket]->id);
+            $server->send($socket,json_encode($msg));
+            $users[(int)$user->socket]->estatus=ENCONVERSACION;
+            $users[(int)$socket]->estatus=ENCONVERSACION;
+            return $user->socket;
+        }
+    }
+    echo __METHOD__." no encontro operador disponible"."\n";
+    $msg = array('msg' => 'Espera');
+    $server->send($socket,json_encode($msg));
+    return $found;
 }
 
 function getuserbysocket($socket,$server){
   $found=null;
     foreach ($server->getClients() as $client) {
-        echo "client=".print_r((int)$client['socket'],true)." y socket ".(int)$socket."\n";
+        echo __METHOD__." client=".print_r((int)$client['socket'],true)." y socket ".(int)$socket."\n";
         if ((int)$socket == (int)$client['socket']) {
             return $socket;
         }
@@ -49,6 +171,16 @@ function getuserbysocket($socket,$server){
   echo "no encontro socket"."\n";
   return $found;
 }
+
+
+class User{
+  var $id;
+  var $socket;
+  var $perfil; /* 0=ciudadano, 1=operador */
+  var $estatus;  /* 0=lista de espersa, 1=En conversacion, 2=disponible, 3=en pausa */
+  var $nombre;  /* nombre del ciudadano o del operador */
+}
+
 
 
 ?>
