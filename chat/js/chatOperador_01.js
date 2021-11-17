@@ -6,8 +6,9 @@ var isActive;
 window.onfocus=function(){isActive = true;};
 window.onblur=function(){isActive = false;};
 
-function Crear_Ventana(chatboxtitle) {
+function Crear_Ventana(resp) {
     var message;
+    var chatboxtitle=resp.nombre;
     if($("#id_institucion").val()!=4){
         if($("#id_institucion").val()==6 || $("#id_institucion").val()==1)
             message = "Bienvenido a los servicios en linea de Locatel.<br />&#191;En que le puedo ayudar?";
@@ -43,13 +44,14 @@ function Crear_Ventana(chatboxtitle) {
 	cadena+= '<textarea id="t_'+chatboxtitle +'" name="t_'+chatboxtitle +'" maxlength="2499"';
 	if($("#id_conversacion").length){cadena+= 'onpaste="return false;" ';}
 	cadena+= 'class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,\''+chatboxtitle+'\');"></textarea>';
+	cadena+= '<input type="hidden" id="id_cliente" value="'+resp.id+'"></input>';
 	cadena+= '</div>';
 	
 	$(" <div />" ).attr("id","chatbox_"+chatboxtitle).addClass("chatbox").html(cadena).appendTo($( "body" ));
-    $("#chatbox_"+chatboxtitle).css('top', '100px');
+        $("#chatbox_"+chatboxtitle).css('top', '100px');
     
 	$("#chatbox_"+chatboxtitle).css('bottom', '0px');
-    $("#chatbox_"+chatboxtitle).css('right', '0px');
+        $("#chatbox_"+chatboxtitle).css('right', '0px');
 	$("#chatbox_"+chatboxtitle+" .chatboxtextarea").blur(function(){Remove_Focus(2,chatboxtitle)}).focus(function(){Remove_Focus(1,chatboxtitle)});
 
 	$("#chatbox_"+chatboxtitle).show();
@@ -145,13 +147,17 @@ function Genera_Status(){
        id_conv = $("#id_conv_op").val();
        msg = "MSG_OP";
     }
-
-    $.ajax({url: app_path+"escribiendo.php",type:"POST",data:({conversacion:id_conv,msg:msg}),success: function(data){}});
+                        var msg = {
+                            msg: 'Escribiendo',
+                            date: Date.now(),
+                            id:  $('#id_cliente').val()
+                        };
+                         connection.send(JSON.stringify(msg))
 }
 
 function Enviar_Mensaje(chatboxtitle){
 	var tipo=2;
-	if($("#id_conversacion").length){
+    if($("#id_conversacion").length){
         if($("#conversacion").val()==0){
            $(chatboxtextarea).val("");
            return;
@@ -198,28 +204,19 @@ function Enviar_Mensaje(chatboxtitle){
     }
 
 	if (message != '') {
-	   $('#fountainG').css("visibility","visible");
-	   var color = (tipo==1?'color="#ff0000"':"");
-	   var param = "action=sendchat&to="+chatboxtitle+"&message="+message+"&conversacion="+id_conv+"&conversacion_op="+id_conv_op+"&operador="+id_opera+"&from_de="+from;
-	   $.ajax({
-            url: app_path+'chat.php',
-            cache:false,
-            type: 'POST',
-            data: param,
-            //beforeSend: function(){},
-            success: function(data){
-                if(data>0 && data!=""){
-                    message = message.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
-        			message = Verificar_Url(message);
-        			$("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxmessagefrom"><img src="'+app_path+'images/'+img+'.png" style="margin:0 4px -4px -8px;"/><font '+color+'">'+from+'</font><img id="ban'+data+'" src="'+app_path+'images/no_recibido.gif" alt="Mensaje No Recibido" title="Mensaje No Recibido" style="cursor:hand; cursor:pointer; margin:0 4px -4px 4px;"/></span><span class="chatboxmessagecontent"><p style="margin: 4 0;">'+message+'</p></span></div>');
-                    //if(id_conv_op!=""){
-                        $('#msg_enviados').val(($('#msg_enviados').val()==""?data:$('#msg_enviados').val()+','+data));
-                    //}
-                    $("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
-                }
-                writting=0;
-            }
-        });
+                        var msg = {
+                            msg: 'Enviar mensaje',
+                            date: Date.now(),
+                            id:  $('#id_cliente').val(),
+                            mensaje:message
+                        };
+                        connection.send(JSON.stringify(msg))
+	                var color = (tipo==1?'color="#ff0000"':"");
+        		message = Verificar_Url(message);
+        		$("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxmessagefrom"><img src="'+app_path+'images/'+img+'.png" style="margin:0 4px -4px -8px;"/><font '+color+'">'+from+'</font><img id="ban'+msg.date+'" src="'+app_path+'images/no_recibido.gif" alt="Mensaje No Recibido" title="Mensaje No Recibido" style="cursor:hand; cursor:pointer; margin:0 4px -4px 4px;"/></span><span class="chatboxmessagecontent"><p style="margin: 4 0;">'+message+'</p></span></div>');
+                        $('#msg_enviados').val(($('#msg_enviados').val()==""?msg.id:$('#msg_enviados').val()+','+msg.id));
+                        $("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
+               
         $('#fountainG').css("visibility","hidden");
 	}
 }
@@ -344,10 +341,11 @@ function Verificar_Url(msg){
 	return msg;
 }
 
-function Verificar_Mensajes_Nuevos(chatboxtitle, tipo){
+function Verificar_Mensajes_Nuevos(resp, tipo){
 	var id_conv="";
 	var msg;
     var tiempo;
+    var chatboxtitle=resp.nombre;
 
     if($("#id_conversacion").length){
         id_conv = $("#id_conversacion").val();
@@ -368,43 +366,27 @@ function Verificar_Mensajes_Nuevos(chatboxtitle, tipo){
             img+=($("#id_inst").val()==4?4:6);        
     }
 
-    var param = "action=chatheartbeat&un="+document.getElementById('t_username').value+"&id_conv="+id_conv;
-    $.ajax({
-        url: app_path+'chat.php',
-        cache:false,
-        type: 'POST',
-        data: param,
-        //beforeSend: function() {$('#'+div).html(Cargando(0));},
-        success: function(data){
-            if(data!=""){
-                msg = data.split('|');
-                for(var i=0; i<msg.length;i++){
-	                   $("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage"><font '+color+'"><span class="chatboxmessagefrom"><img src="'+app_path+'images/'+(tipo==1?'usuario':img)+'.png" style="margin:0 4px -4px -8px;"/>'+chatboxtitle+'</span><span class="chatboxmessagecontent"><p style="margin: 4 auto;">'+Verificar_Url(msg[i])+'</p></span></font></div>');
+            if(resp.mensaje!=""){
+	                   $("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage"><font '+color+'"><span class="chatboxmessagefrom"><img src="'+app_path+'images/'+(tipo==1?'usuario':img)+'.png" style="margin:0 4px -4px -8px;"/>'+chatboxtitle+'</span><span class="chatboxmessagecontent"><p style="margin: 4 auto;">'+Verificar_Url(resp.mensaje)+'</p></span></font></div>');
 
                     if($("#chatbox_"+chatboxtitle+" .chatboxcontent").length){
                         $("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
                     }
-                }
                 $('#chatbox_'+chatboxtitle+' .chatboxhead').toggleClass('chatboxblink');
 
-				if(isActive){
-                    document.getElementById('chatAudio').play();
-                }else if (("Notification" in window)) {
+                if (("Notification" in window)) {
                     Notification.requestPermission(function (permission) {
-                    var notification = new Notification('CHAT LOCATEL', {body: 'Tienes '+(msg.length>1?msg.length+' nuevos mensajes':' un nuevo mensaje')+'!!!', icon: app_path+'images/notificacion.png'});
-                    setTimeout(notification.close.bind(notification), 5000);
-                    notification.onclick = function(e){window.focus(); $('#t_'+chatboxtitle).focus();};
-                    document.getElementById('chatAudio2').play();
+			    var notification = new Notification('CHAT LOCATEL', {body: 'Tienes '+(msg.length>1?msg.length+' nuevos mensajes':' un nuevo mensaje')+'!!!', icon: app_path+'images/notificacion.png'});
+			    setTimeout(notification.close.bind(notification), 5000);
+			    notification.onclick = function(e){window.focus(); $('#t_'+chatboxtitle).focus();};
+			    document.getElementById('chatAudio2').play();
                     });
                 }else
                    document.getElementById('chatAudio').play();
-
-				if(chatboxtitle!="" && id_conv!=""){
-					document.title=chatboxtitle+' te envio un mensaje';
-				}
+	           if(chatboxtitle!="" && id_conv!=""){
+				document.title=chatboxtitle+' te envio un mensaje';
+		}
             }
-        }
-    });
 }
 
 function Verificar_Mensajes_Recibidos_Usuario(){

@@ -312,7 +312,7 @@ textarea:focus { outline: none !important;  resize: none !important;}
 echo '</style>';
 echo "<link type='text/css' rel='stylesheet' href='estilo/inter/inter.css' />\n";
 echo "<link type='text/css' rel='stylesheet' href='https://pro.fontawesome.com/releases/v5.10.0/css/all.css' data-mutate-approach='sync' />\n";
-echo "<link type='text/css' rel='stylesheet' href='../css/style.css' />\n";
+echo "<link type='text/css' rel='stylesheet' href='estilo/fountg.css' />\n";
 echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">';
 ##echo '<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>';
 echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>';
@@ -425,4 +425,5 @@ echo '<footer class="footerx d-none">
       </footer>
 ';
 echo "<script src='js/chatcliente.js'type='text/javascript' language='javascript'></script>";
+echo "<script src='js/crearMensaje.js'type='text/javascript' language='javascript'></script>";
 ?>

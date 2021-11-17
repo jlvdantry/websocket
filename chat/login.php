@@ -19,8 +19,8 @@
 <link href="calendarui/jquery-ui.css" media="screen" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/chat_locatel_20170406.js"></script>
-<script type="text/javascript" src="js/supervision_locatel_20170330.js"></script>
-<script type="text/javascript" src="js/chat_locatel_20170407_redes.js"></script>
+<script type="text/javascript" src="js/chatOperador.js"></script>
+<script type="text/javascript" src="js/chatOperador_01.js"></script>
 <script src="calendarui/jquery-ui.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">google.load("visualization", "1", {packages:["corechart"]});</script>

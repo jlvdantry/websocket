@@ -5,6 +5,8 @@ window.addEventListener('unload', Cerrar_Sesion2, false);*/
 var req_fifo=Array();
 var eleID=Array();
 var i=0;
+var connection=null;
+
 function ajax(url,myid,metodo,tprest){
     eleID[i]=myid;
 
@@ -31,7 +33,74 @@ function ajax(url,myid,metodo,tprest){
     }else{
     	clone();
     }
-    //clone();
+}
+
+function EntroOperador(id){
+        connection = new WebSocket('wss://chat_socket.soluint.com:/ws/');
+	connection.onopen = function () {
+                        var msg = {
+                            msg: 'IniciaSessionOperador',
+                            date: Date.now(),
+                            nombre: $('#t_username').val()
+                        };
+                         connection.send(JSON.stringify(msg))
+        };
+
+        connection.onerror = function () {
+               console.log('error');
+        };
+
+        connection.onmessage = function () {
+                              console.log("mensaje:", event.data);
+                              resp=JSON.parse(event.data);
+                              switch (resp.msg) {
+                                  case 'Te estan escribiendo':
+                                       escribiendo();
+                                       break;
+                                  case 'Encontro cliente':
+                                       abreconversacion(resp);
+                                       break;
+                                  case 'Mensaje enviado':
+                                       recibirmensaje(resp);
+                                       break;
+                                  case 'Mensaje recibido':
+                                       mensajerecibido(resp)
+                                       break;
+                                  default:
+                                       console.log('Mensaje no progamado '+event.data);
+                              }
+        };
+}
+
+                window.recibirmensaje= function  (resp) {
+                        Verificar_Mensajes_Nuevos(resp,1);
+                        var msg = {
+                            msg: 'Mensaje recibido',
+                            date: Date.now(),
+                            id:  $('#id_cliente').val(),
+                            date_recibido: resp.date
+                        };
+                         connection.send(JSON.stringify(msg))
+                }
+
+
+function escribiendo(resp){
+				$('#fountainG').css("visibility","visible");
+                                $("#msg_escribiendo").show(100);
+                                setTimeout(function() { $("#msg_escribiendo").hide(); $('#fountainG').css("visibility","hidden") }, 1000);
+}
+
+function mensajerecibido(resp){
+                            obj = document.getElementById('ban'+resp.date_recibido);
+                            if (typeof(obj) != 'undefined' && obj != null){
+                                obj.src = app_path+"images/recibido.png";
+                                obj.alt = "Mensaje Recibido";
+                                obj.title = "Mensaje Recibido";
+                            }
+}
+
+function abreconversacion(resp){
+        Crear_Ventana(resp);
 }
 
 function GotAsyncData(id){
@@ -46,25 +115,10 @@ function GotAsyncData(id){
 
 				document.getElementById('ayuda').style.display = 'block';
 				document.getElementById('t_username').value = document.getElementById('t_username2').value;
-
-                //document.getElementById('dmensaje').style.display = 'block';
-				/*window.onbeforeunload = function(event){
-					var id_op = document.getElementById('id_operador').value;
-					if(id_op!=-1){
-						event = event || window.event;
-						var confirmClose = 'Importante: Asegurate de cerrar la sesión y todas las conversaciones antes de salir de la página?';
-						if (event) {event.returnValue = confirmClose;}return confirmClose;
-					}
-				}*/
-				/*window.onunload = function(){
-					var id_op = document.getElementById('id_operador').value;
-					if(id_op!=-1){
-						Cerrar_Sesion2();
-					}
-				}*/
-
 				ajax('info.php','centro',1);
-				$('#int_status').val(setInterval(ajaxcall, 3000));
+                                EntroOperador();
+				//$('#int_status').val(setInterval(ajaxcall, 3000));
+                                ajaxcall();
 			}else if(document.getElementById('tperfil').value==2){ //Supervisor
 				ajax('menu_chat.php?perfil=2&inst='+document.getElementById('id_institucion').value,'centro',1);
 				$('#int_status').val(setInterval(Status_Supervisor, 15000));
@@ -263,8 +317,15 @@ function Cambiar_Status(){
 	var id_institucion = $('#id_institucion').val();
 
 	st = (st==1?3:(st==3?1:st));
-	if(st!=2)
+	if(st!=2) {
 		ajax('status.php?st='+st+'&id_op='+op+'&espera='+id_institucion,'hold',1);
+                        var msg = {
+                            msg: 'Operadordisponible',
+                            nombre:$('#t_username').val(),
+                            date: Date.now()
+                        };
+                        connection.send(JSON.stringify(msg))
+        }
 }
 
 function Listar_Operadores(tipo){

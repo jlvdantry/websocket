@@ -14,7 +14,10 @@ $(document).ready(function() {
                          connection.send(JSON.stringify(msg))
 	};
 	connection.onerror = function (event) {
-              console.error("Error en el WebSocket detectado:", event);
+                              console.error("Error en el WebSocket detectado:", event);
+                              $('#tuser').attr('disabled','disabled')
+                              $('#btnconecta').attr('disabled','disabled')
+                              crearMensaje(true,'Atención:','El servicio no esta disponible');
         };
     $('[data-toggle="tooltip"]').tooltip({
               template: '<div class="tooltip tooltip-info"><div class="arrow"></div><div class="tooltip-inner"></div></div>' });
@@ -49,87 +52,98 @@ $(document).ready(function() {
                        $('#dmsg').html("<div class='col-lg-12 mb-3 text-center'> <i class='fas fa-sync fa-spin col-2' style='color: #b5131b !important;'></i> </div>");
 			connection.send(JSON.stringify(msg)); // Send the message 'Ping' to the server
 
-			connection.onerror = function (event) {
-			      console.error("Error en el WebSocket detectado:", event);
-			};
-
 			connection.onmessage = function (event) {
 			      console.log("mensaje:", event.data);
-                              switch (event.data) {
+                              resp=JSON.parse(event.data);
+                              switch (resp.msg) {
                                   case 'Espera':
                                        enespera();
                                        break;
+                                  case 'Encontro operador':
+                                       abreconversacion(resp);
+                                       break;
+                                  case 'Te estan escribiendo':
+                                       escribiendo();
+                                       break;
+                                  case 'Mensaje enviado':   /* se recibe mensaje de Mensaje enviado */
+                                       recibirmensaje(resp);
+                                       break;
+                                  case 'Mensaje recibido': /* mensaje recibido por el receptor */
+                                       mensajerecibido(resp);
+                                       break;
+
                                   default:
                                        console.log('Mensaje no progamado '+event.data);
                               }
 			};
 
-/*
-			$.ajax({
-				url: 'conecta.php',
-				cache:false,
-				type: 'POST',
-				data: param,
-				beforeSend: function(){$('#dmsg').html("<div class='col-lg-12 mb-3 text-center'> <i class='fas fa-sync fa-spin col-2' style='color: #b5131b !important;'></i> </div>");},
-				success: function(data){
-					if(data.search('redirect.')!=-1){ //Inicia Conversacion
-                                                var newstr = data.replace("redirect.", "", "gi");
-						$('#dmsg').html(newstr);
-						document.getElementById('t_username').value = document.getElementById('t_username2').value;
-						var tmp = Limpiar_Cadena(trim(document.getElementById('login_operador').value));
-						overlay();
-						$('#dmsg').css("display","none");
-						Crear_Ventana_Cliente(tmp);
-						document.getElementById('int_conv').value = setInterval(ajaxcall, 3000);
-						document.getElementById('conversacion').value = 1;
-					}else if(data.search('FaltaNombre.')!=-1){
-						$('#dmsg').html("<font style='color:#B61B1C'><b>Ingrese su Nombre!</b></font>");
-						document.getElementById('btnconecta').style.display='block';
-					}else if(data.search('FaltaCorreo.')!=-1){
-						$('#dmsg').html("<font style='color:#B61B1C'><b>Ingrese su Email!</b></font>");
-						document.getElementById('btnconecta').style.display='block';
-					}else if(data.search('coladeespera.')!=-1){
-						//document.getElementById('layout_chat').style.display='block';
-						document.getElementById('form_chat').style.display='none';
-                                                var newstr = data.replace("chat/", "", "gi");
-                                                newstr = newstr.replace("coladeespera", "", "gi");
-                                                var a=newstr.split('<input');
-                                                var b=a[1].split('/>')
-                                                var c=b[0].split('=')
-                                                var d=c[3].replaceAll("'","").replaceAll(" ","");
-                                                $('#id_espera').val(d);
-                                                //$('#dmsg').html('<input'+b[0]+' />');
-						//$('#dmsg').html(newstr);
-						$('#enlazandote').removeClass('d-none');
-						overlay();
-                                                $('#dmsg').html('');
-						document.getElementById('int_conv').value = setInterval(function() {Lista_Espera(document.getElementById('id_inst').value)}, 4000);
-					}else if(data.search('nodisponible.')){
-						document.getElementById('layout_chat').style.display='block';
-						document.getElementById('btnconecta').style.display='none';
-						$('#dmsg').html(data);
-						document.getElementById('int_conv').value = setInterval(function() {Lista_Espera(document.getElementById('id_inst').value)}, 4000);
-					}
-				},
-				error: function (request, status, error){$('#dmsg').html(request.responseText);}
-			});
-*/
 		}
-                                                //document.getElementById('layout_chat').style.display='block';
+
+		window.mensajerecibido= function  (resp) {
+                            obj = document.getElementById('ban'+resp.date_recibido);
+                            if (typeof(obj) != 'undefined' && obj != null){
+                                obj.src = app_path+"images/recibido.png";
+                                $(obj).removeClass('fa-check');
+                                $(obj).addClass('fa-check-double');
+                                obj.alt = "Mensaje Recibido";
+                                obj.title = "Mensaje Recibido";
+                            }
+		}
+
+
+		window.recibirmensaje= function  (resp) {
+                    $("#chatbox_"+resp.nombre+" .chatboxcontent").append(dame_chatboxmessage_ope(Verificar_Url(resp.mensaje)));
+
+                    if($("#chatbox_"+resp.nombre+" .chatboxcontent").length){
+                        $("#chatbox_"+resp.nombre+" .chatboxcontent").scrollTop($("#chatbox_"+resp.nombre+" .chatboxcontent")[0].scrollHeight);
+                    }
+                        var msg = {
+                            msg: 'Mensaje recibido',
+                            date: Date.now(),
+                            id:  $('#id_operador').val(),
+                            date_recibido: resp.date
+                        };
+                         connection.send(JSON.stringify(msg))
+                }
+
 		window.enespera= function  () {
                                                 document.getElementById('form_chat').style.display='none';
-                                                //var newstr = data.replace("chat/", "", "gi");
-                                                //newstr = newstr.replace("coladeespera", "", "gi");
-                                                //var a=newstr.split('<input');
-                                                //var b=a[1].split('/>')
-                                                //var c=b[0].split('=')
-                                                //var d=c[3].replaceAll("'","").replaceAll(" ","");
-                                                //$('#id_espera').val(d);
-                                                //$('#dmsg').html('<input'+b[0]+' />');
-                                                //$('#dmsg').html(newstr);
                                                 $('#enlazandote').removeClass('d-none');
                                                 overlay();
                                                 $('#dmsg').html('');
+                }
+
+		window.escribiendo= function(resp){
+						$('#fountainG').css("visibility","visible");
+						$("#msg_escribiendo").show(100);
+						setTimeout(function() { $("#msg_escribiendo").hide(); $('#fountainG').css("visibility","hidden") }, 1000);
+
+		}
+
+
+		window.abreconversacion = function  (resp) {
+                                                var newstr="<input id='id_operador' type='hidden' value='"+resp.id+"'/><input id='login_operador' type='hidden'"+
+                                                           " value='"+resp.nombre+"'/><input id='id_conversacion' type='hidden' value='9'/><input id='t_username2' "+
+                                                           " name='t_username2' type='hidden' value='jlv'/><div style='color:#ffffff'></div>";
+                                                $('#enlazandote').addClass('d-none')
+                                                document.getElementById('int_conv').value = "";
+                                                $('#dmsg').html(newstr);
+                                                //document.getElementById('t_username').value = document.getElementById('t_username2').value;
+                                                var tmp = Limpiar_Cadena(resp.nombre);
+                                                $('#form_chat').hide();
+                                                Crear_Ventana_Cliente(tmp);
+                                                $('.columna2').css('background-color', '#FFFFFF');
+                                                $('.columna1').removeClass('mb-4');
+                                                $('#div_tienesdudas').removeClass('d-flex');
+                                                $('#div_tienesdudas').addClass('d-none');
+                                                $('#DivPinLocatel').removeClass('pb-2');
+                                                $('#las24').removeClass('d-none');
+                                                $('#header').css('background-color', '#FFFFFF');
+                                                resize();
+                                                document.getElementById('layout_chat').style.display='block';
+                                                document.getElementById('conversacion').value = 1;
+                                                //document.getElementById('int_conv').value = setInterval(ajaxcall, 3000);
+
                 }
 
 		window.emailCheck= function  (emailStr) {
@@ -465,7 +479,12 @@ function Genera_Status(){
        msg = "MSG_OP";
     }
 
-    $.ajax({url: app_path+"escribiendo.php",type:"POST",data:({conversacion:id_conv,msg:msg}),success: function(data){}});
+                        var msg = {
+                            msg: 'Escribiendo',
+                            date: Date.now(),
+                            id:  $('#id_operador').val()
+                        };
+                         connection.send(JSON.stringify(msg))
 }
 
 function Enviar_Mensaje(chatboxtitle){
@@ -517,33 +536,22 @@ function Enviar_Mensaje(chatboxtitle){
     }
 
 	if (message != '') {
-	   $('#fountainG').css("visibility","visible");
-	   var color = (tipo==1?'color="#ff0000"':"");
-	   var param = "action=sendchat&to="+chatboxtitle+"&message="+message+"&conversacion="+id_conv+"&conversacion_op="+id_conv_op+"&operador="+id_opera+"&from_de="+from;
-	   $.ajax({
-            url: app_path+'chat.php',
-            cache:false,
-            type: 'POST',
-            data: param,
-            //beforeSend: function(){},
-            success: function(data){
-                if(data>0 && data!=""){
+                        var msg = {
+                            msg: 'Enviar mensaje',
+                            date: Date.now(),
+                            id:  $('#id_operador').val(),
+                            mensaje:message
+                        };
+                        connection.send(JSON.stringify(msg))
+
+	            $('#fountainG').css("visibility","visible");
+	            var color = (tipo==1?'color="#ff0000"':"");
                     message = message.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
-        			message = Verificar_Url(message);
-        			//$("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxmessagefrom"><img src="'+app_path+'images/'+img+'.png" style="margin:0 4px -4px -8px;"/><font '+color+'">'+from+'</font><img id="ban'+data+'" src="'+app_path+'images/no_recibido.gif" alt="Mensaje No Recibido" title="Mensaje No Recibido" style="cursor:hand; cursor:pointer; margin:0 4px -4px 4px;"/></span><span class="chatboxmessagecontent"><p style="margin: 4 0;">'+message+'</p></span></div>');
-        			$("#chatbox_"+chatboxtitle+" .chatboxcontent").append(dame_chatboxmessage_cliente(message,data));
-                    //if(id_conv_op!=""){
-                        $('#msg_enviados').val(($('#msg_enviados').val()==""?data:$('#msg_enviados').val()+','+data));
-                    //}
+        	    message = Verificar_Url(message);
+        	    $("#chatbox_"+chatboxtitle+" .chatboxcontent").append(dame_chatboxmessage_cliente(message,msg.date));
+                    $('#msg_enviados').val(($('#msg_enviados').val()==""?msg.date:$('#msg_enviados').val()+','+msg.date));
                     $("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
-                }
-                writting=0;
-            },
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log('errorx');
-            }
-        });
-        $('#fountainG').css("visibility","hidden");
+                    $('#fountainG').css("visibility","hidden");
 	}
 }
 
