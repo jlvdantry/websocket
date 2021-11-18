@@ -67,7 +67,11 @@ trait Base
             if ($meta['timed_out']) {
                 return false;
             }
-            if (fwrite($socket, $temp) === false) {
+            $escr=fwrite($socket, $temp);
+            if ($escr === false) {
+                return false;
+            }
+            if ($escr == 0) {
                 return false;
             }
             $opcode = 'continuation';

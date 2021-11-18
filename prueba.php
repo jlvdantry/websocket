@@ -5,9 +5,9 @@ use vakata\websocket\Server;
 require_once __DIR__ . '/vendor/autoload.php';
 define ("CIUDADANO", 0);
 define ("OPERADOR", 1);
-define ("LISTAESPERA", 1);
+define ("LISTAESPERA", 1);  /* para operador disponible para  ciudadano es lista de espera */
 define ("ENCONVERSACION", 2);
-define ("INICIOSESSION", 0);
+define ("INICIOSESSION", 0);   /* el operador inicia session pero no esta disponible */
 $users=array();
 //echo "dir=".__DIR__."\n";
 $server = new \vakata\websocket\Server('ws://127.0.0.1:15382');
@@ -20,9 +20,12 @@ $server->onMessage(function ($sender, $message, $server) {
     case "IniciaSessionCliente" : IniciaSessionCliente($user,$server,$obj_msg);  break;
     case "IniciaSessionOperador" : IniciaSessionOperador($user,$server,$obj_msg);  break;
     case "Operadordisponible" : BuscaClienteEspera($user,$server,$obj_msg);  break;
+    case "OperadorReinicia" : PoneOperadorReinicia($user,$server,$obj_msg);  break;
     case "Escribiendo" : AquienEscribe($user,$server,$obj_msg);  break;
     case "Enviar mensaje" : EnviarMensaje($user,$server,$obj_msg);  break;
     case "Mensaje recibido" : MensajeRecibido($user,$server,$obj_msg);  break;
+    case "Cerrar conversacion" : CerrarConversacion($user,$server,$obj_msg);  break;
+    case "Cerrar conversacion ciudadano" : CerrarConversacionCiudadano($user,$server,$obj_msg);  break;
     default      : $msg = array('msg' => 'msg desconocido'); $server->send($user,json_encode($msg));           break;
   }
     
@@ -38,6 +41,13 @@ function validaoperador($socket,$server){
      echo "operador inicio session ".print_r($socket,true)."\n";
      $msg = array('msg' => 'Espera');
      $server->send($socket,'operador valido',json_encode($msg));
+}
+
+function PoneOperadorReinicia($socket,$server,$obj_msg){
+     global $users;
+     $users[(int)$socket]->estatus=INICIOSESSION;
+     $msg = array('msg' => 'Puso Operador no disponible');
+     $server->send($socket,json_encode($msg));
 }
 
 function MensajeRecibido($socket,$server,$obj_msg){
@@ -56,6 +66,60 @@ function MensajeRecibido($socket,$server,$obj_msg){
     echo __METHOD__." no encontro a quien confirmar que fue recibido el mensaje"."\n";
     return $found;
 }
+
+function CerrarConversacion($socket,$server,$obj_msg){
+     echo __METHOD__." entro \n";
+     global $users;
+     $found=null;
+    foreach ($users as $user) {
+        echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
+        if ($user->id==$obj_msg->id) {
+            echo __METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true)."\n";
+            $msg = array('msg' => 'Cierra conversacion');
+            $envio=$server->send($user->socket,json_encode($msg));
+            if ($envio==true) {
+                echo __METHOD__." finalizo conversacion del cliente=".print_r($user->id,true)."\n";
+                unset($users[(int)$user->socket]);
+            }
+            $users[(int)$socket]->estatus=LISTAESPERA;   /* el operador se pone disponible  o en espera de un ciudadano */
+            $msg = array('msg' => 'Se cerro conversacion');
+            $envio=$server->send($socket,json_encode($msg));
+            return true;
+        }
+    }
+    echo __METHOD__." no encontro con quien terminar la conversacion"."\n";
+    $msg = array('msg' => 'Se cerro conversacion');
+    $envio=$server->send($socket,json_encode($msg));
+    return $false;
+}
+
+function CerrarConversacionCiudadano($socket,$server,$obj_msg){
+     echo __METHOD__." entro \n";
+     global $users;
+     $found=null;
+    foreach ($users as $user) {
+        echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
+        if ($user->id==$obj_msg->id) {
+            echo __METHOD__." encontro con quien terminar la conversación=".print_r($user->id,true)."\n";
+            $msg = array('msg' => 'Cierra conversacion');
+            $envio=$server->send($user->socket,json_encode($msg));
+            if ($envio==true) {
+                echo __METHOD__." finalizo conversacion del cliente=".print_r($user->id,true)."\n";
+                $msg = array('msg' => 'Se cerro conversacion');
+                $envio=$server->send($socket,json_encode($msg));
+                unset($users[(int)$socket]);
+            }
+            $users[(int)$user->socket]->estatus=LISTAESPERA;   /* el operador se pone disponible  o en espera de un ciudadano */
+            return true;
+        }
+    }
+    echo __METHOD__." no encontro con quien terminar la conversacion"."\n";
+    $msg = array('msg' => 'No se encontro con quien cerrar la conversacion');
+    $envio=$server->send($socket,json_encode($msg));
+    return false;
+}
+
+
 
 function EnviarMensaje($socket,$server,$obj_msg){
      echo __METHOD__." entro \n";
@@ -82,14 +146,22 @@ function AquienEscribe($socket,$server,$obj_msg){
     foreach ($users as $user) {
         echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
         if ($user->id==$obj_msg->id) {
-            echo __METHOD__." encontro a quien escribile=".print_r($user->id,true)."\n";
             $msg = array('msg' => 'Te estan escribiendo');
-            $server->send($user->socket,json_encode($msg));
-            return $user->socket;
+            $enviado=$server->send($user->socket,json_encode($msg));
+            echo __METHOD__." encontro a quien escribile=".print_r($user->id,true)." resuldato del envio $enviado \n";
+            if ($enviado==false || $enviado=="") {
+                echo __METHOD__." error en el envio \n";
+                $users[(int)$socket]->estatus=LISTAESPERA;
+                unset($users[(int)$user->socket]);
+                $msg = array('msg' => 'Se desconecto');
+                $server->send($socket,json_encode($msg));
+                return false;
+            }
+            return true;
         }
     }
     echo __METHOD__." no encontro a quien le esta escribiendo"."\n";
-    return $found;
+    return false;
 }
 
 function BuscaClienteEspera($socket,$server,$obj_msg){
