@@ -17,7 +17,7 @@ $(document).ready(function() {
                               console.error("Error en el WebSocket detectado:", event);
                               $('#tuser').attr('disabled','disabled')
                               $('#btnconecta').attr('disabled','disabled')
-                              crearMensaje(true,'Atención:','El servicio no esta disponible');
+                              crearMensaje(true,'Atención:','El servicio no esta disponible',0);
         };
     $('[data-toggle="tooltip"]').tooltip({
               template: '<div class="tooltip tooltip-info"><div class="arrow"></div><div class="tooltip-inner"></div></div>' });
@@ -43,7 +43,7 @@ $(document).ready(function() {
 			document.getElementById('btnconecta').style.display='none';
 			var param = 'nombre='+$.trim($('#tuser').val())+'&correo='+$.trim($('#tmail').val().toLowerCase())+'&nombre2='+Limpiar_Cadena($.trim($('#tuser').val()))+'&inst='+$('#id_inst').val();
 			var msg = {
-			    nombre: $.trim($('#tuser').val()),
+			    nombre: $.trim(Limpiar_Cadena($('#tuser').val())),
 			    msg: 'IniciaSessionCliente',
 			    correo:   $.trim($('#tmail').val()),
                             inst: $('#id_inst').val(),
@@ -70,6 +70,9 @@ $(document).ready(function() {
                                        break;
                                   case 'Mensaje recibido': /* mensaje recibido por el receptor */
                                        mensajerecibido(resp);
+                                       break;
+                                  case 'Cierra conversacion': /* mensaje recibido por el receptor */
+                                       Cerrar_Ventana_Cliente($('#login_operador').val());
                                        break;
 
                                   default:
@@ -358,7 +361,7 @@ function Crear_Ventana_Cliente(chatboxtitle){
                                  '<br><span style="font-size: 15px; color:  rgba(26, 26, 26, 0.7);">Disponible</span>'+
                               '</div>'+
 			      '<div class="chatboxoptions text-white col-5 btn d-flex justify-content-center" style="background-color: #8B1232;">'+
-				      '<div href="#" onclick="Cerrar_Ventana_Cliente(\''+chatboxtitle+
+				      '<div href="#" onclick="Cerrar_Conversacion(\''+chatboxtitle+
 					   '\')" alt="Cerrar Conversaci&oacute;n" title="Cerrar Conversaci&oacute;n" id="c_'+chatboxtitle+
 				      '" name="c_'+chatboxtitle +'" >Finalizar chat</div>'+
 			      '</div>'+
@@ -611,6 +614,16 @@ function Cerrar_Ventana(chatboxtitle) {
 	});
 }
 
+function Cerrar_Conversacion(chatboxtitle) {
+                        var msg = {
+                            msg: 'Cerrar conversacion ciudadano',
+                            date: Date.now(),
+                            id:  $('#id_operador').val(),
+                        };
+                        connection.send(JSON.stringify(msg))
+                        Cerrar_Ventana_Cliente(chatboxtitle);
+}
+
 function Cerrar_Ventana_Cliente(chatboxtitle) {
     if(chatboxtitle=="") return;
 
@@ -626,21 +639,12 @@ function Cerrar_Ventana_Cliente(chatboxtitle) {
         id_conv_op = $("#id_conv_op").val();
     }
 
-	var param = "action=closechat&chatbox="+chatboxtitle+"&conversacion="+id_conv+"&conversacion_op="+id_conv_op+"&operador="+id_opera+"&from_de="+from+'&inst='+$("#id_inst").val();
-    $.ajax({
-		url: app_path+'chat.php',
-		cache:false,
-		type: 'POST',
-		data: param,
-		success: function(data){
-			if($("#id_conversacion").length){
 			    clearInterval(document.getElementById('int_conv').value);
                             $("body").css("overflow","visible");
                             document.getElementById('conversacion').value=0;
 			    document.getElementById('msg_enviados').value='';
 
 				var lop = document.getElementById('login_operador').value;
-				//document.getElementById('t_'+lop).focus();
 				document.getElementById('t_'+lop).style.display='none';
 				document.getElementById('i_'+lop).style.display='none';
 				document.getElementById('c_'+lop).style.display='none';
@@ -652,23 +656,8 @@ function Cerrar_Ventana_Cliente(chatboxtitle) {
 				$("#div_chat").append('<div class="h5 text-left  font-weight-bold col-12 mb-5" style=" font-size: 34px; ">La sesi&oacuten fue terminada. Gracias por usar los servicios en l&iacute;nea.<br><br><button class="btn btnconecta text-white" type="button" onClick="nueva_sesion()">Volver a Iniciar sesi&oacuten</button></div>');
 				$("body").css("overflow","visible");
 				$("#chatbox_"+lop+" .chatboxcontent").scrollTop($("#chatbox_"+lop+" .chatboxcontent")[0].scrollHeight);
-			}else{
-			   document.getElementById('dcalidad').innerHTML='';
-			   document.getElementById('dcalidad').style.display='none';
-			   document.getElementById('id_conv_op').value='';
-			   document.getElementById('msg_enviados').value='';
-			   var us_no = document.getElementById('tusu_nom');
-			       if (typeof(obj) != 'undefined' && obj != null){
-				    document.getElementById('tusu_nom').value='';
-			       }
-			       $('#chatbox_'+chatboxtitle).remove();
-			   //clearInterval(document.getElementById('Interval_Conversacion').value);
-			}
 
-			document.title = ($("#id_conversacion").length!=1?'Chat_Locatel':'LOCATEL');
-    	      },
-                error: function (request, status, error){$(console.log(request.responseText));}
-	});
+			     document.title = ($("#id_conversacion").length!=1?'Chat_Locatel':'LOCATEL');
 }
 
 function Verificar_Url(msg){	

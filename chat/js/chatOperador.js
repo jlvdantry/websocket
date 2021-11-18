@@ -6,6 +6,23 @@ var req_fifo=Array();
 var eleID=Array();
 var i=0;
 var connection=null;
+$(document).ready(function() {
+        connection = new WebSocket('wss://chat_socket.soluint.com:/ws/');
+        connection.onopen = function () {
+                        var msg = {
+                            msg: 'Entroliga',
+                            date: Date.now()
+                        };
+                         connection.send(JSON.stringify(msg))
+        };
+        connection.onerror = function (event) {  /* sis se presenta este error el socket no esta levantado */
+                              console.error("Error en el WebSocket detectado:", event);
+                              $('input').attr('disabled','disabled')
+                              crearMensaje(true,'Atención:','El servicio no esta disponible',0).then(function () {
+                                      //window.location=app_path;
+                              });
+        };
+});
 
 function ajax(url,myid,metodo,tprest){
     eleID[i]=myid;
@@ -35,7 +52,7 @@ function ajax(url,myid,metodo,tprest){
     }
 }
 
-function EntroOperador(id){
+function EntroOperador(){
         connection = new WebSocket('wss://chat_socket.soluint.com:/ws/');
 	connection.onopen = function () {
                         var msg = {
@@ -47,7 +64,12 @@ function EntroOperador(id){
         };
 
         connection.onerror = function () {
-               console.log('error');
+                              console.error("Error en el WebSocket detectado:", event);
+                              //$('#tuser').attr('disabled','disabled')
+                              //$('#btnconecta').attr('disabled','disabled')
+                              crearMensaje(true,'Atención:','El servicio no esta disponible',0).then(function () {
+                                      window.location=app_path;
+                              });
         };
 
         connection.onmessage = function () {
@@ -65,6 +87,23 @@ function EntroOperador(id){
                                        break;
                                   case 'Mensaje recibido':
                                        mensajerecibido(resp)
+                                       break;
+                                  case 'Se desconecto':
+                                       crearMensaje(true,'Atención:','Se desconecto el ciudadano',0).then(function () {
+                                                   Cerrar_Ventana($('#id_operador').val());
+                                       });
+                                       break;
+                                  case 'Cierra conversacion': /* mensaje recibido por el receptor */
+                                       crearMensaje(true,'Atención:','El ciudadano cerro la sesión',0).then(function () {
+                                                Cerrar_Ventana($('#id_operador').val());
+						var msg = {
+						    msg: 'Operadordisponible',
+                                                     nombre:$('#t_username').val(),
+						    date: Date.now(),
+						};
+                                                connection.send(JSON.stringify(msg))
+                                       });
+
                                        break;
                                   default:
                                        console.log('Mensaje no progamado '+event.data);
@@ -117,7 +156,6 @@ function GotAsyncData(id){
 				document.getElementById('t_username').value = document.getElementById('t_username2').value;
 				ajax('info.php','centro',1);
                                 EntroOperador();
-				//$('#int_status').val(setInterval(ajaxcall, 3000));
                                 ajaxcall();
 			}else if(document.getElementById('tperfil').value==2){ //Supervisor
 				ajax('menu_chat.php?perfil=2&inst='+document.getElementById('id_institucion').value,'centro',1);
@@ -315,16 +353,30 @@ function Cambiar_Status(){
 	var st = document.getElementById('tval').value;
 	var op = document.getElementById('id_operador').value;
 	var id_institucion = $('#id_institucion').val();
+        if ($('#stat_opera').length) {
 
-	st = (st==1?3:(st==3?1:st));
-	if(st!=2) {
-		ajax('status.php?st='+st+'&id_op='+op+'&espera='+id_institucion,'hold',1);
+            if ($('#stat_opera').attr('title')=='En Pausa') {
                         var msg = {
                             msg: 'Operadordisponible',
                             nombre:$('#t_username').val(),
                             date: Date.now()
                         };
                         connection.send(JSON.stringify(msg))
+            }
+
+            if ($('#stat_opera').attr('title')=='Disponible') {
+                        var msg = {
+                            msg: 'OperadorReinicia',
+                            nombre:$('#t_username').val(),
+                            date: Date.now()
+                        };
+                        connection.send(JSON.stringify(msg))
+            }
+        }
+
+	st = (st==1?3:(st==3?1:st));
+	if(st!=2) {
+		ajax('status.php?st='+st+'&id_op='+op+'&espera='+id_institucion,'hold',1);
         }
 }
 

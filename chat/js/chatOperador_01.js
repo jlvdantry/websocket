@@ -26,14 +26,15 @@ function Crear_Ventana(resp) {
         var opt = 4;
     }
     
-	var cadena= '<div class="chatboxhead">';
+	var cadena= '<div id="chatbox_'+chatboxtitle+'" class="chatbox">';
+	 cadena+= '<div class="chatboxhead">';
 	cadena+= "<div class='chatboxtitle'><img src='"+app_path+"images/Locatel_User.png' style='margin:2px 4px 0 -4px;'/>"+chatboxtitle+"</div>";
 	cadena+= '<div class="chatboxoptions">';
 	if($("#id_conversacion").length!=6){	    
             cadena+= '<a href="javascript:void(0)" onclick="javascript:Transferencia(\''+chatboxtitle+'\')"><img src="'+app_path+'images/Locatel_Transferir.png" alt="Transferir Conversaci&oacute;n" title="Transferir Conversaci&oacute;n" border="0" style="margin:2px 4px 0 0;"/></a>';                    		
 	}
 
-	cadena+= '<a href="#" onclick="Cerrar_Ventana(\''+chatboxtitle+'\')" alt="Cerrar Conversaci&oacute;n" title="Cerrar Conversaci&oacute;n"><img id="c_'+chatboxtitle+'" name="c_'+chatboxtitle +'" src="'+app_path+'images/Locatel_Close.png" border="0" style="margin-top:2px;" /></a></div><br clear="all"/></div>';
+	cadena+= '<a href="#" onclick="Cerrar_Conversacion(\''+chatboxtitle+'\')" alt="Cerrar Conversaci&oacute;n" title="Cerrar Conversaci&oacute;n"><img id="c_'+chatboxtitle+'" name="c_'+chatboxtitle +'" src="'+app_path+'images/Locatel_Close.png" border="0" style="margin-top:2px;" /></a></div><br clear="all"/></div>';
 	cadena+= "<div class='chatboxcontent'>";
 
 	cadena+='<div class="chatboxmessage"><span class="chatboxmessagefrom"><img id="img_btn" src="'+app_path+'images/operador'+opt+'.png" style="margin:0 4px -4px -8px;" />'+$('#t_username').val()+'</span><span class="chatboxmessagecontent"><p style="margin: 4 auto;">'+message+'</p></span></div>';
@@ -46,8 +47,10 @@ function Crear_Ventana(resp) {
 	cadena+= 'class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,\''+chatboxtitle+'\');"></textarea>';
 	cadena+= '<input type="hidden" id="id_cliente" value="'+resp.id+'"></input>';
 	cadena+= '</div>';
+	cadena+= '</div>';
 	
-	$(" <div />" ).attr("id","chatbox_"+chatboxtitle).addClass("chatbox").html(cadena).appendTo($( "body" ));
+	//$(" <div />" ).attr("id","chatbox_"+chatboxtitle).addClass("chatbox").html(cadena).appendTo($( "body" ));
+        $("body").append(cadena);
         $("#chatbox_"+chatboxtitle).css('top', '100px');
     
 	$("#chatbox_"+chatboxtitle).css('bottom', '0px');
@@ -221,6 +224,16 @@ function Enviar_Mensaje(chatboxtitle){
 	}
 }
 
+function Cerrar_Conversacion(chatboxtitle) {
+                        var msg = {
+                            msg: 'Cerrar conversacion',
+                            date: Date.now(),
+                            id:  $('#id_cliente').val(),
+                        };
+                        connection.send(JSON.stringify(msg))
+         Cerrar_Ventana(chatboxtitle);
+}
+
 function Cerrar_Ventana(chatboxtitle) {
 	if(chatboxtitle=="") return;
 
@@ -232,23 +245,11 @@ function Cerrar_Ventana(chatboxtitle) {
     if($("#id_conversacion").length)
         id_conv = $("#id_conversacion").val();
     else if($("#id_operador").length){
-        //$('#chatbox_'+chatboxtitle).remove();
         id_opera = $("#id_operador").val();
         id_conv_op = $("#id_conv_op").val();
     }
-
-	var param = "action=closechat&chatbox="+chatboxtitle+"&conversacion="+id_conv+"&conversacion_op="+id_conv_op+"&operador="+id_opera+"&from_de="+from+'&inst='+$("#id_institucion").val();
-    $.ajax({
-		url: app_path+'chat.php',
-		cache:false,
-		type: 'POST',
-		data: param,
-		success: function(data){
-			if($("#id_conversacion").length){
-			//alert('aqui');
+/*
 				var lop = document.getElementById('login_operador').value;
-				/*document.getElementById('atras').style.display='block';
-				document.getElementById('msg_modal').style.display='block';*/
 				document.getElementById('t_'+lop).focus();
 				document.getElementById('t_'+lop).style.display='none';
 				document.getElementById('i_'+lop).style.display='none';
@@ -257,82 +258,9 @@ function Cerrar_Ventana(chatboxtitle) {
 				document.getElementById('conversacion').value=0;
 				document.getElementById("msg_escribiendo").style.visibility = 'hidden';
 				document.getElementById("fountainG").style.visibility = 'hidden';
-                clearInterval(document.getElementById('int_conv').value);
-			}else{
-			   document.getElementById('dcalidad').innerHTML='';
-			   document.getElementById('dcalidad').style.display='none';
-			   document.getElementById('id_conv_op').value='';
-			   document.getElementById('msg_enviados').value='';
-			   var us_no = document.getElementById('tusu_nom');
-               if (typeof(obj) != 'undefined' && obj != null){
-                    document.getElementById('tusu_nom').value='';
-               }
-
-			   //clearInterval(document.getElementById('Interval_Conversacion').value);
-			}
-            $('#chatbox_'+chatboxtitle).remove();
-			//clearInterval(document.getElementById('int_chartbeat_titulo').value);
+*/
+            $('[id^="chatbox_"]').remove();
 			document.title = ($("#id_conversacion").length!=1?'Chat_Locatel':'LOCATEL');
-    	}
-	});
-}
-
-function Cerrar_Ventana_Cliente(chatboxtitle) {
-    if(chatboxtitle=="") return;
-
-    var id_conv="";
-    var id_conv_op="";
-    var id_opera="";
-    var from = $('#t_username').val();
-
-    if($("#id_conversacion").length)
-        id_conv = $("#id_conversacion").val();
-    else if($("#id_operador").length){
-        id_opera = $("#id_operador").val();
-        id_conv_op = $("#id_conv_op").val();
-    }
-
-	var param = "action=closechat&chatbox="+chatboxtitle+"&conversacion="+id_conv+"&conversacion_op="+id_conv_op+"&operador="+id_opera+"&from_de="+from+'&inst='+$("#id_inst").val();
-    $.ajax({
-		url: app_path+'chat.php',
-		cache:false,
-		type: 'POST',
-		data: param,
-		success: function(data){
-			if($("#id_conversacion").length){
-			    clearInterval(document.getElementById('int_conv').value);
-                $("body").css("overflow","visible");
-                document.getElementById('conversacion').value=0;
-			    document.getElementById('msg_enviados').value='';
-
-				var lop = document.getElementById('login_operador').value;
-				//document.getElementById('t_'+lop).focus();
-				document.getElementById('t_'+lop).style.display='none';
-				document.getElementById('i_'+lop).style.display='none';
-				document.getElementById('c_'+lop).style.display='none';
-				document.getElementById('layout_chat').style.display='none';
-				document.getElementById("msg_escribiendo").style.visibility = 'hidden';
-				document.getElementById("fountainG").style.visibility = 'hidden';
-
-                $(".chatboxcontent").append('<div style="color:#ff0000;" class="chatboxmessage"><p style="font-weight:bold">La sesi&oacuten fue terminada. Gracias por usar los servicios en linea.<br><br><button class="btn btn-info" type="button" onClick="nueva_sesion()">Volver a Iniciar sesi&oacuten</button></p></span></div>');
-                $("body").css("overflow","visible");
-                $("#chatbox_"+lop+" .chatboxcontent").scrollTop($("#chatbox_"+lop+" .chatboxcontent")[0].scrollHeight);
-			}else{
-			   document.getElementById('dcalidad').innerHTML='';
-			   document.getElementById('dcalidad').style.display='none';
-			   document.getElementById('id_conv_op').value='';
-			   document.getElementById('msg_enviados').value='';
-			   var us_no = document.getElementById('tusu_nom');
-               if (typeof(obj) != 'undefined' && obj != null){
-                    document.getElementById('tusu_nom').value='';
-               }
-               $('#chatbox_'+chatboxtitle).remove();
-			   //clearInterval(document.getElementById('Interval_Conversacion').value);
-			}
-
-			document.title = ($("#id_conversacion").length!=1?'Chat_Locatel':'LOCATEL');
-    	}
-	});
 }
 
 function Verificar_Url(msg){	
@@ -376,7 +304,7 @@ function Verificar_Mensajes_Nuevos(resp, tipo){
 
                 if (("Notification" in window)) {
                     Notification.requestPermission(function (permission) {
-			    var notification = new Notification('CHAT LOCATEL', {body: 'Tienes '+(msg.length>1?msg.length+' nuevos mensajes':' un nuevo mensaje')+'!!!', icon: app_path+'images/notificacion.png'});
+			    var notification = new Notification('CHAT LOCATEL', {body: 'Tienes un nuevo mensaje !!!', icon: app_path+'images/notificacion.png'});
 			    setTimeout(notification.close.bind(notification), 5000);
 			    notification.onclick = function(e){window.focus(); $('#t_'+chatboxtitle).focus();};
 			    document.getElementById('chatAudio2').play();

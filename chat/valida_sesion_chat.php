@@ -25,7 +25,7 @@
 	$rs = $db->Execute($sql);
 	//echo "paso ejecuto sql\n";
 	$respuesta = $rs->RecordCount();
-	echo "paso recordcount=".$respuesta." estatus=".$rs->fields['STATUS']."\n";
+	//echo "paso recordcount=".$respuesta." estatus=".$rs->fields['STATUS']."\n";
 	if($respuesta>0){
 		if($rs->fields['STATUS']==-1){
 			//echo "No es posible Iniciar Sesión<br />Usuario Deshabilitado.";
@@ -49,6 +49,7 @@
 		//include_once('navegador.php');
 		//echo "/valida_sesion_chat paso navegadores";
 
+                //* se comentariza para que sea controlado por el socket 
 		$sql = "update \"CHAT_OPERADORES\" set \"STATUS\"=".($rs->fields['PERFIL']==1?($rs->fields['STATUS']!=2?3:2):1).", \"INICIO\"=current_timestamp, \"IP\"='$ip', \"SALIDA\"=null, \"HOST\"='".$host."', \"NAVEGADOR\"='".$navegador_corto." ".$version."' where \"ID_OPERADOR\"=".$rs->fields['ID_OPERADOR'];
 		$db->Execute($sql);
 
