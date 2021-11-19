@@ -33,7 +33,7 @@ if($st!=""){
 	}
 }
 
-echo "<table><tr>";
+echo "<table><tr id='iconos'>";
 if($st==2){
 	if($conv=="")
 		$tconv = $id_conversacion;
@@ -64,12 +64,16 @@ if($st==2){
 	$usu_nom = preg_replace('/[^A-Za-z0-9\_]/', '', $usu_nom);
 
 	echo "<td><input id='tusu_nom' type='hidden' value='$usu_nom' /></td>";
+} 
+else {
+	echo "<td><input id='tusu_nom' type='hidden' value='' /></td>";
 }
 $sql = "select count(*) from \"CHAT_ESPERA\" where \"ID_INSTITUCION\"=".$id_institucion." and \"STATUS\"=1";
 $rs = $db->Execute($sql);
 $espera = $rs->fields[0];
-
-echo ($espera>0?"<td style='width:60px'><img src='images/espera.png' class='parpadea' alt='Usuarios en Lista de Espera' title='Usuarios en Lista de Espera' /></td>":"")."<td><input type='hidden' id='tval' value='".$st."' /><a href='#' onclick='Cambiar_Status()'><img id='stat_opera' src='images/chat_".($st==1?"on":($st==2?"off":"pause")).".png' alt='".($st==1?"Disponible":($st==2?"No Disponible":"En Pausa"))."' title='".($st==1?"Disponible":($st==2?"No Disponible":"En Pausa"))."' /></a></td>";
+$espera=0;   /*forzo a que no existaa lista de espera */
+$st=3;   /* fonzo a que siempre este en pausa el operador */
+echo ($espera>0?"<td style='width:60px'><img src='images/espera.png' class='parpadea' alt='Usuarios en Lista de Espera' title='Usuarios en Lista de Espera' /></td>":"")."<td><input type='hidden' id='tval' value='".$st."' /><a href='#' id='Cambiar_Status' onclick='Cambiar_Status()'><img id='stat_opera' src='images/chat_".($st==1?"on":($st==2?"off":"pause")).".png' alt='".($st==1?"Disponible":($st==2?"No Disponible":"En Pausa"))."' title='".($st==1?"Disponible":($st==2?"No Disponible":"En Pausa"))."' /></a></td>";
 
 echo "</tr></table>";
 $query->Finalizar_Transaccion($db);

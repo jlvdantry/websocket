@@ -16,20 +16,9 @@ export PGPASSWORD=$DB_PASSWORD
 ##DB_USERNAME=postgres
 ##B_HOST=localhost
 cat > $0.sql << fin
-CREATE OR REPLACE FUNCTION DateDiff (units VARCHAR(30), start_t timestamp, end_t timestamp)
-     RETURNS numeric AS \$\$
-   DECLARE
-     diff timestamp(0) = null;
-     total numeric(8)=0; 
-   BEGIN
-SELECT ((DATE_PART('day', end_t - start_t) * 24 + 
-                DATE_PART('hour', end_t - start_t)) * 60 +
-                DATE_PART('minute', end_t - start_t)) * 60 +
-                DATE_PART('second', end_t - start_t) into total;
-     RETURN total;
-   END;
-   \$\$ LANGUAGE plpgsql;
-select "ENTRADA",current_timestamp, datediff('SS',"ENTRADA",CURRENT_TIMESTAMP::timestamp(0)),current_timestamp-"ENTRADA" from "CHAT_ESPERA";
+--select count(*) from "CHAT_AYUDA"
+select ch."ID_AYUDA", ch."ID_CATEGORIA", ch."DESCRIPCION", ch."TIPO", ch."FINAL", ch."STATUS", (SELECT COUNT(*) FROM "CHAT_AYUDA" WHERE "ID_CATEGORIA"=2 AND "TIPO"=ch."ID_AYUDA") as HIJOS from "CHAT_AYUDA" ch  where ch."ID_CATEGORIA"=2 and ch."TIPO"=0 and ch."STATUS"=1 and ch."VISUALIZAR" in(1,3)  order by ch."ID_AYUDA"
+
 fin
 psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME  < $0.sql
 rm $0.cmd

@@ -232,6 +232,12 @@ function Cerrar_Conversacion(chatboxtitle) {
                         };
                         connection.send(JSON.stringify(msg))
          Cerrar_Ventana(chatboxtitle);
+         $('#lista').hide();
+				$('#stat_opera').attr('title','En Pausa')
+				$('#stat_opera').attr('alt','En Pausa')
+				$('#stat_opera').attr('src','images/chat_pause.png')
+                        $('#Cambiar_Status').removeAttr('disabled')
+
 }
 
 function Cerrar_Ventana(chatboxtitle) {

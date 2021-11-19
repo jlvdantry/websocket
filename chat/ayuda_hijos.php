@@ -27,9 +27,9 @@
 	$persona = str_replace('ñ','n',$persona);
 	$persona = str_replace('Ñ','N',$persona);
 	$persona = preg_replace('/[^A-Za-z0-9\_]/', '', $persona);
-	$orden = ($id_categoria==3 && ($padre==174 || $padre==177 || $padre==183 || $padre==186 || $padre==196 || $padre==305 || $padre==346 || $padre==377 || $padre==398 || $padre==853 || $padre==860 || $padre==910 || $padre==934 || $padre==963 || $padre==1003 || $padre==1009 || $padre==1010 || $padre==1057 || $padre==1081 || $padre==1103 || $padre==1104 || $padre==1147 || $padre==1171 || $padre==1172 || $padre==1240 || $padre==1241)?" ch.DESCRIPCION":"ch.ID_AYUDA");
+	$orden = ($id_categoria==3 && ($padre==174 || $padre==177 || $padre==183 || $padre==186 || $padre==196 || $padre==305 || $padre==346 || $padre==377 || $padre==398 || $padre==853 || $padre==860 || $padre==910 || $padre==934 || $padre==963 || $padre==1003 || $padre==1009 || $padre==1010 || $padre==1057 || $padre==1081 || $padre==1103 || $padre==1104 || $padre==1147 || $padre==1171 || $padre==1172 || $padre==1240 || $padre==1241)?" ch.\"DESCRIPCION\"":"ch.\"ID_AYUDA\"");
 
-	$rs = $query->Consultar($query,"ch.ID_AYUDA, ch.ID_CATEGORIA, ch.DESCRIPCION, ch.TIPO, ch.FINAL, ch.STATUS, (SELECT COUNT(*) FROM CHAT_AYUDA WHERE ID_CATEGORIA=".$id_categoria." AND TIPO=ch.ID_AYUDA) as HIJOS","CHAT_AYUDA ch","ch.ID_CATEGORIA=".$id_categoria." and ch.tipo=".$padre." and ch.status=1 and ch.visualizar in(1,3)",$orden);
+	$rs = $query->Consultar($query,"ch.\"ID_AYUDA\", ch.\"ID_CATEGORIA\", ch.\"DESCRIPCION\", ch.\"TIPO\", ch.\"FINAL\", ch.\"STATUS\", (SELECT COUNT(*) FROM \"CHAT_AYUDA\" WHERE \"ID_CATEGORIA\"=".$id_categoria." AND \"TIPO\"=ch.\"ID_AYUDA\") as \"HIJOS\"","\"CHAT_AYUDA\" ch","ch.\"ID_CATEGORIA\"=".$id_categoria." and ch.\"TIPO\"=".$padre." and ch.\"STATUS\"=1 and ch.\"VISUALIZAR\" in(1,3)",$orden);
 	echo "<ul>";
 	while (!$rs->EOF) {
 		$ct = $rs->fields['ID_CATEGORIA'];
@@ -66,7 +66,7 @@
 					$descripcion.=" ".$_POST['operador'];
 				
 				echo "<img src='images/info.png' /> ";
-				echo "<a href='#' onclick=\"Info_Ventana('".$descripcion."','".$persona."')\"><img src='images/paste.png' alt='Enviar Texto a la Conversación' title='Enviar Texto a la Conversación' /></a>";
+				echo "<a href='#' onclick=\"Info_Ventana('".$descripcion."','".$persona."')\"><img src='images/Paste.png' alt='Enviar Texto a la Conversación' title='Enviar Texto a la Conversación' /></a>";
 			}
 
 			if($ct==3 && $id==835){

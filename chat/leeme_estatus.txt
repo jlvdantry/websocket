@@ -1,0 +1,18 @@
+en los perfiles existe
+
+1=operador
+2=supervisor
+3=calidad
+4=Administrador
+
+estatus del operador
+
+0=activo
+1=disponible
+2=No disponible
+3=en pausa
+
+lista de espera status
+1=espera
+2=en conversacion
+

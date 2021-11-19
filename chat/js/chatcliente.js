@@ -3,6 +3,7 @@ var weekday = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábad
 var a = new Date();
 var dia=weekday[a.getDay()];
 var connection = null;
+var intervalc = null;
 $(document).ready(function() {
     h_columna1=$('.columna1').outerHeight(true);
 	connection = new WebSocket('wss://chat_socket.soluint.com:/ws/');
@@ -11,7 +12,7 @@ $(document).ready(function() {
                             msg: 'Entroliga',
                             date: Date.now()
                         };
-                         connection.send(JSON.stringify(msg))
+                        envia_mensajex_socket(msg);
 	};
 	connection.onerror = function (event) {
                               console.error("Error en el WebSocket detectado:", event);
@@ -49,8 +50,8 @@ $(document).ready(function() {
                             inst: $('#id_inst').val(),
 			    date: Date.now()
 			};
+                        envia_mensajex_socket(msg);
                        $('#dmsg').html("<div class='col-lg-12 mb-3 text-center'> <i class='fas fa-sync fa-spin col-2' style='color: #b5131b !important;'></i> </div>");
-			connection.send(JSON.stringify(msg)); // Send the message 'Ping' to the server
 
 			connection.onmessage = function (event) {
 			      console.log("mensaje:", event.data);
@@ -74,7 +75,11 @@ $(document).ready(function() {
                                   case 'Cierra conversacion': /* mensaje recibido por el receptor */
                                        Cerrar_Ventana_Cliente($('#login_operador').val());
                                        break;
-
+                                  case 'Se desconecto':
+                                       crearMensaje(true,'Atención:','Se desconecto el operador',0).then(function () {
+                                                   Cerrar_Ventana_Cliente($('#id_operador').val());
+                                       });
+                                       break;
                                   default:
                                        console.log('Mensaje no progamado '+event.data);
                               }
@@ -95,18 +100,32 @@ $(document).ready(function() {
 
 
 		window.recibirmensaje= function  (resp) {
+                    var chatboxtitle=resp.nombre;
                     $("#chatbox_"+resp.nombre+" .chatboxcontent").append(dame_chatboxmessage_ope(Verificar_Url(resp.mensaje)));
 
                     if($("#chatbox_"+resp.nombre+" .chatboxcontent").length){
                         $("#chatbox_"+resp.nombre+" .chatboxcontent").scrollTop($("#chatbox_"+resp.nombre+" .chatboxcontent")[0].scrollHeight);
                     }
+                    if (("Notification" in window)) {
+			    Notification.requestPermission(function (permission) {
+				    var notification = new Notification('CHAT LOCATEL', {body: 'Tienes un nuevo mensaje !!!', icon: app_path+'images/notificacion.png'});
+				    setTimeout(notification.close.bind(notification), 5000);
+				    notification.onclick = function(e){window.focus(); $('#t_'+chatboxtitle).focus();};
+				    document.getElementById('chatAudio2').play();
+                           });
+                    }else
+                                document.getElementById('chatAudio').play();
+                                if(chatboxtitle!=""){
+                                        document.title=chatboxtitle+' te envio un mensaje';
+                    }
+
                         var msg = {
                             msg: 'Mensaje recibido',
                             date: Date.now(),
                             id:  $('#id_operador').val(),
                             date_recibido: resp.date
                         };
-                         connection.send(JSON.stringify(msg))
+                        envia_mensajex_socket(msg);
                 }
 
 		window.enespera= function  () {
@@ -114,7 +133,19 @@ $(document).ready(function() {
                                                 $('#enlazandote').removeClass('d-none');
                                                 overlay();
                                                 $('#dmsg').html('');
+                                                intervalc=setInterval(checaconeccion, 3000);
                 }
+
+		window.checaconeccion = function(){
+                         console.log(' connecction state='+connection.readyState);
+                         if (connection.readyState!=connection.OPEN) {
+                              console.log("Error en el WebSocket ");
+                              clearInterval(intervalc);
+                              crearMensaje(true,'Atención:','El servicio ya no esta disponible',0).then( function () {
+                                              location.reload();
+                              });
+                         }
+		}
 
 		window.escribiendo= function(resp){
 						$('#fountainG').css("visibility","visible");
@@ -487,7 +518,18 @@ function Genera_Status(){
                             date: Date.now(),
                             id:  $('#id_operador').val()
                         };
-                         connection.send(JSON.stringify(msg))
+                        envia_mensajex_socket(msg);
+}
+
+function envia_mensajex_socket(msg) {
+                         if (connection.readyState==connection.OPEN) {
+                             connection.send(JSON.stringify(msg))
+                         } else {
+                              console.log("Error en el WebSocket ");
+                              crearMensaje(true,'Atención:','El servicio ya no esta disponible',0).then( function () {
+                                              location.reload();
+                              });
+                         }
 }
 
 function Enviar_Mensaje(chatboxtitle){
@@ -545,7 +587,7 @@ function Enviar_Mensaje(chatboxtitle){
                             id:  $('#id_operador').val(),
                             mensaje:message
                         };
-                        connection.send(JSON.stringify(msg))
+                        envia_mensajex_socket(msg);
 
 	            $('#fountainG').css("visibility","visible");
 	            var color = (tipo==1?'color="#ff0000"':"");
@@ -620,7 +662,7 @@ function Cerrar_Conversacion(chatboxtitle) {
                             date: Date.now(),
                             id:  $('#id_operador').val(),
                         };
-                        connection.send(JSON.stringify(msg))
+                        envia_mensajex_socket(msg);
                         Cerrar_Ventana_Cliente(chatboxtitle);
 }
 
@@ -666,69 +708,6 @@ function Verificar_Url(msg){
 	return msg;
 }
 
-function Verificar_Mensajes_Nuevos(chatboxtitle, tipo){
-	var id_conv="";
-	var msg;
-    var tiempo;
-
-    if($("#id_conversacion").length){
-        id_conv = $("#id_conversacion").val();
-    }else if($("#id_operador").length)
-        id_conv = $("#id_conv_op").val();
-
-    var color = (tipo==1?'color="#ff0000"':"");
-    var color2 = 'color="#5c5c5c"';
-    var img;
-    
-    if(tipo==1){
-        img='usuario';
-    }else{
-        img='operador';
-        if($("#id_institucion").length)
-            img+=($("#id_institucion").val()==4?4:1);
-        else if($("#id_inst").length)
-            img+=($("#id_inst").val()==4?4:1);        
-    }
-
-    var param = "action=chatheartbeat&un="+document.getElementById('t_username').value+"&id_conv="+id_conv;
-    $.ajax({
-        url: app_path+'chat.php',
-        cache:false,
-        type: 'POST',
-        data: param,
-        //beforeSend: function() {$('#'+div).html(Cargando(0));},
-        success: function(data){
-            if(data!=""){
-                msg = data.split('|');
-                for(var i=0; i<msg.length;i++){
-	            //$("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage"><font '+color+'"><span class="chatboxmessagefrom"><img src="'+app_path+'images/'+(tipo==1?'usuario':img)+'.png" style="margin:0 4px -4px -8px;"/>'+chatboxtitle+'</span><span class="chatboxmessagecontent"><p style="margin: 4 auto;">'+Verificar_Url(msg[i])+'</p></span></font></div>');
-	            $("#chatbox_"+chatboxtitle+" .chatboxcontent").append(dame_chatboxmessage_ope(Verificar_Url(msg[i])));
-
-                    if($("#chatbox_"+chatboxtitle+" .chatboxcontent").length){
-                        $("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
-                    }
-                }
-                $('#chatbox_'+chatboxtitle+' .chatboxhead').toggleClass('chatboxblink');
-
-		if(isActive){
-                    document.getElementById('chatAudio').play();
-                }else if (("Notification" in window)) {
-                    Notification.requestPermission(function (permission) {
-                    var notification = new Notification('CHAT LOCATEL', {body: 'Tienes '+(msg.length>1?msg.length+' nuevos mensajes':' un nuevo mensaje')+'!!!', icon: app_path+'images/notificacion.png'});
-                    setTimeout(notification.close.bind(notification), 5000);
-                    notification.onclick = function(e){window.focus(); $('#t_'+chatboxtitle).focus();};
-                    document.getElementById('chatAudio2').play();
-                    });
-                }else
-                   document.getElementById('chatAudio').play();
-
-				if(chatboxtitle!="" && id_conv!=""){
-					document.title=chatboxtitle+' te envio un mensaje';
-				}
-            }
-        }
-    });
-}
 
 function Verificar_Mensajes_Recibidos_Usuario(){
 var param = "action=chatheartbeat_status&msg="+document.getElementById('msg_enviados').value;

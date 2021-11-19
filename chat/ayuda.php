@@ -9,7 +9,7 @@
         include_once('../adodb/adodb.inc.php');
         include_once('Sentencias.php');
         $query = new Sentencias();
-        $rs = $query->Consultar($query,"*","CHAT_CATEGORIAS","STATUS=1 AND ID_INSTITUCION=".$_GET['inst'],"ID_CATEGORIA");
+        $rs = $query->Consultar($query,"*","\"CHAT_CATEGORIAS\"","\"STATUS\"=1 AND \"ID_INSTITUCION\"=".$_GET['inst'],"\"ID_CATEGORIA\"");
         echo "<ul class='arbol'>";
         while (!$rs->EOF) {
             $des = $rs->fields['DESCRIPCION'];
