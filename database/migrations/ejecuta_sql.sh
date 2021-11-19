@@ -16,9 +16,10 @@ export PGPASSWORD=$DB_PASSWORD
 ##DB_USERNAME=postgres
 ##B_HOST=localhost
 cat > $0.sql << fin
---select count(*) from "CHAT_AYUDA"
-select ch."ID_AYUDA", ch."ID_CATEGORIA", ch."DESCRIPCION", ch."TIPO", ch."FINAL", ch."STATUS", (SELECT COUNT(*) FROM "CHAT_AYUDA" WHERE "ID_CATEGORIA"=2 AND "TIPO"=ch."ID_AYUDA") as HIJOS from "CHAT_AYUDA" ch  where ch."ID_CATEGORIA"=2 and ch."TIPO"=0 and ch."STATUS"=1 and ch."VISUALIZAR" in(1,3)  order by ch."ID_AYUDA"
-
+select * from "CHAT_USUARIOS" order by "ID_USUARIO" desc limit 2;
+select * from "CHAT_ESPERA" order by "ID_ESPERA" desc limit 4;
+--ALTER TABLE "CHAT_ESPERA" ALTER COLUMN "ATENCION" SET DEFAULT now();
+--ALTER TABLE "CHAT_ESPERA" ALTER COLUMN "ENTRADA" SET DEFAULT now();
 fin
 psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME  < $0.sql
 rm $0.cmd
