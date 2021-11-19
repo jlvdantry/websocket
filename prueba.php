@@ -119,6 +119,7 @@ function CerrarConversacionCiudadano($socket,$server,$obj_msg){
                 unset($users[(int)$socket]);
             }
             $users[(int)$user->socket]->estatus=LISTAESPERA;   /* el operador se pone disponible  o en espera de un ciudadano */
+            enviaListaespera();
             return true;
         }
     }
@@ -190,6 +191,7 @@ function BuscaClienteEspera($socket,$server,$obj_msg){
             $users[(int)$user->socket]->estatus=ENCONVERSACION;
             $users[(int)$socket]->estatus=ENCONVERSACION;
             echo "--".__METHOD__." puso estatus del operador como".$users[(int)$socket]->estatus."\n";
+             enviaListaespera();
             return $user->socket;
         }
     }
