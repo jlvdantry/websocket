@@ -1,0 +1,21 @@
+(2021-11-19 22:36:10) |postgres8 error: [-1: ERROR:  syntax error at end of input
+LINE 1: ...set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=
+                                                                       ^] in EXECUTE("update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=")
+(2021-11-19 22:39:50) |postgres8 error: [-1: ERROR:  syntax error at end of input
+LINE 1: ...set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=
+                                                                       ^] in EXECUTE("update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=")
+(2021-11-19 23:13:12) |postgres8 error: [-1: ERROR:  syntax error at end of input
+LINE 1: ...SACIONES" set  "FIN"=localtimestamp where "ID_CONVERSACION"=
+                                                                       ^] in EXECUTE("update "CHAT_CONVERSACIONES" set  "FIN"=localtimestamp where "ID_CONVERSACION"=")
+(2021-11-19 23:45:25) |postgres8 error: [-1: ERROR:  syntax error at end of input
+LINE 1: ...set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=
+                                                                       ^] in EXECUTE("update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=")
+(2021-11-19 23:50:13) |postgres8 error: [-1: ERROR:  syntax error at end of input
+LINE 1: ...set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=
+                                                                       ^] in EXECUTE("update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=")
+(2021-11-19 23:56:14) |postgres8 error: [-1: ERROR:  syntax error at end of input
+LINE 1: ...set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=
+                                                                       ^] in EXECUTE("update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=")
+(2021-11-20 00:00:08) |postgres8 error: [-1: ERROR:  syntax error at end of input
+LINE 1: ...set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=
+                                                                       ^] in EXECUTE("update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"=")

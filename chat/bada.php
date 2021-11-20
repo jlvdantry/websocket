@@ -62,6 +62,88 @@
                                 return false;
                 }
 
+                public function cierraConversacion($user,$db){
+                                $sql='update "CHAT_CONVERSACIONES" set  "FIN"=localtimestamp where "ID_CONVERSACION"='.$user->idConv;
+                                try {
+                                        $rs=false;
+					if (@$db->Execute($sql) === false) {
+					 echo __METHOD__.$db->ErrorMsg();
+					}
+                                } catch (Exception $e) {
+                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            return false;
+                                        }
+                                return false;
+                }
+
+                public function MensajeRecibido($user,$db){
+                                $sql='update "CHAT_MENSAJES_NEW" set  "RECEIVED"=localtimestamp, "RECD"=1 where "ID_MENSAJE_NEW"='.$user->idMen;
+                                try {
+                                        $rs=false;
+                                        if (@$db->Execute($sql) === false) {
+                                         echo __METHOD__.$db->ErrorMsg();
+                                        }
+                                } catch (Exception $e) {
+                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            return false;
+                                        }
+                                return false;
+                }
+
+
+                public function EnConversacion($opera,$ciu,$db){
+                                try {
+                                        if ($ciu->id_espera!="") {
+						$sql='update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"='.$ciu->id_espera;
+						$rs=false;
+						if (@$db->Execute($sql) === false) {
+						 echo __METHOD__.$db->ErrorMsg();
+						}
+                                        }
+					$sql='insert into "CHAT_CONVERSACIONES" ("ID_USUARIO","ID_OPERADOR","ID_ESPERA","ID_INSTITUCION") values ('.
+					      $ciu->id.','.$opera->idOpe.','.($ciu->id_espera!='' ? $ciu->id_espera : 'null').','.$ciu->inst.');';
+                                        $rs=false;
+                                        @$db->execute($sql);
+                                        $sql='select lastval() as seq';
+                                        $rs=@$db->execute($sql);
+                                        echo __METHOD__." entro ".print_r(gettype($rs),true)."\n";
+                                        if (gettype($rs)!='boolean') {
+                                                if ($rs->RecordCount()>0) {
+                                                     return $rs->fields['seq'];
+                                                }
+                                        } else { return false; }
+
+                                } catch (Exception $e) {
+                                            echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+                                            return false;
+                                        }
+                                return false;
+                }
+
+                public function enviaMensaje($envia,$recibe,$db,$men){
+                                try {
+                                        $sql='insert into "CHAT_MENSAJES_NEW" ("ID_CONVERSACION","FROMM","TOO","MESSAGE") values ('.
+                                              $envia->idConv.',\''.$envia->nombre.'\',\''.$recibe->nombre.'\',\''.$men.'\');';
+                                        $rs=false;
+                                        @$db->execute($sql);
+                                        $sql='select lastval() as seq';
+                                        $rs=@$db->execute($sql);
+                                        echo __METHOD__." entro ".print_r(gettype($rs),true)."\n";
+                                        if (gettype($rs)!='boolean') {
+                                                if ($rs->RecordCount()>0) {
+                                                     return $rs->fields['seq'];
+                                                }
+                                        } else { return false; }
+
+                                } catch (Exception $e) {
+                                            echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+                                            return false;
+                                        }
+                                return false;
+                }
+
+
+
 		public function Consultar($obj, $campos, $tabla, $criterios, $orden, $extra=""){
 			if($criterios!="")
 				$criterios=" where ".$criterios;

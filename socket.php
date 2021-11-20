@@ -66,7 +66,7 @@ function PoneOperadorReinicia($socket,$server,$obj_msg){
 
 function MensajeRecibido($socket,$server,$obj_msg){
      echo __METHOD__." entro \n";
-     global $users;
+     global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
         echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
@@ -74,6 +74,7 @@ function MensajeRecibido($socket,$server,$obj_msg){
             echo __METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true)."\n";
             $msg = array('msg' => 'Mensaje recibido','date_recibido'=>$obj_msg->date_recibido);
             $server->send($user->socket,json_encode($msg));
+            $ok=$bd->mensajeRecibido($user,$co);
             return $user->socket;
         }
     }
@@ -83,7 +84,7 @@ function MensajeRecibido($socket,$server,$obj_msg){
 
 function CerrarConversacion($socket,$server,$obj_msg){
      echo __METHOD__." entro \n";
-     global $users;
+     global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
         echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
@@ -98,6 +99,8 @@ function CerrarConversacion($socket,$server,$obj_msg){
             $users[(int)$socket]->estatus=INICIOSESSION;   /* el operador se pone en pausa */
             $msg = array('msg' => 'Se cerro conversacion');
             $envio=$server->send($socket,json_encode($msg));
+            echo __METHOD__." va a cerra conversacion en bd=".print_r($user->id,true)."\n";
+            $ok=$bd->cierraConversacion($user,$co);
             return true;
         }
     }
@@ -109,7 +112,7 @@ function CerrarConversacion($socket,$server,$obj_msg){
 
 function CerrarConversacionCiudadano($socket,$server,$obj_msg){
      echo __METHOD__." entro \n";
-     global $users;
+     global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
         echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
@@ -125,6 +128,7 @@ function CerrarConversacionCiudadano($socket,$server,$obj_msg){
             }
             $users[(int)$user->socket]->estatus=LISTAESPERA;   /* el operador se pone disponible  o en espera de un ciudadano */
             enviaListaespera();
+            $ok=$bd->cierraConversacion($user,$co);
             return true;
         }
     }
@@ -138,7 +142,7 @@ function CerrarConversacionCiudadano($socket,$server,$obj_msg){
 
 function EnviarMensaje($socket,$server,$obj_msg){
      echo __METHOD__." entro \n";
-     global $users;
+     global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
         echo __METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true)."\n";
@@ -146,7 +150,13 @@ function EnviarMensaje($socket,$server,$obj_msg){
             echo __METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true)."\n";
             $msg = array('msg' => 'Mensaje enviado','date'=>$obj_msg->date,'mensaje'=>$obj_msg->mensaje,'nombre'=>$users[(int)$socket]->nombre);
             $server->send($user->socket,json_encode($msg));
-            //$server->send($socket,json_encode($msg));
+            $ok=$bd->enviaMensaje($users[(int)$socket],$users[(int)$user->socket],$co,$obj_msg->mensaje);
+                 if ($ok!=false) {
+                      echo "--".__METHOD__." id del mensaje".$ok."\n";
+                      $users[(int)$socket]->idMen=$ok;
+                      $users[(int)$user->socket]->idMen=$ok;
+                 }
+
             return $user->socket;
         }
     }
@@ -183,7 +193,7 @@ function AquienEscribe($socket,$server,$obj_msg){
 
 function BuscaClienteEspera($socket,$server,$obj_msg){
      echo __METHOD__." entro a buscar lista de espera\n";
-     global $users;
+     global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
         echo __METHOD__." user perfil=".print_r(json_encode($user),true)."\n";
@@ -193,10 +203,17 @@ function BuscaClienteEspera($socket,$server,$obj_msg){
             $server->send($user->socket,json_encode($msg));
             $msg = array('msg' => 'Encontro cliente','nombre'=>$users[(int)$user->socket]->nombre,'id'=>$users[(int)$user->socket]->id);
             $server->send($socket,json_encode($msg));
-            $users[(int)$user->socket]->estatus=ENCONVERSACION;
-            $users[(int)$socket]->estatus=ENCONVERSACION;
+            $users[(int)$user->socket]->estatus=ENCONVERSACION; /*ciudadano */
+            $users[(int)$socket]->estatus=ENCONVERSACION;  /* operado */
             echo "--".__METHOD__." puso estatus del operador como".$users[(int)$socket]->estatus."\n";
-             enviaListaespera();
+            enviaListaespera();
+            $ok=$bd->EnConversacion($users[(int)$socket],$users[(int)$user->socket],$co);
+		 if ($ok!=false) {
+                      echo "--".__METHOD__." id de la conversacion".$ok."\n";
+		      $users[(int)$socket]->idConv=$ok;
+		      $users[(int)$user->socket]->idConv=$ok;
+		 }
+
             return $user->socket;
         }
     }
@@ -278,9 +295,10 @@ function buscaoperadordisponible($socket,$server,$user_ciu){
             $server->send($user->socket,json_encode($msg));
             $msg = array('msg' => 'Encontro operador','nombre'=>$users[(int)$user->socket]->nombre,'id'=>$users[(int)$user->socket]->id);
             $server->send($socket,json_encode($msg));
-            $users[(int)$user->socket]->estatus=ENCONVERSACION;
-            $users[(int)$socket]->estatus=ENCONVERSACION;
+            $users[(int)$user->socket]->estatus=ENCONVERSACION; /*operador */
+            $users[(int)$socket]->estatus=ENCONVERSACION;  /*ciudadano */
             enviaListaespera();
+            $ok=$bd->EnConversacion($users[(int)$user->socket],$users[(int)$socket],$co);
             return $user->socket;
         }
     }
@@ -289,6 +307,9 @@ function buscaoperadordisponible($socket,$server,$user_ciu){
     $server->send($socket,json_encode($msg));
     enviaListaespera();
     $ok=$bd->CreaListaEspera($co,$user_ciu);
+         if ($ok!=false) {
+              $users[(int)$socket]->id_espera=$ok;
+         }
     return $found;
 }
 
@@ -310,7 +331,7 @@ function enviaListaespera(){
     echo __METHOD__." ciudadanos en espera=".$cuantos."\n";
     foreach ($users as $user) {
         if ($user->perfil == OPERADOR) {
-            echo __METHOD__." va a enviar lista=".$user->socket."\n";
+            echo __METHOD__." va a enviar lista=".$user->socket." cuantos=$cuantos \n";
             $msg = array('msg' => 'Lista de espera','cuantos' => $cuantos);
             $server->send($user->socket,json_encode($msg));
         }
@@ -352,7 +373,10 @@ class User{
   var $nombre;  /* nombre del ciudadano o del operador */
   var $idOpe;  
   var $correo;  
-  var $inst;  
+  var $inst;    /*institucion */
+  var $id_espera;    /*id de la lista de espera */
+  var $idConv; /* id de la conversacion */
+  var $idMen; /* id delmensaje */
 }
 
 
