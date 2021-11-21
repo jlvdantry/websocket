@@ -10,14 +10,10 @@
 	class bada 
 	{
 		public function Conectar(){
-			//echo "entro a conectar\n";
-                        //echo __METHOD__." entro \n";
 			$cstr ="(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.250.109.44)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = XE)))";
 			$db = ADONewConnection('postgres');
-                        //echo __METHOD__." despues de ADONewConnection \n";
 			$db->charSet = 'AL32UTF8';
 			@$db->Connect('localhost', 'postgres', '888aDantryR','chat');
-                        //echo __METHOD__." paso por aqui ".print_r($db,true)."\n";
                         return $db;
 		}
 
@@ -28,14 +24,14 @@
 					@$db->execute($sql);
 					$sql='select lastval() as seq';
 					$rs=@$db->execute($sql);
-                                        echo __METHOD__." entro ".print_r(gettype($rs),true)."\n";
+                                        milog(__METHOD__." entro ".print_r(gettype($rs),true));
                                         if (gettype($rs)!='boolean') {
 						if ($rs->RecordCount()>0) {
 						     return $rs->fields['seq'];
 						}
                                         } else { return false; }
                                 } catch (Exception $e) {
-					     echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+					     milog('Excepción capturada: ',  $e->getMessage(),);
                                             return false;
 					}
                                 return false;
@@ -49,28 +45,29 @@
 					@$db->execute($sql);
 					$sql='select lastval() as seq';
 					$rs=@$db->execute($sql);
-                                        echo __METHOD__." entro ".print_r(gettype($rs),true)."\n";
+                                        milog(__METHOD__." entro ".print_r(gettype($rs),true));
                                         if (gettype($rs)!='boolean') {
 						if ($rs->RecordCount()>0) {
 						     return $rs->fields['seq'];
 						}
                                         } else { return false; }
                                 } catch (Exception $e) {
-					    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+					    milog('Excepción capturada: ',  $e->getMessage(),);
                                             return false;
 					}
                                 return false;
                 }
 
                 public function cierraConversacion($user,$db){
+                                $sql_ope='update "CHAT_OPERADORES" set  "STATUS"='.OPE_ENPAUSA.' where "ID_OPERADOR"='.$user->idOpe.";";
                                 $sql='update "CHAT_CONVERSACIONES" set  "FIN"=localtimestamp where "ID_CONVERSACION"='.$user->idConv;
                                 try {
                                         $rs=false;
-					if (@$db->Execute($sql) === false) {
-					 echo __METHOD__.$db->ErrorMsg();
+					if (@$db->Execute($sql_ope.$sql) === false) {
+					 milog(__METHOD__.$db->ErrorMsg());
 					}
                                 } catch (Exception $e) {
-                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            milog(__METHOD__.' Excepción capturada: ',  $e->getMessage(),);
                                             return false;
                                         }
                                 return false;
@@ -81,10 +78,10 @@
                                 try {
                                         $rs=false;
                                         if (@$db->Execute($sql) === false) {
-                                         echo __METHOD__.$db->ErrorMsg();
+                                         milog(__METHOD__.$db->ErrorMsg());
                                         }
                                 } catch (Exception $e) {
-                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            milog(__METHOD__.' Excepción capturada: '.  $e->getMessage());
                                             return false;
                                         }
                                 return false;
@@ -95,10 +92,10 @@
                                 try {
                                         $rs=false;
                                         if (@$db->Execute($sql) === false) {
-                                         echo __METHOD__.$db->ErrorMsg();
+                                         milog(__METHOD__.$db->ErrorMsg());
                                         }
                                 } catch (Exception $e) {
-                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            milog(__METHOD__.' Excepción capturada: '.  $e->getMessage());
                                             return false;
                                         }
                                 return false;
@@ -109,10 +106,10 @@
                                 try {
                                         $rs=false;
                                         if (@$db->Execute($sql) === false) {
-                                         echo __METHOD__.$db->ErrorMsg();
+                                         milog(__METHOD__.$db->ErrorMsg());
                                         }
                                 } catch (Exception $e) {
-                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            milog(__METHOD__.' Excepción capturada: '.  $e->getMessage());
                                             return false;
                                         }
                                 return false;
@@ -126,10 +123,10 @@
                                 try {
                                         $rs=false;
                                         if (@$db->Execute($sql) === false) {
-                                         echo __METHOD__.$db->ErrorMsg();
+                                         milog(__METHOD__.$db->ErrorMsg());
                                         }
                                 } catch (Exception $e) {
-                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            milog(__METHOD__.' Excepción capturada: ',  $e->getMessage());
                                             return false;
                                         }
                                 return false;
@@ -142,7 +139,7 @@
 						$sql='update "CHAT_ESPERA" set "STATUS"=2, "ATENCION"=localtimestamp where "ID_ESPERA"='.$ciu->id_espera;
 						$rs=false;
 						if (@$db->Execute($sql) === false) {
-						 echo __METHOD__.$db->ErrorMsg();
+						 milog(__METHOD__.$db->ErrorMsg());
 						}
                                         }
                                         $sql_ope='update "CHAT_OPERADORES" set  "STATUS"='.ENCONVERSACION.' where "ID_OPERADOR"='.$opera->idOpe.";";
@@ -152,7 +149,7 @@
                                         @$db->execute($sql_ope.$sql);
                                         $sql='select lastval() as seq';
                                         $rs=@$db->execute($sql);
-                                        echo __METHOD__." entro ".print_r(gettype($rs),true)."\n";
+                                        milog(__METHOD__." entro ".print_r(gettype($rs),true));
                                         if (gettype($rs)!='boolean') {
                                                 if ($rs->RecordCount()>0) {
                                                      return $rs->fields['seq'];
@@ -160,7 +157,7 @@
                                         } else { return false; }
 
                                 } catch (Exception $e) {
-                                            echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+                                            milog('Excepción capturada: ',  $e->getMessage(),);
                                             return false;
                                         }
                                 return false;
@@ -174,7 +171,7 @@
                                         @$db->execute($sql);
                                         $sql='select lastval() as seq';
                                         $rs=@$db->execute($sql);
-                                        echo __METHOD__." entro ".print_r(gettype($rs),true)."\n";
+                                        milog(__METHOD__." entro ".print_r(gettype($rs),true));
                                         if (gettype($rs)!='boolean') {
                                                 if ($rs->RecordCount()>0) {
                                                      return $rs->fields['seq'];
@@ -182,7 +179,7 @@
                                         } else { return false; }
 
                                 } catch (Exception $e) {
-                                            echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+                                            milog('Excepción capturada: ',  $e->getMessage(),);
                                             return false;
                                         }
                                 return false;
