@@ -76,6 +76,51 @@
                                 return false;
                 }
 
+                public function OperadorIniciaSesion($user,$db){
+                                $sql='update "CHAT_OPERADORES" set  "STATUS"='.OPE_ENPAUSA.' where "ID_OPERADOR"='.$user->idOpe;
+                                try {
+                                        $rs=false;
+                                        if (@$db->Execute($sql) === false) {
+                                         echo __METHOD__.$db->ErrorMsg();
+                                        }
+                                } catch (Exception $e) {
+                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            return false;
+                                        }
+                                return false;
+                }
+
+                public function OperadorTerminaSesion($user,$db){
+                                $sql='update "CHAT_OPERADORES" set  "STATUS"='.OPE_LOGOUT.' where "ID_OPERADOR"='.$user->idOpe;
+                                try {
+                                        $rs=false;
+                                        if (@$db->Execute($sql) === false) {
+                                         echo __METHOD__.$db->ErrorMsg();
+                                        }
+                                } catch (Exception $e) {
+                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            return false;
+                                        }
+                                return false;
+                }
+
+                public function OperadorEnEspera($user,$db){
+                                $sql='update "CHAT_OPERADORES" set  "STATUS"='.LISTAESPERA.' where "ID_OPERADOR"='.$user->idOpe;
+                                try {
+                                        $rs=false;
+                                        if (@$db->Execute($sql) === false) {
+                                         echo __METHOD__.$db->ErrorMsg();
+                                        }
+                                } catch (Exception $e) {
+                                            echo __METHOD__.' Excepción capturada: ',  $e->getMessage(), "\n";
+                                            return false;
+                                        }
+                                return false;
+                }
+
+
+
+
                 public function MensajeRecibido($user,$db){
                                 $sql='update "CHAT_MENSAJES_NEW" set  "RECEIVED"=localtimestamp, "RECD"=1 where "ID_MENSAJE_NEW"='.$user->idMen;
                                 try {
@@ -100,10 +145,11 @@
 						 echo __METHOD__.$db->ErrorMsg();
 						}
                                         }
+                                        $sql_ope='update "CHAT_OPERADORES" set  "STATUS"='.ENCONVERSACION.' where "ID_OPERADOR"='.$opera->idOpe.";";
 					$sql='insert into "CHAT_CONVERSACIONES" ("ID_USUARIO","ID_OPERADOR","ID_ESPERA","ID_INSTITUCION") values ('.
 					      $ciu->id.','.$opera->idOpe.','.($ciu->id_espera!='' ? $ciu->id_espera : 'null').','.$ciu->inst.');';
                                         $rs=false;
-                                        @$db->execute($sql);
+                                        @$db->execute($sql_ope.$sql);
                                         $sql='select lastval() as seq';
                                         $rs=@$db->execute($sql);
                                         echo __METHOD__." entro ".print_r(gettype($rs),true)."\n";

@@ -10,6 +10,8 @@ define ("OPERADOR", 1);
 define ("LISTAESPERA", 1);  /* para operador disponible para  ciudadano es lista de espera */
 define ("ENCONVERSACION", 2);
 define ("INICIOSESSION", 0);   /* el operador inicia session pero no esta disponible */
+define ("OPE_ENPAUSA", 3);   /* se pone en pausa el operador estatus de bd para que funcione el back */
+define ("OPE_LOGOUT", 0);   /* se pone en pausa el operador estatus de bd para que funcione el back */
 $users=array();
 //echo "dir=".__DIR__."\n";
 $server = new \vakata\websocket\Server('ws://127.0.0.1:15382');
@@ -57,10 +59,11 @@ function validaoperador($socket,$server){
 }
 
 function PoneOperadorReinicia($socket,$server,$obj_msg){
-     global $users;
+     global $users,$bd,$co;
      $users[(int)$socket]->estatus=INICIOSESSION;
      $msg = array('msg' => 'Puso Operador no disponible');
      $server->send($socket,json_encode($msg));
+     $ok=$bd->OperadorIniciaSesion($users[(int)$socket],$co);
      echo "--".__METHOD__." puso estatus del operador como".$users[(int)$socket]->estatus."\n";
 }
 
@@ -126,7 +129,7 @@ function CerrarConversacionCiudadano($socket,$server,$obj_msg){
                 $envio=$server->send($socket,json_encode($msg));
                 unset($users[(int)$socket]);
             }
-            $users[(int)$user->socket]->estatus=LISTAESPERA;   /* el operador se pone disponible  o en espera de un ciudadano */
+            $users[(int)$user->socket]->estatus=INICIOSESSION;   /* el operador se pone disponible  o en espera de un ciudadano */
             enviaListaespera();
             $ok=$bd->cierraConversacion($user,$co);
             return true;
@@ -217,13 +220,14 @@ function BuscaClienteEspera($socket,$server,$obj_msg){
             return $user->socket;
         }
     }
+    $ok=$bd->OperadorEnEspera($users[(int)$socket],$co);
     $users[(int)$socket]->estatus=LISTAESPERA;
     echo "--".__METHOD__." puso estatus del operador como".$users[(int)$socket]->estatus."\n";
     return $found;
 }
 
 function IniciaSessionOperador($socket,$server,$obj_msg){
-         global $users;
+         global $users,$bd,$co;
          $ops = getopebyid($server,$obj_msg);
          if ($ops==false) {
 		 $user = new User();
@@ -239,6 +243,7 @@ function IniciaSessionOperador($socket,$server,$obj_msg){
 		    $msg = array('msg' => 'Lista de espera','cuantos' => $cuantos);
 		    $server->send($user->socket,json_encode($msg));
                  }
+                 $ok=$bd->OperadorIniciaSesion($user,$co);
                  echo __METHOD__." creo operador ".json_encode($user)."\n";
          } else {
             $msg = array('msg' => 'Estas vivo');
@@ -255,9 +260,10 @@ function IniciaSessionOperador($socket,$server,$obj_msg){
 }
 
 function CierraSessionOperador($socket,$server,$obj_msg){
-         global $users;
+         global $users, $bd, $co;
                  $msg = array('msg' => 'Cierra session');
                  $server->send($socket,json_encode($msg));
+                 $ok=$bd->OperadorTerminaSesion($users[(int)$socket],$co);
                  unset($users[(int)$socket]);
                  echo __METHOD__." cerro session de".print_r((int)$socket,true)."\n";
 }
@@ -299,6 +305,11 @@ function buscaoperadordisponible($socket,$server,$user_ciu){
             $users[(int)$socket]->estatus=ENCONVERSACION;  /*ciudadano */
             enviaListaespera();
             $ok=$bd->EnConversacion($users[(int)$user->socket],$users[(int)$socket],$co);
+                 if ($ok!=false) {
+                      echo "--".__METHOD__." id de la conversacion".$ok."\n";
+                      $users[(int)$socket]->idConv=$ok;
+                      $users[(int)$user->socket]->idConv=$ok;
+                 }
             return $user->socket;
         }
     }

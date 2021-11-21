@@ -232,11 +232,6 @@ function Cerrar_Conversacion(chatboxtitle) {
                         };
                         connection.send(JSON.stringify(msg))
          Cerrar_Ventana(chatboxtitle);
-         $('#lista').hide();
-				$('#stat_opera').attr('title','En Pausa')
-				$('#stat_opera').attr('alt','En Pausa')
-				$('#stat_opera').attr('src','images/chat_pause.png')
-                        $('#Cambiar_Status').removeAttr('disabled')
 
 }
 
@@ -254,17 +249,11 @@ function Cerrar_Ventana(chatboxtitle) {
         id_opera = $("#id_operador").val();
         id_conv_op = $("#id_conv_op").val();
     }
-/*
-				var lop = document.getElementById('login_operador').value;
-				document.getElementById('t_'+lop).focus();
-				document.getElementById('t_'+lop).style.display='none';
-				document.getElementById('i_'+lop).style.display='none';
-				document.getElementById('c_'+lop).style.display='none';
-				document.getElementById('layout_chat').style.display='none';
-				document.getElementById('conversacion').value=0;
-				document.getElementById("msg_escribiendo").style.visibility = 'hidden';
-				document.getElementById("fountainG").style.visibility = 'hidden';
-*/
+         $('#lista').hide();
+                                $('#stat_opera').attr('title','En Pausa')
+                                $('#stat_opera').attr('alt','En Pausa')
+                                $('#stat_opera').attr('src','images/chat_pause.png')
+                        $('#Cambiar_Status').removeAttr('disabled')
             $('[id^="chatbox_"]').remove();
 			document.title = ($("#id_conversacion").length!=1?'Chat_Locatel':'LOCATEL');
 }

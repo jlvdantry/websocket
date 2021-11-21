@@ -45,6 +45,15 @@ a:hover{text-decoration: none; color:green; text-shadow: 0px 0px 0px #37070c;}
      border-color: #3b8eb5;
 	 color: #000;
 }
+ #le {
+    position: relative;
+    width: 60px;
+}
+ .espera {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
 
 .error{
      background-color: #de4343;

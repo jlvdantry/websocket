@@ -127,12 +127,14 @@ function EntroOperador(idOpe){
                                   case 'Cierra conversacion': /* mensaje recibido por el receptor */
                                        crearMensaje(true,'Atención:','El ciudadano cerro la sesión',0).then(function () {
                                                 Cerrar_Ventana($('#id_operador').val());
+/*
 						var msg = {
 						    msg: 'Operadordisponible',
                                                      nombre:$('#t_username').val(),
 						    date: Date.now(),
 						};
                                                 envia_mensajex_socket(msg);
+*/
                                        });
 
                                        break;
@@ -145,8 +147,8 @@ function EntroOperador(idOpe){
                 window.listadeespera= function  (resp) {
                       $('#le').remove();
                       if (resp.cuantos>0) {
-				  txt='<td id="le" ><div src="images/espera.png" class="ml-2 btn btn-primary" alt="Usuarios en Lista de Espera" title="Usuarios en Lista de Espera">Espera<span class="ml-1 badge badge-light">'+resp.cuantos+'</span></div></td>';
-				 //$('#iconos').append("<td id='le' style='width:60px'><img src='images/espera.png' class='parpadea' alt='Usuarios en Lista de Espera' title='Usuarios en Lista de Espera' /></td>")
+				  //txt='<td id="le" ><div src="images/espera.png" class="ml-2 btn btn-primary" alt="Usuarios en Lista de Espera" title="Usuarios en Lista de Espera">Espera<span class="ml-1 badge badge-light">'+resp.cuantos+'</span></div></td>';
+				  txt=$('#iconos').append("<td id='le' style='width:60px'><img src='images/espera.png' class='parpadea' alt='Usuarios en Lista de Espera' title='Usuarios en Lista de Espera' /><span class='ml-1 badge badge-danger espera'>"+resp.cuantos+"</span></td>")
 				 $('#iconos').append(txt)
                        }
                 }
@@ -209,7 +211,6 @@ function GotAsyncData(id){
 				document.getElementById('ayuda').style.display = 'block';
 				document.getElementById('t_username').value = document.getElementById('t_username2').value;
 				ajax('info.php','centro',1);
-                                EntroOperador($('#tid').val());
                                 ajaxcall();  /* con esto quito el llamado a status */
                                 //var str="<td><input type='hidden' id='tval' value='3' /><a href='#' onclick='Cambiar_Status()'><img id='stat_opera' src='images/chat_pause.png' alt='En Pausa' title='En Pausa' /></a></td>";
                                 //$('#hold').html(str);
@@ -261,48 +262,7 @@ function ajaxcall(){
 				data: ({id_op: op, conv: conv, st:stat, espera:id_institucion}),
 				success: function(data){
 					$('#hold').html(data);
-/*
-					if($('#tval').val()!=2){
-						if($('#tval').val()==4){
-							var path = location.pathname.split('/');
-							if (path[path.length-1].indexOf('.html')>-1)
-						  	    path.length = path.length - 1;
-
-							var app = path[path.length-2];
-							document.location.href='login.php';
-						}else if($('#tval').val()!=0){
-							$('#ayuda').html("");
-							$('#drespuestas').html("");
-							//pararReloj();
-						}
-					}else{
-
-						if($('#tconv_status').length){$('#id_conv_op').val($('#tconv_status').val());}
-						if($('#tval').val()==2)
-						{
-							Escribiendo();
-							if($('#tusu_nom').val()!="" && $('#id_conv_op').val()!=""){
-								if($('#chatbox_'+$('#tusu_nom').val()).length){}
-								else{
-								    Crear_Ventana($('#tusu_nom').val());
-									Recuperar_Mensajes($('#id_conv_op').val(),$('#tusu_nom').val());
-									//iniciaReloj();
-									Conversacion_Categorias();
-									if($('#ayuda').html()==""){
-									    var us = $('#tusu_nom').val();
-									    var inst = $('#id_institucion').val();
-										$('#drespuestas').html("");
-										$.ajax({type:"GET",url: 'ayuda.php',data: ({cat: "categorias", operador:op, usuario:us, inst:inst}),success: function(data){$('#ayuda').html(data)}});
-									}
-								}
-							}
-
-							Verificar_Mensajes_Nuevos($('#tusu_nom').val(),1);
-							Verificar_Mensajes_Recibidos_Usuario();
-							//muestraReloj();
-						}
-					}
-*/
+                                        EntroOperador($('#id_operador').val());
 				}
 		});
 	}
