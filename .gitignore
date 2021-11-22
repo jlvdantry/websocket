@@ -12,3 +12,5 @@ npm-debug.log
 yarn-error.log
 /storage/fonts
 /chat/logs
+/chat/helpers/logs
+/chat/helpers/cookies

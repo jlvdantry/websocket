@@ -1,11 +1,16 @@
 <?php
-   error_reporting(E_ERROR | E_PARSE);
+   use vakata\websocket\Server;
+   require_once 'vendor/autoload.php';
    include('mycurl.php');
    $nombre=$argv[1];
    sleep(2);
    $cookie=dirname(__FILE__)."/cookies/".$nombre;
    $log=dirname(__FILE__)."/logs/".$nombre.".log";
    $url="https://chat_laravel.soluint.com/";
+   echo "antes new\n";
+   $client = new \vakata\websocket\Client('ws://127.0.0.1:15382');
+   $client->run();
+   echo print_r($client,true);
 try {
    echo $nombre." ".date('Y-m-d H:i:s.') . gettimeofday()['usec']." nombre=".$nombre." log=".$log."\n";
    $fields = array('nombre' => $nombre,'correo'=>'pruebamasiva@hotmail.com','nombre2'=>$nombre,'inst'=>'1');
@@ -30,11 +35,7 @@ catch (Exception $e){
 }
 
 function conectado($x,$nombre,$url) {
-           $doc = new DOMDocument();
-           $doc->validateOnParse = true;
-           $doc->loadHTML($x->__tostring());
-           $id_espera_obj=$doc->getElementById('id_espera');
-           $correo='pruebamasiva@hotmail.com';
+           $cliente = new \vakata\websocket\Client('ws://127.0.0.1:15382');
            //echo print_r($id_espera->getAttribute('value'),true);
 
 	   if (is_null($id_espera_obj)) { 
