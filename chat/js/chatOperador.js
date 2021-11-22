@@ -8,7 +8,7 @@ var i=0;
 var connection=null;
 var intervalc=null;
 $(document).ready(function() {
-        connection = new WebSocket('wss://chat_socket.soluint.com:/ws/');
+        connection = new WebSocket('wss://window.location.hostname:/ws/');
         connection.onopen = function () {
                         var msg = {
                             msg: 'Entroliga',
