@@ -20,9 +20,8 @@ $bd = new bada();
 $co = $bd->Conectar();
 milog(__METHOD__." bd=".print_r($bd,true));
 $server->onMessage(function ($sender, $message, $server) {
-  milog(__METHOD__."onMessage sender=".print_r($sender['socket'],true)." message=".print_r($message,true));
   $user=getuserbysocket($sender['socket'],$server);
-  milog(__METHOD__." encontro usuario socket=".$user);
+  milog(__METHOD__." encontro usuario socket=".$user->nombre);
   $obj_msg=json_decode($message);
   switch($obj_msg->msg){
     case "IniciaSessionCliente" : IniciaSessionCliente($user,$server,$obj_msg);  break;
@@ -46,9 +45,9 @@ $server->onConnect(function ($server) {
 
 $server->onDisconnect(function ($server) {
      global $users;
-     milog("se desconecto".print_r($server['socket'],true));
+     milog("se desconecto nombre=".print_r($users[(int)$server['socket']]->nombre,true));
      unset($users[(int)$server['socket']]);
-     enviaListaespera();
+     enviaListaespera(); /* hay que ver si estaba en conversación o en espera para avisar a su contraparte */
 });
 
 $server->run();
@@ -65,7 +64,7 @@ function PoneOperadorReinicia($socket,$server,$obj_msg){
      $msg = array('msg' => 'Puso Operador no disponible');
      $server->send($socket,json_encode($msg));
      $ok=$bd->OperadorIniciaSesion($users[(int)$socket],$co);
-     milog(__METHOD__." puso estatus del operador como".$users[(int)$socket]->estatus);
+     milog(__METHOD__." reinicio el operador ".$users[(int)$socket]->estatus." nombre:".$users[(int)$socket]->nombre);
 }
 
 function MensajeRecibido($socket,$server,$obj_msg){
@@ -73,9 +72,8 @@ function MensajeRecibido($socket,$server,$obj_msg){
      global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
-        milog(__METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true));
         if ($user->id==$obj_msg->id) {
-            milog(__METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true));
+            milog(__METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true)." nombre=".$user->nombre);
             $msg = array('msg' => 'Mensaje recibido','date_recibido'=>$obj_msg->date_recibido);
             $server->send($user->socket,json_encode($msg));
             $ok=$bd->mensajeRecibido($user,$co);
@@ -91,13 +89,12 @@ function CerrarConversacion($socket,$server,$obj_msg){
      global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
-        milog(__METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true));
         if ($user->id==$obj_msg->id) {
-            milog(__METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true));
+            milog(__METHOD__." encontro a quien cerrar la conversacion=".print_r($user->id,true)." nombre=".$user->nombre);
             $msg = array('msg' => 'Cierra conversacion');
             $envio=$server->send($user->socket,json_encode($msg));
             if ($envio==true) {
-                milog(__METHOD__." finalizo conversacion del cliente=".print_r($user->id,true));
+                milog(__METHOD__." finalizo conversacion del cliente=".print_r($user->id,true)." nombre=".$user->nombre);
                 unset($users[(int)$user->socket]);
             }
             $users[(int)$socket]->estatus=INICIOSESSION;   /* el operador se pone en pausa */
@@ -119,13 +116,12 @@ function CerrarConversacionCiudadano($socket,$server,$obj_msg){
      global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
-        milog(__METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true));
         if ($user->id==$obj_msg->id) {
-            milog(__METHOD__." encontro con quien terminar la conversación=".print_r($user->id,true));
+            milog(__METHOD__." encontro con quien terminar la conversación de=".$users[(int)$socket]->nombre." a=".$user->nombre);
             $msg = array('msg' => 'Cierra conversacion');
             $envio=$server->send($user->socket,json_encode($msg));
             if ($envio==true) {
-                milog(__METHOD__." finalizo conversacion del cliente=".print_r($user->id,true));
+                milog(__METHOD__." finalizo  la conversación de=".$users[(int)$socket]->nombre." a=".$user->nombre);
                 $msg = array('msg' => 'Se cerro conversacion');
                 $envio=$server->send($socket,json_encode($msg));
                 unset($users[(int)$socket]);
@@ -136,7 +132,7 @@ function CerrarConversacionCiudadano($socket,$server,$obj_msg){
             return true;
         }
     }
-    milog(__METHOD__." no encontro con quien terminar la conversacion");
+    milog(__METHOD__." no encontro con quien terminar la conversacion de".$users[(int)$socket]->nombre);
     $msg = array('msg' => 'No se encontro con quien cerrar la conversacion');
     $envio=$server->send($socket,json_encode($msg));
     return false;
@@ -149,9 +145,8 @@ function EnviarMensaje($socket,$server,$obj_msg){
      global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
-        milog(__METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true));
         if ($user->id==$obj_msg->id) {
-            milog(__METHOD__." encontro a quien enviar mensaje=".print_r($user->id,true));
+            milog(__METHOD__." encontro a quien enviar mensaje a=".$user->nombre." de=".$users[(int)$socket]->nombre);
             $msg = array('msg' => 'Mensaje enviado','date'=>$obj_msg->date,'mensaje'=>$obj_msg->mensaje,'nombre'=>$users[(int)$socket]->nombre);
             $server->send($user->socket,json_encode($msg));
             $ok=$bd->enviaMensaje($users[(int)$socket],$users[(int)$user->socket],$co,$obj_msg->mensaje);
@@ -164,7 +159,7 @@ function EnviarMensaje($socket,$server,$obj_msg){
             return $user->socket;
         }
     }
-    milog(__METHOD__." no encontro a quien enviar el mensaje");
+    milog(__METHOD__." no encontro a quien enviar el mensaje de=".$users[(int)$socket]->nombre." al id=".$obj_msg->id);
     return $found;
 }
 
@@ -172,11 +167,9 @@ function AquienEscribe($socket,$server,$obj_msg){
      global $users;
      $found=null;
     foreach ($users as $user) {
-        //milog(__METHOD__." user perfil=".print_r($user->perfil,true)." estatus ".print_r($user->estatus,true));
         if ($user->id==$obj_msg->id) {
             $msg = array('msg' => 'Te estan escribiendo');
             $enviado=$server->send($user->socket,json_encode($msg));
-            //milog(__METHOD__." encontro a quien escribile=".print_r($user->id,true)." resuldato del envio ".$enviado);
             if ($enviado==false || $enviado=="") {
                 milog(__METHOD__." error en el envio");
                 $users[(int)$socket]->estatus=LISTAESPERA;
@@ -195,13 +188,12 @@ function AquienEscribe($socket,$server,$obj_msg){
 }
 
 function BuscaClienteEspera($socket,$server,$obj_msg){
-     milog(__METHOD__." entro a buscar lista de espera");
+     milog(__METHOD__." entro ");
      global $users,$bd,$co;
      $found=null;
     foreach ($users as $user) {
-        milog(__METHOD__." user perfil=".print_r(json_encode($user),true));
         if ($user->perfil == CIUDADANO && $user->estatus==LISTAESPERA) {
-            milog(__METHOD__." encontro cliente socket oper=".print_r($socket,true)." user=".print_r($user->socket,true));
+            milog(__METHOD__." encontro cliente en espera operador=".$users[(int)$socket]->nombre." ciudadano=".$users[(int)$user->socket]->nombre);
             $msg = array('msg' => 'Encontro operador','nombre'=>$users[(int)$socket]->nombre,'id'=>$users[(int)$socket]->id);
             $server->send($user->socket,json_encode($msg));
             $msg = array('msg' => 'Encontro cliente','nombre'=>$users[(int)$user->socket]->nombre,'id'=>$users[(int)$user->socket]->id);
@@ -209,7 +201,6 @@ function BuscaClienteEspera($socket,$server,$obj_msg){
             $users[(int)$user->socket]->estatus=ENCONVERSACION; /*ciudadano */
             $users[(int)$socket]->estatus=ENCONVERSACION;  /* operado */
             $users[(int)$user->socket]->idOpe=$users[(int)$socket]->idOpe; /*ciudadano */
-            milog(__METHOD__." puso estatus del operador como".$users[(int)$socket]->estatus);
             enviaListaespera();
             $ok=$bd->EnConversacion($users[(int)$socket],$users[(int)$user->socket],$co);
 		 if ($ok!=false) {
@@ -223,7 +214,7 @@ function BuscaClienteEspera($socket,$server,$obj_msg){
     }
     $ok=$bd->OperadorEnEspera($users[(int)$socket],$co);
     $users[(int)$socket]->estatus=LISTAESPERA;
-    milog(__METHOD__." puso estatus del operador como".$users[(int)$socket]->estatus);
+    milog(__METHOD__." puso operador en espera".$users[(int)$socket]->nombre);
     return $found;
 }
 
@@ -241,11 +232,11 @@ function IniciaSessionOperador($socket,$server,$obj_msg){
 		 $users[(int)$socket]=$user;
                  $cuantos=getCuantosEsperando();
                  if ($cuantos>0) {
-		    $msg = array('msg' => 'Lista de espera','cuantos' => $cuantos);
+		    $msg = array('msg' => 'Lista de espera','tablero' => $cuantos);
 		    $server->send($user->socket,json_encode($msg));
                  }
                  $ok=$bd->OperadorIniciaSesion($user,$co);
-                 milog(__METHOD__." creo operador ".json_encode($user));
+                 milog(__METHOD__." creo operador ".$user->nombre);
          } else {
             $msg = array('msg' => 'Estas vivo');
             $enviado=$server->send($ops->socket,json_encode($msg));
@@ -265,8 +256,8 @@ function CierraSessionOperador($socket,$server,$obj_msg){
                  $msg = array('msg' => 'Cierra session');
                  $server->send($socket,json_encode($msg));
                  $ok=$bd->OperadorTerminaSesion($users[(int)$socket],$co);
+                 milog(__METHOD__." cerro session operador ".$users[(int)$socket]->nombre);
                  unset($users[(int)$socket]);
-                 milog(__METHOD__." cerro session de".print_r((int)$socket,true));
 }
 
 function IniciaSessionCliente($socket,$server,$obj_msg){
@@ -283,7 +274,7 @@ function IniciaSessionCliente($socket,$server,$obj_msg){
          $user->inst = $obj_msg->inst;
          $users[(int)$socket]=$user;
          $ok=$bd->Creausuario($co,$user);
-         milog(__METHOD__." creo ciudadano".print_r(json_encode($user),true)." id=".$ok);
+         milog(__METHOD__." creo ciudadano ".$user->nombre);
          if ($ok!=false) {
               $users[(int)$socket]->id=$ok;
               $user->id=$ok;
@@ -292,12 +283,12 @@ function IniciaSessionCliente($socket,$server,$obj_msg){
 }
 
 function buscaoperadordisponible($socket,$server,$user_ciu){
-     milog(__METHOD__." entro a buscar operador");
+     milog(__METHOD__." entro ");
      global $users, $bd, $co;
      $found=null;
     foreach ($users as $user) {
-        milog(__METHOD__."user perfil=".print_r($user->perfil,true)." estauts ".print_r($user->estatus,true));
         if ($user->perfil == OPERADOR && $user->estatus==LISTAESPERA) {
+            milog(__METHOD__." encontro operador=".$user->nombre." ciudadano=".$users[(int)$socket]->nombre);
             $msg = array('msg' => 'Encontro cliente','nombre'=>$users[(int)$socket]->nombre,'id'=>$users[(int)$socket]->id);
             $server->send($user->socket,json_encode($msg));
             $msg = array('msg' => 'Encontro operador','nombre'=>$users[(int)$user->socket]->nombre,'id'=>$users[(int)$user->socket]->id);
@@ -315,7 +306,7 @@ function buscaoperadordisponible($socket,$server,$user_ciu){
             return $user->socket;
         }
     }
-    milog(__METHOD__." no encontro operador disponible ".print_r($socket,true));
+    milog(__METHOD__." no encontro operador disponible ".$users[(int)$socket]->nombre);
     $msg = array('msg' => 'Espera');
     $server->send($socket,json_encode($msg));
     enviaListaespera();
@@ -329,37 +320,47 @@ function buscaoperadordisponible($socket,$server,$user_ciu){
 function getCuantosEsperando(){
     global $users;
     $cuantos=0;
+    $tablero = new Tablero();
     foreach ($users as $user) {
         if ($user->perfil == CIUDADANO && $user->estatus==LISTAESPERA) {
-            $cuantos=$cuantos+1;
+            $tablero->ciu_enespera=$tablero->ciu_enespera+1;
+        }
+        if ($user->perfil == OPERADOR && $user->estatus==INICIOSESSION) {
+            $tablero->ope_enpausa=$tablero->ope_enpausa+1;
+        }
+        if ($user->perfil == OPERADOR && $user->estatus==LISTAESPERA) {
+            $tablero->ope_enespera=$tablero->ope_enespera+1;
+        }
+        if ($user->perfil == OPERADOR && $user->estatus==ENCONVERSACION) {
+            $tablero->ope_enconversacion=$tablero->ope_enconversacion+1;
         }
     }
-    return $cuantos;
+    return $tablero;
 }
 
 function enviaListaespera(){
     global $users;
     global $server;
     $cuantos=getCuantosEsperando();
-    milog(__METHOD__." ciudadanos en espera=".$cuantos);
-    foreach ($users as $user) {
-        if ($user->perfil == OPERADOR) {
-            milog(__METHOD__." va a enviar lista=".$user->socket." cuantos=".$cuantos);
-            $msg = array('msg' => 'Lista de espera','cuantos' => $cuantos);
-            $server->send($user->socket,json_encode($msg));
-        }
-    }
+	    foreach ($users as $user) {
+		if ($user->perfil == OPERADOR) {
+		    milog(__METHOD__." va a enviar lista a=".$user->nombre);
+		    $msg = array('msg' => 'Lista de espera','tablero' => $cuantos);
+		    $server->send($user->socket,json_encode($msg));
+		}
+	    }
+
 }
 
 function getuserbysocket($socket,$server){
+    global $users;
   $found=null;
     foreach ($server->getClients() as $client) {
-        milog(__METHOD__." client=".print_r((int)$client['socket'],true)." y socket ".(int)$socket);
         if ((int)$socket == (int)$client['socket']) {
             return $socket;
         }
     }
-  milog(__METHOD__."no encontro socket");
+  milog(__METHOD__." no encontro socket=".users[(int)$socket]->nombre);
   return $found;
 }
 
@@ -367,12 +368,11 @@ function getopebyid($server,$objmsg){
     $found=false;
     global $users;
     foreach ($users as $user) {
-        milog(__METHOD__." perfil=".print_r(json_encode($user),true));
         if ($user->perfil==OPERADOR && $objmsg->idOpe == $user->idOpe) {
             return $user;
         }
     }
-  milog(__METHOD__."no encontro socket");
+  milog(__METHOD__." no encontro operador por id=". $objmsg->idOpe);
   return $found;
 }
 
@@ -397,6 +397,13 @@ class User{
   var $id_espera;    /*id de la lista de espera */
   var $idConv; /* id de la conversacion */
   var $idMen; /* id delmensaje */
+}
+
+class Tablero{
+  var $ciu_enespera=0;
+  var $ope_enespera=0;  /* o disponible */
+  var $ope_enpausa=0; /* operador en pausa */
+  var $ope_enconversacion=0; /* operador en pausa */
 }
 
 

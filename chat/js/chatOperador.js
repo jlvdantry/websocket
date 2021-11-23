@@ -146,9 +146,9 @@ function EntroOperador(idOpe){
 
                 window.listadeespera= function  (resp) {
                       $('#le').remove();
-                      if (resp.cuantos>0) {
+                      if (resp.tablero.ciu_enespera>0) {
 				  //txt='<td id="le" ><div src="images/espera.png" class="ml-2 btn btn-primary" alt="Usuarios en Lista de Espera" title="Usuarios en Lista de Espera">Espera<span class="ml-1 badge badge-light">'+resp.cuantos+'</span></div></td>';
-				  txt=$('#iconos').append("<td id='le' style='width:60px'><img src='images/espera.png' class='parpadea' alt='Usuarios en Lista de Espera' title='Usuarios en Lista de Espera' /><span class='ml-1 badge badge-danger espera'>"+resp.cuantos+"</span></td>")
+				  txt=$('#iconos').append("<td id='le' style='width:60px'><img src='images/espera.png' class='parpadea' alt='Usuarios en Lista de Espera' title='Usuarios en Lista de Espera' /><span class='ml-1 badge badge-danger espera'>"+resp.tablero.ciu_enespera+"</span></td>")
 				 $('#iconos').append(txt)
                        }
                 }
