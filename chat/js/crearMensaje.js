@@ -15,7 +15,7 @@ window.crearMensaje = function (error,titulo,mensaje,tiempo=3500){
           }
 
           var mensaje_alert = ' '+
-                    '<div class="modal fade msj_js" id="msgModal" tabindex="-1" role="dialog" data-focus=false aria-labelledby="titleMsgModal" aria-hidden="true">'+
+                    '<div class="modal fade msj_js" id="msgModal" tabindex="-1" role="dialog" data-focus=false data-keyboard="false" data-backdrop="static" aria-labelledby="titleMsgModal" aria-hidden="true">'+
                       '<div class="modal-dialog" role="document">'+
                         '<div class="modal-content">'+
                           '<div class="modal-header pb-0">'+
