@@ -26,18 +26,24 @@ $(document).ready(function() {
 });
 		window.Chat = function (){
 			if($.trim($('#tuser').val())==""){
+                              crearMensaje(true,'Atención:','Falta ingresar tu nombre',0).then( function () {
 				$('#tuser').focus();
+                              });
+
 				return;
 			}
 
 			if($.trim($('#tmail').val())==""){
+                              crearMensaje(true,'Atención:','Falta ingresar tu correo electrónico',0).then( function () {
 				$('#tmail').focus();
+                              });
 				return;
 			}
 
 			if(!emailCheck($.trim($('#tmail').val()))){
-				$('#dmsg').html("<font style='color:#B61B1C'><b>¡Correo electr&oacute;nico no v&aacute;lido!</b></font>");
-				$('#dmsg').focus();
+                              crearMensaje(true,'Atención:','¡Correo electr&oacute;nico no v&aacute;lido!',0).then( function () {
+				$('#tmail').focus();
+                              });
 				return;
 			}
 
