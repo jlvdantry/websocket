@@ -17,7 +17,6 @@ $(document).ready(function() {
                         envia_mensajex_socket(msg);
         };
         connection.onerror = function (event) {  /* sis se presenta este error el socket no esta levantado */
-                              console.error("Error en el WebSocket detectado:", event);
                               $('input').attr('disabled','disabled')
                               crearMensaje(true,'Atención:','El servicio no esta disponible',0).then(function () {
                                       //window.location=app_path;
